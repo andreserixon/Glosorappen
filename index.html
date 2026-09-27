@@ -163,6 +163,11 @@ input,textarea,select{font-size:16px}
 .rr .iconbtn{width:48px;height:44px}
 .rr-flag{font-size:.8rem;color:var(--gold-d);font-weight:800}
 .rr.ok .rr-flag{display:none}
+.rr-alts{display:flex;flex-direction:column;gap:6px}
+.rr-alts .lbl{margin:0}
+.altchips{display:flex;flex-wrap:wrap;gap:6px}
+.altchip{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;min-height:38px;font-weight:800;font-size:.9rem;color:var(--ink);text-align:left}
+.altchip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-d)}
 .revcount{margin:0;text-align:center;font-size:.9rem;color:var(--muted)}
 
 /* edit */
@@ -878,25 +883,31 @@ dimma = fog`}
     msg=`Jag hittade ${rows.length} ord på ${nm} men ingen svenska.`;
     let done=0, got=0;
     await pool(rows,3,async r=>{
-      try{ const t=await translate(r.fx.split('/')[0].trim(),lang); if(t){ r.sv=t; r.suggested=true; got++; } }catch(e){}
+      try{ const t=await translate(r.fx.split('/')[0].trim(),lang); if(t.length){ r.sv=t[0]; r.alts=t; r.suggested=true; got++; } }catch(e){}
       prog && prog(++done/rows.length,`Föreslår svenska översättningar… ${done} av ${rows.length}`);
     });
-    msg += got ? ` Jag har föreslagit svenska översättningar. Kolla varje förslag och ändra om det behövs innan du godkänner.`
+    msg += got ? ` Jag har föreslagit svenska översättningar. Finns det flera förslag kan du trycka på det som passar bäst, eller skriva ett eget.`
                : ` Skriv den svenska översättningen på varje rad innan du godkänner den.`;
     if(skipped>0) msg+=` ${skipped} rad${skipped>1?'er':''} som inte såg ut som glosor (rubriker, namn, datum) hoppade jag över.`;
     return {rows,msg};
   }
   async function pool(items,n,fn){ let i=0; await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{ while(i<items.length) await fn(items[i++]); })); }
+  // returns up to 5 Swedish suggestions, best first
   async function translate(text,lang){
     text=text.toLowerCase();
     const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${lang==='fr'?'fr':'en'}|sv`;
     const r=await fetch(url); const j=await r.json();
     if(String(j.responseStatus)!=='200') throw new Error('tr');
-    let t=(j.responseData&&j.responseData.translatedText||'').trim();
-    if(!t || t.toLowerCase()===text.toLowerCase() || /MYMEMORY|QUERY LENGTH/i.test(t)) return '';
-    t=t.replace(/[.!?]+$/,'').trim();
-    t=t.toLowerCase();
-    return t;
+    const raw=[j.responseData&&j.responseData.translatedText];
+    (j.matches||[]).filter(m=>!m.target||/^sv/i.test(m.target))
+      .sort((x,y)=>(+y.quality||0)-(+x.quality||0)).forEach(m=>raw.push(m.translation));
+    const out=[];
+    raw.forEach(t=>{
+      t=String(t||'').replace(/[\s.,;:!?]+$/,'').replace(/^[\s.,;:!?]+/,'').replace(/\s+/g,' ').trim().toLowerCase();
+      if(!t || t===text || /mymemory|query length|&#|<\/?\w+>/i.test(t) || t.length>text.length*3+12) return;
+      if(!out.includes(t)) out.push(t);
+    });
+    return out.slice(0,5);
   }
   // true if the Swedish words seem to be in the right column
   function orient(rows,lang){
@@ -923,6 +934,7 @@ dimma = fog`}
           <button type="button" class="iconbtn" data-a="swap" aria-label="Byt plats på orden"><svg><use href="#i-swap"/></svg></button>
           <button type="button" class="iconbtn danger" data-a="del" aria-label="Ta bort raden"><svg><use href="#i-trash"/></svg></button>
         </div>
+        <div class="rr-alts" hidden><span class="lbl">Välj översättning</span><div class="altchips"></div></div>
         <span class="rr-flag"></span>`;
       const [a,b]=d.querySelectorAll('input'); a.value=r.sv; b.value=r.fx;
       const paint=()=>{
@@ -930,7 +942,14 @@ dimma = fog`}
         d.querySelector('.rr-ok').innerHTML = r.ok ? '<svg><use href="#i-check"/></svg>Godkänd' : 'Stämmer';
         d.querySelector('.rr-ok').setAttribute('aria-pressed',r.ok);
         d.classList.toggle('unsure',!r.ok&&(r.unsure||r.suggested||!r.sv||!r.fx));
-        d.querySelector('.rr-flag').textContent = !r.sv ? 'Skriv den svenska översättningen.' : !r.fx ? `Skriv ordet på ${nm}.` : r.suggested ? 'Föreslagen översättning. Stämmer den?' : r.unsure ? 'Osäker. Kolla stavningen noga.' : '';
+        paintAlts && paintAlts();
+        d.querySelector('.rr-flag').textContent = !r.sv ? 'Skriv den svenska översättningen.' : !r.fx ? `Skriv ordet på ${nm}.` : r.suggested ? ((r.alts||[]).length>1 ? 'Flera förslag. Välj det som stämmer eller skriv ett eget.' : 'Föreslagen översättning. Stämmer den?') : r.unsure ? 'Osäker. Kolla stavningen noga.' : '';
+      };
+      const alts=d.querySelector('.rr-alts'), chips=alts.querySelector('.altchips');
+      const paintAlts=()=>{
+        const list=r.alts||[]; alts.hidden=list.length<2 || r.ok;
+        chips.innerHTML=list.map((t,k)=>`<button type="button" class="altchip" data-k="${k}" aria-pressed="${t===r.sv}">${esc(t)}</button>`).join('');
+        chips.querySelectorAll('button').forEach(c=>c.onclick=()=>{ r.sv=list[+c.dataset.k]; a.value=r.sv; r.suggested=false; sTap(); paint(); revFooter(); });
       };
       a.oninput=()=>{r.sv=a.value.trim(); r.suggested=false; paint(); revFooter();};
       b.oninput=()=>{r.fx=b.value.trim(); paint(); revFooter();};
