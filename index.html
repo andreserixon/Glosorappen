@@ -170,6 +170,49 @@ input,textarea,select{font-size:16px}
 .altchip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-d)}
 .revcount{margin:0;text-align:center;font-size:.9rem;color:var(--muted)}
 
+/* konto, klasser */
+.avatar{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:40px;height:40px;border-radius:999px;border:2px solid var(--line);background:var(--tile);font-weight:900;color:var(--green-ink);padding:0 10px;font-size:.85rem;box-shadow:0 3px 0 var(--tile-shadow)}
+.welcome{align-items:stretch;text-align:left;padding-top:28px}
+.wfrog{display:flex;justify-content:center}
+.wfrog .frog{width:120px;height:120px}
+.wtitle{font-size:1.9rem;text-align:center;color:var(--green)}
+.roles{display:flex;flex-direction:column;gap:10px}
+.rolebtn{display:flex;flex-direction:column;gap:2px;text-align:left;border:2px solid var(--line);background:var(--tile);border-radius:16px;box-shadow:0 4px 0 var(--tile-shadow);padding:14px 16px}
+.rolebtn b{font-size:1.15rem;font-weight:900}
+.rolebtn span{color:var(--muted);font-weight:700;font-size:.92rem}
+.rolebtn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--tile-shadow)}
+.namebox{display:flex;align-items:center;gap:10px;border:2px solid var(--green);background:var(--green-soft);border-radius:16px;padding:12px 12px 12px 16px}
+.namebox span{flex:1;font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--green-ink);overflow-wrap:anywhere}
+.secretcard{display:flex;flex-direction:column;gap:2px;border:2px solid var(--gold);background:var(--gold-soft);border-radius:16px;padding:14px 16px}
+.secretcard b{font-size:1.25rem;font-weight:900;margin-bottom:8px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.check{display:flex;gap:10px;align-items:center;font-weight:800;cursor:pointer;min-height:44px}
+.check input{width:22px;height:22px;accent-color:var(--green)}
+.errmsg{color:var(--red-ink);font-weight:800;margin:0;min-height:1.2em}
+.errmsg:empty{display:none}
+.row2{display:flex;gap:10px;align-items:center}
+.row2 input,.row2 select{flex:1;min-width:0}
+.row2 .btn{min-height:48px;padding:10px 16px}
+.row2 .seg{flex:1}
+.bigcode{font-family:var(--display);font-weight:800;font-size:1.8rem;letter-spacing:.06em;text-align:center;margin:0;color:var(--blue-d)}
+.codebox{border:2px solid var(--blue);background:var(--blue-soft);border-radius:16px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.codebox .lbl{grid-column:1/-1;margin:0}
+.codebox b{font-family:var(--display);font-size:1.6rem;letter-spacing:.06em;color:var(--blue-d)}
+.codebox .btn{min-height:40px;padding:8px 14px;font-size:.8rem}
+.codebox .hint{grid-column:1/-1}
+.cloudsec{display:flex;flex-direction:column;gap:12px}
+.classhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
+.classhead h3{font-size:1.15rem;overflow-wrap:anywhere}
+.classhead .btn{min-height:40px;padding:8px 12px;font-size:.78rem}
+.grouphead{font-weight:900;color:var(--muted);font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+.grow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:2px solid var(--line);border-radius:14px;flex-wrap:wrap}
+.grow b{font-weight:900}
+.grow .btn{min-height:40px;padding:8px 14px;font-size:.8rem}
+.grow .in{color:var(--green-ink);font-weight:900}
+.from{color:var(--muted);font-size:.8rem;font-weight:700}
+.sugg{display:flex;flex-direction:column;gap:6px;background:var(--gold-soft);border-radius:12px;padding:10px 12px;font-weight:700}
+.sugg:empty{display:none}
+.hint:empty{display:none}
+
 /* edit */
 .form{display:flex;flex-direction:column;gap:18px;padding-block:20px 40px}
 .form .head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -306,6 +349,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
         <circle id="ringArc" cx="32" cy="32" r="26" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="163.4" transform="rotate(-90 32 32)"/></svg><span id="goalN">0/30</span></span>
       <span class="stat flame" id="streakStat" title="Dagar i rad"><svg><use href="#i-flame"/></svg><span id="streakN">0</span></span>
       <span class="stat xp" title="XP totalt"><svg><use href="#i-bolt"/></svg><span id="xpN">0</span></span>
+      <button class="avatar" id="acctBtn" hidden></button>
     </div>
   </div>
 
@@ -324,7 +368,8 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   </div>
 
   <p class="goaltext" id="goalText"></p>
-  <h2 class="sect">Mina förhör <span id="listCount"></span></h2>
+  <div id="cloudHome" class="cloudsec" hidden></div>
+  <h2 class="sect"><span id="ownHead">Mina förhör</span> <span id="listCount"></span></h2>
   <div class="cards" id="cards"></div>
 </section>
 
@@ -337,6 +382,11 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <div>
     <label class="lbl" for="listName">Namn på listan</label>
     <input type="text" id="listName" placeholder="t.ex. Franska vecka 40" autocomplete="off">
+  </div>
+  <div id="placeBox" hidden>
+    <label class="lbl" for="listPlace">Var ska listan ligga?</label>
+    <select id="listPlace"></select>
+    <p class="hint">En lista i en kurs syns för alla elever i kursen. Bara du kan ändra den.</p>
   </div>
   <div>
     <span class="lbl">Språk</span>
@@ -414,6 +464,118 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     <button type="button" class="btn ghost" id="addRow"><svg width="18" height="18"><use href="#i-plus"/></svg>Ny rad</button>
   </div>
   <div class="revrows" id="revRows"></div>
+</section>
+
+<!-- WELCOME / KONTO -->
+<section id="welcome" class="form welcome" hidden>
+  <div class="wfrog" id="wFrog"></div>
+  <h1 class="wtitle">Välkommen!</h1>
+  <p class="hint" style="text-align:center;margin:-8px 0 0">Vem är du?</p>
+  <div class="roles">
+    <button type="button" class="rolebtn" data-role="elev"><b>Elev</b><span>Jag ska öva på mina glosor</span></button>
+    <button type="button" class="rolebtn" data-role="larare"><b>Lärare</b><span>Jag gör glosförhör till mina klasser</span></button>
+    <button type="button" class="rolebtn" data-role="forhorare"><b>Förhörare</b><span>Jag förhör någon, t.ex. mitt barn eller en kompis</span></button>
+  </div>
+  <button class="btn ghost wide" id="toLogin">Jag har redan ett konto</button>
+  <button class="link" id="localOnly">Använd utan konto</button>
+</section>
+
+<section id="signup" class="form" hidden>
+  <div class="head"><h2 id="suTitle">Nytt konto</h2><button class="link" id="suBack">Tillbaka</button></div>
+  <div>
+    <span class="lbl">Ditt namn i appen</span>
+    <div class="namebox"><span id="suName"></span><button type="button" class="iconbtn" id="suReroll" aria-label="Ge mig ett annat namn"><svg><use href="#i-swap"/></svg></button></div>
+    <p class="hint">Tryck på pilarna för ett annat namn. Inga elever kan se varandras namn.</p>
+  </div>
+  <div id="suDispBox">
+    <label class="lbl" for="suDisp" id="suDispLbl">Namn som eleverna ser (valfritt)</label>
+    <input type="text" id="suDisp" maxlength="40" autocomplete="off" placeholder="t.ex. Anna L">
+  </div>
+  <p class="hint" id="suMigrate"></p>
+  <button class="btn wide" id="suGo">Skapa konto</button>
+  <p class="errmsg" id="suErr"></p>
+</section>
+
+<section id="secret" class="form" hidden>
+  <h2>Skriv upp det här!</h2>
+  <p class="hint" style="margin-top:-8px">Du behöver namnet och den hemliga koden för att logga in på en annan telefon eller dator. Visa dem inte för någon annan.</p>
+  <div class="secretcard"><span class="lbl">Namn</span><b id="seName"></b><span class="lbl">Hemlig kod</span><b id="seCode"></b></div>
+  <button class="btn ghost wide" id="seCopy">Kopiera namn och kod</button>
+  <label class="check"><input type="checkbox" id="seOk"> Jag har skrivit upp namnet och koden</label>
+  <button class="btn wide" id="seGo" disabled>Fortsätt</button>
+</section>
+
+<section id="login" class="form" hidden>
+  <div class="head"><h2>Logga in</h2><button class="link" id="liBack">Tillbaka</button></div>
+  <div><label class="lbl" for="liName">Namn</label><input type="text" id="liName" placeholder="t.ex. Glada-Pingvinen-42" autocapitalize="off" autocorrect="off" autocomplete="username"></div>
+  <div><label class="lbl" for="liCode">Hemlig kod</label><input type="text" id="liCode" placeholder="t.ex. sol-kex-moln-472" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="current-password"></div>
+  <button class="btn wide" id="liGo">Logga in</button>
+  <p class="errmsg" id="liErr"></p>
+</section>
+
+<section id="account" class="form" hidden>
+  <div class="head"><h2>Mitt konto</h2><button class="link" id="acBack">Klar</button></div>
+  <div class="secretcard">
+    <span class="lbl">Namn</span><b id="acName"></b>
+    <span class="lbl">Roll</span><b id="acRole"></b>
+    <span class="lbl" id="acCodeLbl">Hemlig kod</span><b id="acCode"></b>
+  </div>
+  <div id="acDispBox">
+    <label class="lbl" for="acDisp">Namn som eleverna ser</label>
+    <div class="row2"><input type="text" id="acDisp" maxlength="40" autocomplete="off"><button class="btn" id="acDispSave">Spara</button></div>
+  </div>
+  <div class="importbox" id="acInvite">
+    <h3>Förhörare</h3>
+    <p class="hint" style="margin:0">Vill du att någon förhör dig, t.ex. en förälder? Skapa en kod och ge den till personen. Förhöraren ser bara dina listor, inga resultat. Koden gäller i 7 dagar.</p>
+    <button class="btn blue" id="acInvBtn">Skapa kod till förhörare</button>
+    <p class="bigcode" id="acInvCode" hidden></p>
+    <ul class="mini" id="acExaminers"></ul>
+  </div>
+  <p class="errmsg" id="acErr"></p>
+  <button class="btn red wide" id="acLogout">Logga ut</button>
+  <div class="confirm" id="acLogoutConfirm" hidden>
+    <span>Har du skrivit upp ditt namn och din hemliga kod? Annars kommer du inte in på kontot igen.</span>
+    <div class="acts2"><button class="btn red" id="acLogoutYes">Logga ut</button><button class="btn ghost" id="acLogoutNo">Avbryt</button></div>
+  </div>
+</section>
+
+<section id="classes" class="form" hidden>
+  <div class="head"><h2>Klasser</h2><button class="link" id="clBack">Tillbaka</button></div>
+  <div class="importbox">
+    <h3>Gå med i en klass</h3>
+    <p class="hint" style="margin:0">Fråga din lärare eller en klasskompis efter klasskoden.</p>
+    <div class="row2"><input type="text" id="joinCode" placeholder="t.ex. GRODA-4821" autocapitalize="characters" autocorrect="off" autocomplete="off"><button class="btn" id="joinBtn">Gå med</button></div>
+    <p class="errmsg" id="joinErr"></p>
+  </div>
+  <div class="importbox">
+    <h3>Skapa en ny klass</h3>
+    <p class="hint" style="margin:0">Gör det bara om ingen i klassen har skapat den än. Annars blir det två likadana klasser.</p>
+    <input type="text" id="newClassName" placeholder="t.ex. 7A" maxlength="40" autocomplete="off">
+    <div class="sugg" id="classSugg"></div>
+    <button class="btn blue" id="createClassBtn">Skapa klassen</button>
+    <p class="errmsg" id="ccErr"></p>
+  </div>
+</section>
+
+<section id="klass" class="form" hidden>
+  <div class="head"><h2 id="kName"></h2><button class="link" id="kBack">Klar</button></div>
+  <div class="row2" id="kRename" hidden><input type="text" id="kNameIn" maxlength="40" aria-label="Klassens namn"><button class="btn ghost" id="kRenameBtn">Byt namn</button></div>
+  <div class="codebox"><span class="lbl">Klasskod</span><b id="kCode"></b><button class="btn ghost" id="kCopy">Kopiera</button><p class="hint" style="margin:0">Dela koden med klassen så kan de gå med.</p></div>
+  <div class="cloudsec"><span class="lbl" style="margin:0">Terminer och kurser i klassen</span><div class="cloudsec" id="kGroups"></div></div>
+  <div class="importbox">
+    <h3>Lägg till termin och kurs</h3>
+    <span class="lbl" style="margin:0">Termin</span>
+    <div class="row2"><select id="tYear" aria-label="År"></select><div class="seg" id="tSeg"><button type="button" data-v="VT">VT</button><button type="button" data-v="HT">HT</button></div></div>
+    <label class="lbl" for="cName" style="margin:0">Kurs</label>
+    <input type="text" id="cName" placeholder="t.ex. Franska" maxlength="40" autocomplete="off">
+    <div class="altchips" id="cChips"></div>
+    <span class="lbl" style="margin:0">Språk i kursen</span>
+    <div class="seg" id="cLang"><button type="button" data-v="fr">Franska</button><button type="button" data-v="en">Engelska</button><button type="button" data-v="es">Spanska</button></div>
+    <div class="sugg" id="gHint"></div>
+    <button class="btn blue" id="gAdd">Lägg till</button>
+    <p class="errmsg" id="gErr"></p>
+  </div>
+  <button class="link" id="kLeave" style="color:var(--red)">Lämna klassen</button>
 </section>
 
 <!-- LESSON -->
@@ -499,7 +661,9 @@ dimma = fog`}
   function write(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
   let lists = Array.isArray(read(KEY)) ? read(KEY) : EXAMPLES.slice();
   let S = Object.assign({xp:0,streak:0,lastDay:null,dayXp:0,day:null,goal:30,words:{},done:{},sound:true,speak:true,strict:false,mode:'mix',scope:'weak'}, read(SKEY)||{});
-  const saveLists=()=>write(KEY,lists), saveStats=()=>write(SKEY,S);
+  const saveLists=()=>{ if(C) cloudSchedule(); else write(KEY,lists); };
+  const saveStats=()=>{ write(SKEY,S); if(C){ C.statsDirty=true; cloudSchedule(); } };
+  let C=null; // inloggad användare (moln), annars null
 
   const dayStr = d => { d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
   const yesterday = () => { const d=new Date(); d.setDate(d.getDate()-1); return dayStr(d); };
@@ -567,14 +731,410 @@ dimma = fog`}
 
   /* ---------- views ---------- */
   function show(v){
-    ['home','edit','add','review','lesson','done'].forEach(x=>$(x).hidden=x!==v);
-    if(v==='home'||v==='edit'||v==='add') $('footer').hidden=true;
+    ['home','edit','add','review','lesson','done','welcome','signup','secret','login','account','classes','klass'].forEach(x=>$(x).hidden=x!==v);
+    if(!['review','lesson','done'].includes(v)) $('footer').hidden=true;
     window.scrollTo(0,0);
   }
+
+  /* ---------- KONTO OCH MOLN (Supabase) ---------- */
+  const SB_URL='https://ovncurniymbmnlckjboa.supabase.co', SB_KEY='sb_publishable_7XR17kl6Z_V2MGuj_ljAWg_eUWwboUo';   // Supabase: Project URL och anon/publishable key
+  const CKEY='glosforhoret.cloud.v1';
+  const ROLE={elev:'Elev',larare:'Lärare',forhorare:'Förhörare'};
+  const ADJ=['Glada','Modiga','Pigga','Snälla','Busiga','Lyckliga','Nyfikna','Kloka','Snabba','Mysiga','Coola','Tokiga','Starka','Sköna','Käcka','Fnissiga','Vänliga','Soliga','Hoppiga','Sprudlande','Lugna','Listiga','Fantastiska','Charmiga','Magiska'];
+  const NOUN=['Pingvinen','Igelkotten','Ekorren','Pandan','Delfinen','Räven','Grodan','Uttern','Kaninen','Ugglan','Tigern','Sköldpaddan','Koalan','Lamadjuret','Flodhästen','Giraffen','Valrossen','Bävern','Mullvaden','Papegojan','Sjöhästen','Kameleonten','Hummern','Älgen','Myrsloken'];
+  const CW=['sol','hav','kex','moln','bok','ost','ros','katt','regn','vind','gran','sten','lampa','kaka','boll','fisk','glass','mango','kiwi','tomte','banan','citron','raket','drake'];
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const genName=()=>`${pick(ADJ)}-${pick(NOUN)}-${10+Math.floor(Math.random()*990)}`;
+  const genSecret=()=>`${pick(CW)}-${pick(CW)}-${pick(CW)}-${100+Math.floor(Math.random()*900)}`;
+  const toEmail=u=>u.trim().toLowerCase().replace(/[åä]/g,'a').replace(/ö/g,'o').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9-]/g,'')+'@glosorappen.app';
+  const newId=()=> crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16);});
+  const personName=p=>p.display_name||p.username;
+  const nkey=t=>String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+  function lev(a,b){ const d=Array.from({length:a.length+1},(_,i)=>[i]); for(let j=1;j<=b.length;j++) d[0][j]=j;
+    for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[a.length][b.length]; }
+  // namn som liknar det man skriver, för att undvika dubbletter
+  function similar(input,names){
+    const k=nkey(input); if(!k) return [];
+    return names.filter(n=>{ const m=nkey(n); return m===k || (k.length>=3&&(m.startsWith(k)||k.startsWith(m))) || lev(k,m)<=Math.max(1,Math.floor(Math.min(k.length,m.length)/4)); });
+  }
+  const errMsg=e=>{
+    const m=(e&&(e.message||e.error_description||e.msg))||'';
+    if(/fetch|network|load failed/i.test(m)) return 'Ingen kontakt med servern. Kolla att du har internet.';
+    if(/invalid login/i.test(m)) return 'Fel namn eller hemlig kod.';
+    if(/rate limit/i.test(m)) return 'För många försök. Vänta en stund och prova igen.';
+    return m||'Något gick fel. Försök igen.';
+  };
+  let sb=null, sbReach=false;
+  async function q(pr){ const {data,error}=await pr; if(error) throw error; return data; }
+  function loadScript(src){ return new Promise((res,rej)=>{ const e=document.createElement('script'); e.src=src; e.onload=res; e.onerror=rej; document.head.appendChild(e); }); }
+  async function sbInit(){
+    if(!SB_URL||!SB_KEY) return false;
+    try{
+      if(!window.supabase) await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js');
+      sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'glosforhoret.auth'}});
+      try{ const ctl=new AbortController(); setTimeout(()=>ctl.abort(),5000);
+        const r=await fetch(SB_URL+'/auth/v1/health',{headers:{apikey:SB_KEY},signal:ctl.signal}); sbReach=r.ok; }catch(e){ sbReach=false; }
+      return true;
+    }catch(e){ return false; }
+  }
+  const fromRow=r=>({id:r.id,name:r.name,lang:r.lang,text:r.words||'',group_id:r.group_id,owner_id:r.owner_id,mine:r.owner_id===C.uid});
+  const hashL=l=>[l.name,l.lang,l.text,l.group_id||''].join('\u0001');
+  const statsOut=()=>{ const o=Object.assign({},S); delete o.sound; delete o.speak; delete o.localOnly; return o; };
+  function freshStats(){ return {xp:0,streak:0,lastDay:null,dayXp:0,day:null,goal:30,words:{},done:{},sound:S.sound,speak:S.speak,strict:false,mode:'mix',scope:'weak'}; }
+  function cacheCloud(){ if(!C) return; write(CKEY,{uid:C.uid,secret:C.secret,profile:C.profile,classes:C.classes,groups:C.groups,myGroups:[...C.myGroups],links:C.links,people:C.people,lists,pushed:C.pushed,delq:C.delq}); }
+  function applyCache(x){ Object.assign(C,{secret:x.secret,profile:x.profile,classes:x.classes||[],groups:x.groups||[],myGroups:new Set(x.myGroups||[]),links:x.links||[],people:x.people||{},pushed:x.pushed||{},delq:x.delq||[]}); lists=x.lists||[]; }
+
+  async function cloudLoad(){
+    const uid=C.uid;
+    const [prof,classes,groups,gm,ls,ud,links]=await Promise.all([
+      q(sb.from('profiles').select('*').eq('id',uid).maybeSingle()),
+      q(sb.from('classes').select('*').order('name')),
+      q(sb.from('groups').select('id,class_id,term:terms(name),course:courses(name,lang)')),
+      q(sb.from('group_members').select('group_id')),
+      q(sb.from('lists').select('*').order('created_at',{ascending:false})),
+      q(sb.from('user_data').select('data').eq('user_id',uid).maybeSingle()),
+      q(sb.from('examiner_links').select('*')),
+    ]);
+    if(!prof) throw new Error('noprofile');
+    C.profile=prof; C.classes=classes; C.links=links;
+    C.groups=groups.map(g=>({id:g.id,class_id:g.class_id,term:(g.term||{}).name||'',course:(g.course||{}).name||'',lang:(g.course||{}).lang||null}))
+      .sort((a,b)=>b.term.localeCompare(a.term)||a.course.localeCompare(b.course));
+    C.myGroups=new Set(gm.map(x=>x.group_id));
+    const all=ls.map(fromRow);
+    if(prof.role==='forhorare'){
+      for(const lk of links.filter(l=>l.examiner_id===uid)){
+        (await q(sb.rpc('student_lists',{p_student:lk.student_id}))).forEach(r=>{ if(!all.some(x=>x.id===r.id)) all.push({...fromRow(r),mine:false,studentId:lk.student_id}); });
+      }
+    }
+    C.people={};
+    const ids=[...new Set([...all.filter(l=>!l.mine).map(l=>l.owner_id),...links.map(l=>l.student_id),...links.map(l=>l.examiner_id)])].filter(x=>x&&x!==uid);
+    if(ids.length) (await q(sb.from('profiles').select('id,username,display_name,role').in('id',ids))).forEach(p=>C.people[p.id]=p);
+    // behåll egna ändringar som inte hunnit upp till servern
+    const unsent=lists.filter(l=>l.mine && C.pushed && C.pushed[l.id]!==hashL(l) && !(C.delq||[]).includes(l.id));
+    unsent.forEach(l=>{ const i=all.findIndex(x=>x.id===l.id); if(i>=0) all[i]=l; else all.unshift(l); });
+    lists=all.filter(l=>!(C.delq||[]).includes(l.id));
+    C.pushed={}; ls.forEach(r=>C.pushed[r.id]=hashL(fromRow(r)));
+    if(ud && ud.data && Object.keys(ud.data).length && !C.statsDirty) S=Object.assign({},S,ud.data,{sound:S.sound,speak:S.speak});
+    write(SKEY,S); cacheCloud();
+  }
+  let pushT=null, pushing=false;
+  function cloudSchedule(){ if(!C) return; cacheCloud(); clearTimeout(pushT); pushT=setTimeout(cloudPush,700); }
+  async function cloudPush(){
+    if(!C||!sb||pushing) return; pushing=true;
+    try{
+      for(const id of [...(C.delq||[])]){ await q(sb.from('lists').delete().eq('id',id)); C.delq=C.delq.filter(x=>x!==id); }
+      const dirty=lists.filter(l=>l.mine && C.pushed[l.id]!==hashL(l));
+      if(dirty.length){
+        await q(sb.from('lists').upsert(dirty.map(l=>({id:l.id,owner_id:C.uid,group_id:l.group_id||null,name:l.name,lang:l.lang,words:l.text,updated_at:new Date().toISOString()}))));
+        dirty.forEach(l=>C.pushed[l.id]=hashL(l));
+      }
+      if(C.statsDirty){ C.statsDirty=false; await q(sb.from('user_data').upsert({user_id:C.uid,data:statsOut(),updated_at:new Date().toISOString()})); }
+      cacheCloud();
+    }catch(e){ if(C) C.statsDirty=C.statsDirty||false; }
+    finally{ pushing=false; }
+  }
+  async function migrateLocal(){
+    const old=(Array.isArray(read(KEY))?read(KEY):[]).filter(l=>!l.example && parse(l.text).length);
+    const map={}, rows=old.map(l=>{ const id=newId(); map[l.id]=id; return {id,owner_id:C.uid,name:l.name,lang:l.lang,words:l.text}; });
+    if(rows.length) await q(sb.from('lists').insert(rows));
+    const w={}; Object.entries(S.words||{}).forEach(([k,v])=>{ const i=k.indexOf('|'), id=k.slice(0,i); if(map[id]) w[map[id]+k.slice(i)]=v; });
+    const d={}; Object.entries(S.done||{}).forEach(([k,v])=>{ if(map[k]) d[map[k]]=v; });
+    S.words=w; S.done=d;
+    await q(sb.from('user_data').upsert({user_id:C.uid,data:statsOut()}));
+    write(KEY,[]);
+    return rows.length;
+  }
+
+  async function boot(){
+    if(!(await sbInit())) return;
+    let session=null; try{ session=(await sb.auth.getSession()).data.session; }catch(e){}
+    if(session){
+      C={uid:session.user.id,pushed:{},delq:[],classes:[],groups:[],myGroups:new Set(),links:[],people:{}};
+      const x=read(CKEY); if(x&&x.uid===C.uid) applyCache(x);
+      if(C.profile) renderHome();
+      try{ await cloudLoad(); await cloudPush(); renderHome(); }
+      catch(e){ if(e.message==='noprofile'){ await sb.auth.signOut(); C=null; showWelcome(); } else if(!C.profile){ C=null; renderHome(); } }
+      return;
+    }
+    renderAcctBtn();
+    if(!S.localOnly && sbReach) showWelcome();
+  }
+
+  /* välkommen, skapa konto, logga in */
+  let suRole='elev', suName='';
+  function showWelcome(){ $('wFrog').innerHTML=frog('happy'); $('localOnly').hidden=false; show('welcome'); }
+  document.querySelectorAll('.rolebtn').forEach(b=>b.onclick=()=>{
+    suRole=b.dataset.role; suName=genName();
+    $('suTitle').textContent=`Nytt konto: ${ROLE[suRole].toLowerCase()}`;
+    $('suName').textContent=suName; $('suErr').textContent='';
+    $('suDispBox').hidden=suRole==='elev';
+    $('suDispLbl').textContent = suRole==='larare' ? 'Namn som eleverna ser (valfritt)' : 'Namn som eleven ser (valfritt)';
+    $('suDisp').value='';
+    const n=(Array.isArray(read(KEY))?read(KEY):[]).filter(l=>!l.example&&parse(l.text).length).length;
+    $('suMigrate').textContent = n ? `Dina ${n} förhör i den här telefonen flyttas in i kontot, med XP och dagar i rad.` : '';
+    show('signup');
+  });
+  $('suReroll').onclick=()=>{ suName=genName(); $('suName').textContent=suName; sTap(); };
+  $('suBack').onclick=showWelcome;
+  $('toLogin').onclick=()=>{ $('liErr').textContent=''; show('login'); $('liName').focus(); };
+  $('liBack').onclick=showWelcome;
+  $('localOnly').onclick=()=>{ S.localOnly=true; write(SKEY,S); renderHome(); show('home'); };
+  $('suGo').onclick=async()=>{
+    const btn=$('suGo'); btn.disabled=true; $('suErr').textContent='';
+    try{
+      let done=false;
+      for(let i=0;i<5&&!done;i++){
+        const username = i===0 ? suName : genName(), secret=genSecret();
+        const {data,error}=await sb.auth.signUp({email:toEmail(username),password:secret});
+        if(error){ if(/already|registered|exists/i.test(error.message)) continue; throw error; }
+        if(!data.session) throw new Error('Kontot kräver e-postbekräftelse. Stäng av "Confirm email" i Supabase.');
+        C={uid:data.user.id,secret,pushed:{},delq:[],classes:[],groups:[],myGroups:new Set(),links:[],people:{}};
+        await q(sb.from('profiles').insert({id:C.uid,username,role:suRole,display_name:$('suDisp').value.trim()||null}));
+        delete S.localOnly;
+        await migrateLocal();
+        await cloudLoad();
+        $('seName').textContent=username; $('seCode').textContent=secret; $('seOk').checked=false; $('seGo').disabled=true;
+        show('secret'); done=true;
+      }
+      if(!done) throw new Error('Kunde inte hitta ett ledigt namn. Försök igen.');
+    }catch(e){ $('suErr').textContent=errMsg(e); }
+    finally{ btn.disabled=false; }
+  };
+  $('seOk').onchange=()=>{ $('seGo').disabled=!$('seOk').checked; };
+  $('seCopy').onclick=()=>copyText(`Namn: ${$('seName').textContent}\nHemlig kod: ${$('seCode').textContent}`,$('seCopy'));
+  $('seGo').onclick=()=>{ sWin(); renderHome(); show('home'); };
+  $('liGo').onclick=async()=>{
+    const btn=$('liGo'); btn.disabled=true; $('liErr').textContent='';
+    try{
+      const secret=$('liCode').value.trim().toLowerCase();
+      const {data,error}=await sb.auth.signInWithPassword({email:toEmail($('liName').value),password:secret});
+      if(error) throw error;
+      C={uid:data.user.id,secret,pushed:{},delq:[],classes:[],groups:[],myGroups:new Set(),links:[],people:{}};
+      S=freshStats(); lists=[];
+      await cloudLoad();
+      $('liName').value=''; $('liCode').value='';
+      renderHome(); show('home');
+    }catch(e){ C=null; $('liErr').textContent=errMsg(e); }
+    finally{ btn.disabled=false; }
+  };
+  async function copyText(t,btn){
+    try{ await navigator.clipboard.writeText(t); const o=btn.textContent; btn.textContent='Kopierat!'; setTimeout(()=>btn.textContent=o,1500); }
+    catch(e){ btn.textContent='Markera och kopiera texten'; }
+  }
+
+  function renderAcctBtn(){
+    const b=$('acctBtn');
+    if(C&&C.profile){ b.hidden=false; b.textContent=C.profile.username.split('-')[1]||'Konto'; b.setAttribute('aria-label','Mitt konto'); b.onclick=openAccount; }
+    else if(sb&&sbReach){ b.hidden=false; b.textContent='Logga in'; b.onclick=showWelcome; }
+    else b.hidden=true;
+  }
+
+  /* mitt konto */
+  function openAccount(){
+    const p=C.profile;
+    $('acName').textContent=p.username; $('acRole').textContent=ROLE[p.role];
+    $('acCode').textContent=C.secret||'Syns bara på telefonen där kontot skapades eller loggades in.';
+    $('acDispBox').hidden=p.role==='elev'; $('acDisp').value=p.display_name||'';
+    $('acInvite').hidden=p.role!=='elev'; $('acInvCode').hidden=true;
+    $('acErr').textContent=''; $('acLogoutConfirm').hidden=true;
+    const ex=C.links.filter(l=>l.student_id===C.uid);
+    $('acExaminers').innerHTML=ex.map(l=>`<li><b>${esc(personName(C.people[l.examiner_id]||{username:'Förhörare'}))}</b><button class="link" data-x="${l.examiner_id}" style="color:var(--red)">Ta bort</button></li>`).join('');
+    $('acExaminers').querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{
+      try{ await q(sb.from('examiner_links').delete().eq('student_id',C.uid).eq('examiner_id',b.dataset.x)); await cloudLoad(); openAccount(); }catch(e){ $('acErr').textContent=errMsg(e); }
+    });
+    show('account');
+  }
+  $('acBack').onclick=()=>{ renderHome(); show('home'); };
+  $('acDispSave').onclick=async()=>{
+    try{ await q(sb.from('profiles').update({display_name:$('acDisp').value.trim()||null}).eq('id',C.uid)); C.profile.display_name=$('acDisp').value.trim()||null; cacheCloud(); $('acDispSave').textContent='Sparat!'; setTimeout(()=>$('acDispSave').textContent='Spara',1500); }
+    catch(e){ $('acErr').textContent=errMsg(e); }
+  };
+  $('acInvBtn').onclick=async()=>{
+    try{ const code=await q(sb.rpc('create_examiner_invite')); $('acInvCode').textContent=code; $('acInvCode').hidden=false; }
+    catch(e){ $('acErr').textContent=errMsg(e); }
+  };
+  $('acLogout').onclick=()=>{ $('acLogoutConfirm').hidden=false; };
+  $('acLogoutNo').onclick=()=>{ $('acLogoutConfirm').hidden=true; };
+  $('acLogoutYes').onclick=async()=>{
+    await cloudPush(); try{ await sb.auth.signOut(); }catch(e){}
+    try{ localStorage.removeItem(CKEY); }catch(e){}
+    C=null; S=freshStats(); write(SKEY,S); lists=Array.isArray(read(KEY))?read(KEY):[];
+    renderHome(); showWelcome();
+  };
+
+  /* hem: klasser och elever */
+  function renderCloudHome(){
+    const box=$('cloudHome'); box.innerHTML='';
+    if(!C||!C.profile){ box.hidden=true; return; }
+    box.hidden=false;
+    const role=C.profile.role;
+    if(role==='forhorare'){
+      box.insertAdjacentHTML('beforeend','<h2 class="sect">Mina elever</h2>');
+      const studs=C.links.filter(l=>l.examiner_id===C.uid);
+      if(!studs.length) box.insertAdjacentHTML('beforeend','<p class="emptytxt">Du förhör ingen än. Be eleven skapa en kod under Mitt konto och skriv in den här.</p>');
+      studs.forEach(lk=>{
+        const p=C.people[lk.student_id]||{username:'Elev'};
+        box.insertAdjacentHTML('beforeend',`<div class="classhead"><h3>${esc(personName(p))}</h3></div>`);
+        const ls=lists.filter(l=>l.studentId===lk.student_id);
+        if(!ls.length) box.insertAdjacentHTML('beforeend','<p class="emptytxt">Inga listor än.</p>');
+        ls.forEach(l=>box.appendChild(listCard(l)));
+      });
+      const add=document.createElement('div'); add.className='importbox';
+      add.innerHTML=`<h3>Lägg till en elev</h3><p class="hint" style="margin:0">Skriv koden som eleven har skapat.</p>
+        <div class="row2"><input type="text" id="exCode" placeholder="t.ex. PANDA-1234" autocapitalize="characters" autocorrect="off" autocomplete="off"><button class="btn" id="exGo">Lägg till</button></div><p class="errmsg" id="exErr"></p>`;
+      box.appendChild(add);
+      $('exGo').onclick=async()=>{ try{ await q(sb.rpc('redeem_examiner_invite',{p_code:$('exCode').value})); await cloudLoad(); renderHome(); }catch(e){ $('exErr').textContent=errMsg(e); } };
+      return;
+    }
+    const head=document.createElement('div'); head.className='classhead';
+    head.innerHTML='<h2 class="sect" style="margin:0">Mina klasser</h2><button class="btn ghost" id="toClasses">Gå med / skapa</button>';
+    box.appendChild(head); $('toClasses').onclick=openClasses;
+    if(!C.classes.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">${role==='larare'?'Du har inga klasser än. Skapa en klass eller gå med med en klasskod.':'Du är inte med i någon klass än. Fråga din lärare efter klasskoden.'}</p>`);
+    C.classes.forEach(c=>{
+      const h=document.createElement('div'); h.className='classhead';
+      h.innerHTML=`<h3>${esc(c.name)}</h3><button class="btn ghost">Hantera</button>`;
+      h.querySelector('button').onclick=()=>openKlass(c.id); box.appendChild(h);
+      const gs=C.groups.filter(g=>g.class_id===c.id && C.myGroups.has(g.id));
+      if(!gs.length) box.insertAdjacentHTML('beforeend','<p class="emptytxt">Välj termin och kurs under Hantera.</p>');
+      gs.forEach(g=>{
+        box.insertAdjacentHTML('beforeend',`<div class="grouphead">${esc(g.term)} · ${esc(g.course)}</div>`);
+        const ls=lists.filter(l=>l.group_id===g.id);
+        if(!ls.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">${role==='larare'?'Inga förhör i kursen än.':'Läraren har inte lagt upp några förhör än.'}</p>`);
+        ls.forEach(l=>box.appendChild(listCard(l)));
+        if(role==='larare'){
+          const b=document.createElement('button'); b.className='btn ghost wide'; b.innerHTML='<svg width="18" height="18"><use href="#i-plus"/></svg>Ny lista i kursen';
+          b.onclick=()=>openEdit(null,g.id); box.appendChild(b);
+        }
+      });
+    });
+  }
+
+  /* gå med i / skapa klass */
+  function openClasses(){ $('joinErr').textContent=''; $('ccErr').textContent=''; $('joinCode').value=''; $('newClassName').value=''; $('classSugg').innerHTML=''; show('classes'); }
+  $('clBack').onclick=()=>{ renderHome(); show('home'); };
+  $('joinBtn').onclick=async()=>{
+    $('joinErr').textContent='';
+    try{ const c=await q(sb.rpc('join_class',{p_code:$('joinCode').value})); await cloudLoad(); openKlass(c.id); }
+    catch(e){ $('joinErr').textContent=errMsg(e); }
+  };
+  $('newClassName').oninput=()=>{
+    const sim=similar($('newClassName').value,C.classes.map(c=>c.name));
+    $('classSugg').innerHTML = sim.length ? `<span>Du är redan med i ${sim.map(n=>`<b>${esc(n)}</b>`).join(', ')}. Menade du den?</span>`+
+      sim.map(n=>`<button class="btn ghost" data-open="${esc(C.classes.find(c=>c.name===n).id)}">Öppna ${esc(n)}</button>`).join('') : '';
+    $('classSugg').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openKlass(b.dataset.open));
+  };
+  $('createClassBtn').onclick=async()=>{
+    const name=$('newClassName').value.trim(); if(!name){ $('ccErr').textContent='Skriv ett namn på klassen.'; return; }
+    try{ const c=await q(sb.rpc('create_class',{p_name:name})); await cloudLoad(); openKlass(c.id); }
+    catch(e){ $('ccErr').textContent=errMsg(e); }
+  };
+
+  /* en klass: kod, terminer och kurser */
+  let K=null, allCourses=[], allTerms=[], tTerm='HT', cLang='fr';
+  function curTerm(){ const d=new Date(); return {y:d.getFullYear(), p:d.getMonth()<6?'VT':'HT'}; }
+  async function openKlass(id){
+    K=C.classes.find(c=>c.id===id); if(!K) return;
+    $('kName').textContent=K.name; $('kCode').textContent=K.join_code;
+    const canRename = C.profile.role==='larare' || K.created_by===C.uid;
+    $('kRename').hidden=!canRename; $('kNameIn').value=K.name;
+    $('gErr').textContent=''; $('cName').value=''; $('kLeave').dataset.sure='';
+    $('kLeave').textContent='Lämna klassen';
+    const t=curTerm();
+    $('tYear').innerHTML=[t.y-1,t.y,t.y+1].map(y=>`<option ${y===t.y?'selected':''}>${y}</option>`).join('');
+    tTerm=t.p; setSeg('tSeg',tTerm); cLang='fr'; setSeg('cLang',cLang);
+    renderKGroups(); gHint(); show('klass');
+    try{ [allCourses,allTerms]=await Promise.all([q(sb.from('courses').select('name,lang').order('name')),q(sb.from('terms').select('name'))]); }catch(e){}
+    gHint();
+  }
+  function renderKGroups(){
+    const gs=C.groups.filter(g=>g.class_id===K.id), box=$('kGroups'); box.innerHTML='';
+    if(!gs.length) box.innerHTML='<p class="emptytxt" style="text-align:left">Inga än. Lägg till en termin och kurs nedan.</p>';
+    gs.forEach(g=>{
+      const d=document.createElement('div'); d.className='grow';
+      const inG=C.myGroups.has(g.id);
+      d.innerHTML=`<b>${esc(g.term)} · ${esc(g.course)}</b>${inG?'<span class="in">Du är med</span>':'<button class="btn">Gå med</button>'}`;
+      if(!inG) d.querySelector('button').onclick=async()=>{ try{ await q(sb.rpc('join_group',{p_group:g.id})); await cloudLoad(); renderKGroups(); }catch(e){ $('gErr').textContent=errMsg(e); } };
+      box.appendChild(d);
+    });
+  }
+  const termName=()=>`${$('tYear').value}-${tTerm}`;
+  function guessLang(n){ const k=nkey(n); return /^fran|^fre/.test(k)?'fr':/^eng/.test(k)?'en':/^span|^spa|^esp/.test(k)?'es':null; }
+  function gHint(){
+    const name=$('cName').value.trim(), tn=termName(), out=[];
+    const exact=allCourses.find(c=>nkey(c.name)===nkey(name));
+    const sim=name?similar(name,allCourses.map(c=>c.name)).filter(n=>!exact||n!==exact.name).slice(0,4):[];
+    $('cChips').innerHTML = sim.map(n=>`<button type="button" class="altchip" data-n="${esc(n)}">Menar du ${esc(n)}?</button>`).join('');
+    $('cChips').querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ $('cName').value=b.dataset.n; gHint(); });
+    if(exact){ out.push(`Kursen <b>${esc(exact.name)}</b> finns redan och används.`); if(exact.lang){ cLang=exact.lang; setSeg('cLang',cLang); } }
+    else if(name){ const g=guessLang(name); if(g){ cLang=g; setSeg('cLang',cLang); } }
+    if(allTerms.some(t=>t.name===tn)) out.push(`Terminen <b>${tn}</b> finns redan och används.`);
+    const dup=C.groups.find(g=>g.class_id===K.id && g.term===tn && exact && nkey(g.course)===nkey(exact.name));
+    if(dup) out.push(C.myGroups.has(dup.id)?'Den här terminen och kursen finns redan i klassen och du är med.':'Den här terminen och kursen finns redan i klassen. Du går med i den.');
+    $('gHint').innerHTML=out.map(t=>`<span>${t}</span>`).join('');
+  }
+  $('cName').oninput=gHint; $('tYear').onchange=gHint;
+  $('tSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ tTerm=b.dataset.v; setSeg('tSeg',tTerm); gHint(); });
+  $('cLang').querySelectorAll('button').forEach(b=>b.onclick=()=>{ cLang=b.dataset.v; setSeg('cLang',cLang); });
+  $('gAdd').onclick=async()=>{
+    const name=$('cName').value.trim(); if(!name){ $('gErr').textContent='Skriv vilken kurs det är, t.ex. Franska.'; return; }
+    $('gErr').textContent='';
+    try{ await q(sb.rpc('ensure_group',{p_class:K.id,p_term:termName(),p_course:name,p_lang:cLang})); await cloudLoad(); $('cName').value=''; renderKGroups(); gHint(); sGood(); }
+    catch(e){ $('gErr').textContent=errMsg(e); }
+  };
+  $('kRenameBtn').onclick=async()=>{
+    const n=$('kNameIn').value.trim(); if(!n) return;
+    try{ await q(sb.rpc('rename_class',{p_class:K.id,p_name:n})); await cloudLoad(); K=C.classes.find(c=>c.id===K.id); $('kName').textContent=K.name; }
+    catch(e){ $('gErr').textContent=errMsg(e); }
+  };
+  $('kCopy').onclick=()=>copyText(K.join_code,$('kCopy'));
+  $('kBack').onclick=()=>{ renderHome(); show('home'); };
+  $('kLeave').onclick=async()=>{
+    if(!$('kLeave').dataset.sure){ $('kLeave').dataset.sure='1'; $('kLeave').textContent='Tryck igen för att lämna klassen'; return; }
+    try{
+      const gids=C.groups.filter(g=>g.class_id===K.id).map(g=>g.id);
+      if(gids.length) await q(sb.from('group_members').delete().eq('user_id',C.uid).in('group_id',gids));
+      await q(sb.from('class_members').delete().eq('user_id',C.uid).eq('class_id',K.id));
+      await cloudLoad(); renderHome(); show('home');
+    }catch(e){ $('gErr').textContent=errMsg(e); }
+  };
 
   /* ---------- HOME ---------- */
   let confirmId=null;
   function setSeg(id,val){ $(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===val)); }
+  function listCard(l){
+    const edit = !C || l.mine;
+    const pairs=parse(l.text), n=pairs.length, lv=Math.min(3,S.done[l.id]||0);
+    const weak=pairs.filter(p=>(S.words[wkey(l,p)]||0)<2).length;
+    const stars=[0,1,2].map(i=>`<svg style="color:${i<lv?'var(--gold)':'var(--locked-d)'}"><use href="#i-star"/></svg>`).join('');
+    const who = C && !l.mine && l.owner_id && C.people[l.owner_id] ? personName(C.people[l.owner_id]) : '';
+    const c=document.createElement('div'); c.className='lc';
+    c.innerHTML=`<div class="lc-main">
+        <div class="lc-icon ${n?l.lang:'empty'}"><svg><use href="#i-book"/></svg><span>${LANG[l.lang].short}</span></div>
+        <div class="lc-text"><div class="title">${esc(l.name)}</div>
+          <div class="meta">${n} ord${n?(weak?` · ${weak} att öva på`:' · kan alla'):''}${l.example?' · <i>exempel</i>':''}</div>
+          ${who?`<div class="from">Från ${esc(who)}</div>`:''}
+          <div class="stars" title="${lv} av 3 stjärnor">${stars}</div></div>
+      </div>
+      <div class="lc-acts">
+        <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
+        ${edit?`<button class="iconbtn" data-a="add" aria-label="Lägg till ord i ${esc(l.name)}"><svg><use href="#i-plus"/></svg></button>
+        <button class="iconbtn" data-a="edit" aria-label="Ändra ${esc(l.name)}"><svg><use href="#i-pen"/></svg></button>
+        <button class="iconbtn danger" data-a="del" aria-label="Radera ${esc(l.name)}"><svg><use href="#i-trash"/></svg></button>`:''}
+      </div>
+      ${confirmId===l.id?`<div class="confirm"><span>Radera "${esc(l.name)}"?${l.group_id?' Den försvinner för alla i kursen.':''} Det går inte att ångra.</span>
+        <div class="acts2"><button class="btn red" data-a="yes">Ja, radera</button><button class="btn ghost" data-a="no">Nej</button></div></div>`:''}`;
+    c.querySelector('[data-a=go]').onclick=()=>startLesson(l,S.scope==='all',S.mode==='write');
+    if(edit){
+      c.querySelector('[data-a=edit]').onclick=()=>openEdit(l.id);
+      c.querySelector('[data-a=add]').onclick=()=>openAdd(l.id);
+      c.querySelector('[data-a=del]').onclick=()=>{ confirmId = confirmId===l.id?null:l.id; renderHome(); };
+      if(confirmId===l.id){
+        c.querySelector('[data-a=yes]').onclick=()=>{ removeList(l); };
+        c.querySelector('[data-a=no]').onclick=()=>{ confirmId=null; renderHome(); };
+      }
+    }
+    return c;
+  }
   function renderHome(){
     const st=liveStreak();
     $('streakN').textContent=st; $('streakStat').classList.toggle('off',!st || S.lastDay!==dayStr());
@@ -590,41 +1150,19 @@ dimma = fog`}
     $('chipStrict').setAttribute('aria-pressed',S.strict);
     $('listCount').textContent = lists.length ? `(${lists.length})` : '';
 
+    const own=lists.filter(l=>!l.group_id && !l.studentId && l.mine!==false);
+    $('listCount').textContent = own.length ? `(${own.length})` : '';
+    $('ownHead').textContent = C ? 'Mina egna förhör' : 'Mina förhör';
     const box=$('cards'); box.innerHTML='';
-    if(!lists.length){ box.innerHTML='<p class="emptytxt">Inga förhör än. Tryck på Ny lista och skriv in dina glosor.</p>'; }
-    lists.forEach(l=>{
-      const pairs=parse(l.text), n=pairs.length, lv=Math.min(3,S.done[l.id]||0);
-      const weak=pairs.filter(p=>(S.words[wkey(l,p)]||0)<2).length;
-      const stars=[0,1,2].map(i=>`<svg style="color:${i<lv?'var(--gold)':'var(--locked-d)'}"><use href="#i-star"/></svg>`).join('');
-      const c=document.createElement('div'); c.className='lc';
-      c.innerHTML=`<div class="lc-main">
-          <div class="lc-icon ${n?l.lang:'empty'}"><svg><use href="#i-book"/></svg><span>${LANG[l.lang].short}</span></div>
-          <div class="lc-text"><div class="title">${esc(l.name)}</div>
-            <div class="meta">${n} ord${n?(weak?` · ${weak} att öva på`:' · kan alla'):''}${l.example?' · <i>exempel</i>':''}</div>
-            <div class="stars" title="${lv} av 3 stjärnor">${stars}</div></div>
-        </div>
-        <div class="lc-acts">
-          <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
-          <button class="iconbtn" data-a="add" aria-label="Lägg till ord i ${esc(l.name)}"><svg><use href="#i-plus"/></svg></button>
-          <button class="iconbtn" data-a="edit" aria-label="Ändra ${esc(l.name)}"><svg><use href="#i-pen"/></svg></button>
-          <button class="iconbtn danger" data-a="del" aria-label="Radera ${esc(l.name)}"><svg><use href="#i-trash"/></svg></button>
-        </div>
-        ${confirmId===l.id?`<div class="confirm"><span>Radera "${esc(l.name)}"? Det går inte att ångra.</span>
-          <div class="acts2"><button class="btn red" data-a="yes">Ja, radera</button><button class="btn ghost" data-a="no">Nej</button></div></div>`:''}`;
-      c.querySelector('[data-a=go]').onclick=()=>startLesson(l,S.scope==='all',S.mode==='write');
-      c.querySelector('[data-a=edit]').onclick=()=>openEdit(l.id);
-      c.querySelector('[data-a=add]').onclick=()=>openAdd(l.id);
-      c.querySelector('[data-a=del]').onclick=()=>{ confirmId = confirmId===l.id?null:l.id; renderHome(); };
-      if(confirmId===l.id){
-        c.querySelector('[data-a=yes]').onclick=()=>{ removeList(l); };
-        c.querySelector('[data-a=no]').onclick=()=>{ confirmId=null; renderHome(); };
-      }
-      box.appendChild(c);
-    });
+    if(!own.length) box.innerHTML=`<p class="emptytxt">${C?'Inga egna förhör än. Tryck på Ny lista för att göra ett.':'Inga förhör än. Tryck på Ny lista och skriv in dina glosor.'}</p>`;
+    own.forEach(l=>box.appendChild(listCard(l)));
+    renderCloudHome();
+    renderAcctBtn();
     if($('home').hidden) show('home');
   }
   function removeList(l){
     lists=lists.filter(x=>x!==l); confirmId=null;
+    if(C){ C.delq=(C.delq||[]).concat(l.id); delete C.pushed[l.id]; }
     delete S.done[l.id]; Object.keys(S.words).forEach(k=>{ if(k.startsWith(l.id+'|')) delete S.words[k]; });
     saveLists(); saveStats(); renderHome();
   }
@@ -636,11 +1174,20 @@ dimma = fog`}
   let editing=null, editLang='fr';
   function setLang(l){ editLang=l; $('langSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===l)); }
   $('langSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
-  function openEdit(id){
+  function groupLabel(g){ const c=C.classes.find(x=>x.id===g.class_id); return `${c?c.name:''} · ${g.term} · ${g.course}`; }
+  function openEdit(id,groupId){
     editing = id?lists.find(l=>l.id===id):null;
+    const teacher = C && C.profile.role==='larare';
+    $('placeBox').hidden=!teacher;
+    if(teacher){
+      const gs=C.groups.filter(g=>C.myGroups.has(g.id));
+      $('listPlace').innerHTML='<option value="">Bara för mig</option>'+gs.map(g=>`<option value="${g.id}">${esc(groupLabel(g))}</option>`).join('');
+      $('listPlace').value = editing ? (editing.group_id||'') : (groupId||'');
+      $('listPlace').onchange=()=>{ const g=C.groups.find(x=>x.id===$('listPlace').value); if(g&&g.lang&&!editing) setLang(g.lang); };
+    }
     $('editTitle').textContent = editing?'Ändra lista':'Ny lista';
     $('listName').value = editing?editing.name:'';
-    setLang(editing?editing.lang:'fr');
+    setLang(editing?editing.lang:((groupId&&C&&(C.groups.find(g=>g.id===groupId)||{}).lang)||'fr'));
     $('listWords').value = editing?editing.text:'';
     $('deleteBtn').hidden=!editing; $('confirmDelete').hidden=true;
     updateCount(); show('edit'); $('listName').focus();
@@ -656,8 +1203,9 @@ dimma = fog`}
   $('editCancel').onclick=()=>{show('home');renderHome();};
   $('saveBtn').onclick=()=>{
     const data={name:$('listName').value.trim()||'Namnlös lista',lang:editLang,text:$('listWords').value};
+    if(C && C.profile.role==='larare') data.group_id=$('listPlace').value||null;
     if(editing){Object.assign(editing,data);delete editing.example;}
-    else { lists.unshift({id:'l'+Date.now(),...data}); }
+    else { lists.unshift(C ? {id:newId(),owner_id:C.uid,mine:true,group_id:null,...data} : {id:'l'+Date.now(),...data}); }
     saveLists(); renderHome();
   };
   $('deleteBtn').onclick=()=>{$('confirmDelete').hidden=false;};
@@ -1268,6 +1816,7 @@ dimma = fog`}
   }
 
   renderHome();
+  boot();
 })();
 </script>
 
