@@ -342,7 +342,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   </div>
   <div class="importbox">
     <h3>Har du glosorna på papper?</h3>
-    <p class="hint" style="margin:0">Ta en bild på glosorna. Sedan kollar du varje ord innan det läggs till.</p>
+    <p class="hint" style="margin:0">Appen letar upp glosorna och hoppar över rubriker, namn och datum. Saknas svenskan föreslår den en översättning. Du godkänner varje ord innan det läggs till.</p>
     <div class="two">
       <button type="button" class="btn blue" data-imp="cam"><svg width="20" height="20"><use href="#i-cam"/></svg>Fotografera</button>
       <button type="button" class="btn ghost" data-imp="file"><svg width="20" height="20"><use href="#i-up"/></svg>Bild eller fil</button>
@@ -378,7 +378,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <p class="hint okmsg" id="addMsg" style="margin-top:-8px"></p>
   <div class="importbox">
     <h3>Har du glosorna på papper?</h3>
-    <p class="hint" style="margin:0">Ta en bild på glosorna. Sedan kollar du varje ord innan det läggs till.</p>
+    <p class="hint" style="margin:0">Appen letar upp glosorna och hoppar över rubriker, namn och datum. Saknas svenskan föreslår den en översättning. Du godkänner varje ord innan det läggs till.</p>
     <div class="two">
       <button type="button" class="btn blue" data-imp="cam"><svg width="20" height="20"><use href="#i-cam"/></svg>Fotografera</button>
       <button type="button" class="btn ghost" data-imp="file"><svg width="20" height="20"><use href="#i-up"/></svg>Bild eller fil</button>
@@ -713,11 +713,11 @@ dimma = fog`}
     const isText=/^text\//.test(f.type)||/\.(txt|csv|tsv)$/i.test(f.name);
     const isImg=/^image\//.test(f.type)||/\.(jpe?g|png|heic|heif|webp|gif)$/i.test(f.name);
     try{
-      if(isText){ IMP.rows=textRows(await f.text(),IMP.lang); }
+      if(isText){ IMP.res=await buildRows(textCands(await f.text()),IMP.lang,revStatus); }
       else if(isImg){
         $('revImg').src=URL.createObjectURL(f); $('revImgBox').hidden=false; $('revImgBox').open=false;
         revStatus(0,'Startar bildläsaren…');
-        IMP.rows=rowsFromOcr(await ocr(f,IMP.lang,revStatus),IMP.lang);
+        IMP.res=await buildRows(ocrCands(await ocr(f,IMP.lang,revStatus)),IMP.lang,revStatus);
       }
       else { revStatus(0,'Den filtypen kan appen inte läsa. Ta ett foto, välj en bild eller en textfil (.txt).'); $('revTools').hidden=false; revFooter(); return; }
     }catch(err){
@@ -725,9 +725,9 @@ dimma = fog`}
       $('revTools').hidden=false; revFooter(); return;
     }
     $('revProgress').hidden=true;
-    if(orient(IMP.rows,IMP.lang)){ IMP.rows.forEach(r=>{[r.sv,r.fx]=[r.fx,r.sv];}); note('Jag bytte plats på kolumnerna så att svenskan hamnar till vänster. Kolla att det blev rätt.'); }
-    if(!IMP.rows.length) note('Jag hittade inga ord. Prova att ta bilden rakt ovanifrån med bra ljus, eller lägg till raderna själv.');
-    else note(`Jag hittade ${IMP.rows.length} rader. Rätta det som blev fel och tryck på Stämmer på varje ord som är rätt. Gula rader är jag osäker på.`);
+    IMP.rows=IMP.res.rows;
+    if(!IMP.rows.length) note('Jag hittade inga glosor. Prova att ta bilden rakt ovanifrån med bra ljus, eller lägg till raderna själv.');
+    else note(IMP.res.msg+' Gula rader behöver du kolla extra noga.');
     $('revTools').hidden=false; renderRows();
   }
   function note(t){ $('revNote').textContent=t; $('revNote').hidden=false; }
@@ -774,15 +774,56 @@ dimma = fog`}
     if(t.length===2) return {sv:t[0],fx:t[1],how:'two'};
     return {sv:t[0]||'',fx:t.slice(1).join(' '),how:'guess'};
   }
-  function textRows(text,lang){
-    return text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{
-      const p=splitLine(l.replace(/^([^,]+),\s*([^,]+)$/,'$1 = $2'),lang);
-      return {sv:cleanW(p.sv),fx:cleanW(p.fx),unsure:p.how==='guess'||!p.fx,ok:false};
-    }).filter(r=>r.sv||r.fx);
+  /* --- turning OCR/text into glosor --- */
+  const FR_W=new Set("le la les l un une des du de d et est es suis sont pas ne n ce c je j tu il elle on nous vous ils elles à au aux en y moi toi lui vos votre mon ma mes ton ta tes son sa ses sur dans avec pour par qui que qu quoi où comment oui non très bien merci bonjour salut voici voilà mais ou donc car chez sans sous".split(' '));
+  const EN_W=new Set("the a an to and is are am was were be of in on at for with from you i he she it we they not no yes do does did have has this that these those my your his her our their what where when how who why can will please thank hello good very".split(' '));
+  const SV_W=new Set("och att det är en ett i på med för till av som jag du han hon vi ni de dem inte har kan ska vill den detta vad var när hur varför ja nej tack hej mycket bra från om men eller så också läxa läxor vecka åk sidan glosor franska engelska svenska".split(' '));
+  function langOf(line,lang){
+    const low=line.toLowerCase(), toks=low.split(/[^a-zà-ÿœæ]+/).filter(Boolean);
+    let fr=0,en=0,sv=0;
+    if(/[åäö]/.test(low)) sv+=3;
+    if(/[éèêëàâçîïôûùœ]/.test(low)) fr+=3;
+    if(/\s[!?;:]\s*$/.test(line)) fr+=1;
+    if(/[a-zé]+-(moi|toi|vous|nous|il|elle|le|la|les)\b/.test(low)) fr+=2;
+    if(/\b(l|d|j|n|c|qu|s|m|t)['’]/.test(low)) fr+=2;
+    toks.forEach(t=>{
+      if(FR_W.has(t)) fr+=1.5; if(EN_W.has(t)) en+=1.5; if(SV_W.has(t)) sv+=1.5;
+      if(/(ez|eux|aux|eau|tion|ment|oire|ette|ille|que|ais|ait|ée)$/.test(t)) fr+=.5;
+      if(/(ing|ed|ly|ness|ful|ght)$/.test(t)) en+=.5;
+      if(/(ning|het|lig|arna|orna|erna|skap)$/.test(t)) sv+=.5;
+    });
+    const T = lang==='fr'?fr:en;
+    if(sv>=1.5 && sv>T) return 'sv';
+    if(T>0 && T>=sv) return 'fx';
+    return '?';
   }
-  function rowsFromOcr(data,lang){
+  // things on a screenshot or page that are not glosor
+  function isJunk(line){
+    const letters=(line.match(/[a-zà-ÿœæåäö]/gi)||[]).length;
+    if(letters<2) return true;
+    if(/\d/.test(line)) return true;                       // dates, times, page numbers, "åk 7"
+    const lw=line.match(/[A-Za-zÀ-ÿŒœÅÄÖåäö]+/g)||[];
+    if(lw.every(w=>w.length>=3 && w===w.toUpperCase())) return true; // headings like KALENDER
+    if(/^[A-ZÅÄÖ][\wåäöéè-]+,\s*[A-ZÅÄÖ][\wåäöéè-]+\W*$/.test(line.trim())) return true; // "Efternamn, Förnamn"
+    if(letters/line.replace(/\s/g,'').length<.6) return true;  // mostly symbols
+    return false;
+  }
+  // "absent, -e" -> "absent / absente"
+  function expandForms(fx){
+    const m=fx.match(/^(.+?),\s*-([a-zà-ÿ]+)$/i); if(!m) return fx;
+    const w=m[1].trim(), suf=m[2];
+    const fem = /x$/.test(w)&&suf==='se' ? w.slice(0,-1)+'se' : /f$/.test(w)&&suf==='ve' ? w.slice(0,-1)+'ve' : w+suf;
+    return `${w} / ${fem}`;
+  }
+  function textCands(text){
+    return text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(line=>{
+      const p=splitLine(line,'');
+      return {line, split: p.how==='sep'?{sv:p.sv,fx:p.fx}:null, conf:100};
+    });
+  }
+  function ocrCands(data){
     const words=(data.words||[]).filter(w=>w.text&&w.text.trim()&&w.confidence>15);
-    if(!words.length) return textRows(data.text||'',lang);
+    if(!words.length) return textCands(data.text||'');
     const hs=words.map(w=>w.bbox.y1-w.bbox.y0).sort((a,b)=>a-b), h=hs[hs.length>>1]||20;
     const rows=[];
     words.slice().sort((a,b)=>(a.bbox.y0+a.bbox.y1)-(b.bbox.y0+b.bbox.y1)).forEach(w=>{
@@ -793,15 +834,69 @@ dimma = fog`}
     rows.sort((a,b)=>a.yc-b.yc);
     return rows.map(r=>{
       const ws=r.ws.sort((a,b)=>a.bbox.x0-b.bbox.x0);
-      const conf=Math.min(...ws.map(w=>w.confidence));
+      const line=ws.map(w=>w.text).join(' ');
       let gap=-1,gi=-1;
       for(let i=0;i<ws.length-1;i++){ const g=ws[i+1].bbox.x0-ws[i].bbox.x1; if(g>gap){gap=g;gi=i;} }
-      const line=ws.map(w=>w.text).join(' ');
-      let p=splitLine(line,lang);
-      if(p.how!=='sep' && gi>=0 && gap>h*1.2) p={sv:ws.slice(0,gi+1).map(w=>w.text).join(' '),fx:ws.slice(gi+1).map(w=>w.text).join(' '),how:'gap'};
-      const sv=cleanW(p.sv), fx=cleanW(p.fx);
-      return {sv,fx,ok:false,unsure:conf<70||p.how==='guess'||!sv||!fx};
-    }).filter(r=>(r.sv+r.fx).length>1);
+      const p=splitLine(line,'');
+      const split = p.how==='sep' ? {sv:p.sv,fx:p.fx}
+        : (gi>=0 && gap>h*1.5) ? {sv:ws.slice(0,gi+1).map(w=>w.text).join(' '),fx:ws.slice(gi+1).map(w=>w.text).join(' ')} : null;
+      return {line, split, conf:Math.min(...ws.map(w=>w.confidence))};
+    });
+  }
+
+  async function buildRows(cands,lang,prog){
+    const nm=LANG[lang].name;
+    cands=cands.map(c=>({...c,line:cleanW(c.line)})).filter(c=>c.line && !isJunk(c.line));
+    const paired=cands.filter(c=>c.split && !isJunk(c.split.sv) && !isJunk(c.split.fx));
+    let rows=[], msg='';
+
+    if(paired.length>=2 && paired.length>=cands.length*.5){
+      // two columns: Swedish and the other language side by side
+      rows=paired.map(c=>({sv:cleanW(c.split.sv),fx:expandForms(cleanW(c.split.fx)),ok:false,unsure:c.conf<70}));
+      if(orient(rows,lang)){ rows.forEach(r=>{[r.sv,r.fx]=[r.fx,r.sv];}); msg='Jag bytte plats på kolumnerna så att svenskan hamnar till vänster. '; }
+      msg+=`Jag hittade ${rows.length} glosor med både svenska och ${nm}.`;
+      return {rows,msg};
+    }
+
+    // one column: sort lines into Swedish / the other language / other text
+    const items=cands.map(c=>({text:c.line,conf:c.conf,k:langOf(c.line,lang)})).filter(x=>!(x.k==='sv'&&false));
+    const fx=items.filter(x=>x.k!=='sv'), sv=items.filter(x=>x.k==='sv');
+    if(sv.length>=2 && sv.length>=fx.length*.6){
+      // alternating lines: word, translation, word, translation …
+      for(let i=0;i<items.length;i++){
+        const a=items[i], b=items[i+1];
+        if(b && a.k!=='sv' && b.k==='sv'){ rows.push({sv:b.text,fx:expandForms(a.text),ok:false,unsure:a.conf<70||b.conf<70}); i++; }
+        else if(b && a.k==='sv' && b.k!=='sv'){ rows.push({sv:a.text,fx:expandForms(b.text),ok:false,unsure:a.conf<70||b.conf<70}); i++; }
+      }
+      msg=`Jag hittade ${rows.length} glosor med både svenska och ${nm}.`;
+      return {rows,msg};
+    }
+
+    // only the foreign words: the Swedish must be filled in
+    rows=fx.map(x=>({sv:'',fx:expandForms(x.text),ok:false,unsure:x.conf<70||x.k==='?',needSv:true}));
+    const skipped=cands.length-rows.length;
+    msg=`Jag hittade ${rows.length} ord på ${nm} men ingen svenska.`;
+    let done=0, got=0;
+    await pool(rows,3,async r=>{
+      try{ const t=await translate(r.fx.split('/')[0].trim(),lang); if(t){ r.sv=t; r.suggested=true; got++; } }catch(e){}
+      prog && prog(++done/rows.length,`Föreslår svenska översättningar… ${done} av ${rows.length}`);
+    });
+    msg += got ? ` Jag har föreslagit svenska översättningar. Kolla varje förslag och ändra om det behövs innan du godkänner.`
+               : ` Skriv den svenska översättningen på varje rad innan du godkänner den.`;
+    if(skipped>0) msg+=` ${skipped} rad${skipped>1?'er':''} som inte såg ut som glosor (rubriker, namn, datum) hoppade jag över.`;
+    return {rows,msg};
+  }
+  async function pool(items,n,fn){ let i=0; await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{ while(i<items.length) await fn(items[i++]); })); }
+  async function translate(text,lang){
+    text=text.toLowerCase();
+    const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${lang==='fr'?'fr':'en'}|sv`;
+    const r=await fetch(url); const j=await r.json();
+    if(String(j.responseStatus)!=='200') throw new Error('tr');
+    let t=(j.responseData&&j.responseData.translatedText||'').trim();
+    if(!t || t.toLowerCase()===text.toLowerCase() || /MYMEMORY|QUERY LENGTH/i.test(t)) return '';
+    t=t.replace(/[.!?]+$/,'').trim();
+    t=t.toLowerCase();
+    return t;
   }
   // true if the Swedish words seem to be in the right column
   function orient(rows,lang){
@@ -834,15 +929,16 @@ dimma = fog`}
         d.classList.toggle('ok',r.ok); d.classList.toggle('unsure',!r.ok&&r.unsure);
         d.querySelector('.rr-ok').innerHTML = r.ok ? '<svg><use href="#i-check"/></svg>Godkänd' : 'Stämmer';
         d.querySelector('.rr-ok').setAttribute('aria-pressed',r.ok);
-        d.querySelector('.rr-flag').textContent = (!r.sv||!r.fx) ? 'Ett ord saknas. Fyll i båda.' : r.unsure ? 'Osäker. Kolla stavningen noga.' : '';
+        d.classList.toggle('unsure',!r.ok&&(r.unsure||r.suggested||!r.sv||!r.fx));
+        d.querySelector('.rr-flag').textContent = !r.sv ? 'Skriv den svenska översättningen.' : !r.fx ? `Skriv ordet på ${nm}.` : r.suggested ? 'Föreslagen översättning. Stämmer den?' : r.unsure ? 'Osäker. Kolla stavningen noga.' : '';
       };
-      a.oninput=()=>{r.sv=a.value.trim(); paint(); revFooter();};
+      a.oninput=()=>{r.sv=a.value.trim(); r.suggested=false; paint(); revFooter();};
       b.oninput=()=>{r.fx=b.value.trim(); paint(); revFooter();};
       d.querySelector('[data-a=ok]').onclick=()=>{
         if(!r.ok && (!r.sv||!r.fx)){ (r.sv?b:a).focus(); return; }
         r.ok=!r.ok; if(r.ok) sTap(); paint(); revFooter();
       };
-      d.querySelector('[data-a=swap]').onclick=()=>{ [r.sv,r.fx]=[r.fx,r.sv]; a.value=r.sv; b.value=r.fx; paint(); };
+      d.querySelector('[data-a=swap]').onclick=()=>{ [r.sv,r.fx]=[r.fx,r.sv]; r.suggested=false; a.value=r.sv; b.value=r.fx; paint(); };
       d.querySelector('[data-a=del]').onclick=()=>{ IMP.rows.splice(IMP.rows.indexOf(r),1); d.remove(); revFooter(); };
       paint(); box.appendChild(d);
     });
@@ -850,7 +946,8 @@ dimma = fog`}
   }
   function revFooter(){
     const ok=IMP.rows.filter(r=>r.ok&&r.sv&&r.fx).length, n=IMP.rows.length;
-    footer(`<p class="revcount">${n?`${ok} av ${n} ord godkända`:'Inga ord än'}</p>
+    const miss=IMP.rows.filter(r=>!r.sv).length;
+    footer(`<p class="revcount">${n?`${ok} av ${n} ord godkända`:'Inga ord än'}${miss?` · ${miss} saknar svenska`:''}</p>
       <button class="btn wide" id="revSave" ${ok?'':'disabled'}>Lägg till ${ok} ord</button>`);
     $('revSave').onclick=saveImport;
   }
