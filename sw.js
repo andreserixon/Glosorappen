@@ -1,5 +1,5 @@
 // Sparar appen i telefonen så att den fungerar utan internet.
-const CACHE = 'glosor-v1';
+const CACHE = 'glosor-1790500392';
 const FILES = ['./', './index.html', './apple-touch-icon.png', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
