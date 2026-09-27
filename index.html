@@ -22,7 +22,7 @@
   --red:#F0525A; --red-d:#C73A42; --red-soft:#FFE3E4; --red-ink:#B8323A;
   --blue:#2FA8F0; --blue-d:#1D86C6; --blue-soft:#DDF1FD;
   --gold:#FFBE1A; --gold-d:#D9980A; --gold-soft:#FFF4D1;
-  --flame:#FF8A1F; --purple:#9B6BF2; --purple-d:#7A4ED6;
+  --flame:#FF8A1F; --flame-d:#D2670A; --purple:#9B6BF2; --purple-d:#7A4ED6;
   --tile:#FFFFFF; --tile-shadow:#E3E8E5; --locked:#E6EAE8; --locked-d:#CCD3CF;
   --display:"Baloo 2","Nunito",ui-rounded,system-ui,sans-serif;
   --body:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
@@ -116,7 +116,7 @@ input,textarea,select{font-size:16px}
 .lc-icon{--c:var(--green);--d:var(--green-d);width:54px;height:54px;border-radius:16px;background:var(--c);box-shadow:0 4px 0 var(--d);color:#fff;display:grid;place-items:center;flex:none;position:relative}
 .lc-icon svg{width:28px;height:28px}
 .lc-icon span{position:absolute;bottom:-6px;right:-8px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:8px;font-size:.65rem;font-weight:900;padding:0 5px}
-.lc-icon.fr{--c:var(--blue);--d:var(--blue-d)} .lc-icon.en{--c:var(--purple);--d:var(--purple-d)} .lc-icon.empty{--c:var(--locked);--d:var(--locked-d);color:var(--muted)}
+.lc-icon.fr{--c:var(--blue);--d:var(--blue-d)} .lc-icon.en{--c:var(--purple);--d:var(--purple-d)} .lc-icon.es{--c:var(--flame);--d:var(--flame-d)} .lc-icon.empty{--c:var(--locked);--d:var(--locked-d);color:var(--muted)}
 .lc-text{min-width:0;flex:1}
 .lc .title{font-weight:900;font-size:1.05rem;overflow-wrap:break-word}
 .lc .meta{color:var(--muted);font-size:.85rem;font-weight:700}
@@ -125,7 +125,7 @@ input,textarea,select{font-size:16px}
 .stars svg{width:16px;height:16px}
 .lc-acts{display:flex;gap:8px}
 .lc-go{flex:1;min-height:48px}
-.lc-go.fr{--c:var(--blue);--d:var(--blue-d)} .lc-go.en{--c:var(--purple);--d:var(--purple-d)}
+.lc-go.fr{--c:var(--blue);--d:var(--blue-d)} .lc-go.en{--c:var(--purple);--d:var(--purple-d)} .lc-go.es{--c:var(--flame);--d:var(--flame-d)}
 .iconbtn{width:52px;height:48px;flex:none;border:2px solid var(--line);background:var(--tile);border-radius:14px;box-shadow:0 4px 0 var(--tile-shadow);color:var(--muted);display:grid;place-items:center}
 .iconbtn:active{transform:translateY(4px);box-shadow:none}
 .iconbtn svg{width:22px;height:22px}
@@ -319,7 +319,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     <div class="chips">
       <button type="button" class="chip" id="chipSound">Ljud</button>
       <button type="button" class="chip" id="chipSpeak">Läs upp orden</button>
-      <button type="button" class="chip" id="chipStrict">Franska accenter måste vara rätt</button>
+      <button type="button" class="chip" id="chipStrict">Accenter måste vara rätt</button>
     </div>
   </div>
 
@@ -343,6 +343,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     <div class="seg" id="langSeg">
       <button type="button" data-lang="fr" aria-pressed="true">Franska</button>
       <button type="button" data-lang="en" aria-pressed="false">Engelska</button>
+      <button type="button" data-lang="es" aria-pressed="false">Spanska</button>
     </div>
   </div>
   <div class="importbox">
@@ -467,7 +468,8 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   const KEY='glosforhoret.v1', SKEY='glosforhoret.stats.v1';
   const LANG={
     en:{name:'engelska', short:'EN', voice:'en-GB', acc:[]},
-    fr:{name:'franska', short:'FR', voice:'fr-FR', acc:['é','è','ê','ë','à','â','ç','î','ï','ô','û','ù','œ']}
+    fr:{name:'franska', short:'FR', voice:'fr-FR', acc:['é','è','ê','ë','à','â','ç','î','ï','ô','û','ù','œ']},
+    es:{name:'spanska', short:'ES', voice:'es-ES', acc:['á','é','í','ó','ú','ñ','ü','¿','¡']}
   };
   const EXAMPLES=[
     {id:'ex-fr',example:true,name:'Franska: i skolan',lang:'fr',text:
@@ -759,7 +761,7 @@ dimma = fog`}
   async function ocr(f,lang,prog){
     await loadTess();
     const img=await prepImage(f);
-    const worker=await Tesseract.createWorker('swe+'+(lang==='fr'?'fra':'eng'),1,{logger:m=>{
+    const worker=await Tesseract.createWorker('swe+'+{fr:'fra',en:'eng',es:'spa'}[lang],1,{logger:m=>{
       if(m.status==='recognizing text') prog(.35+.65*(m.progress||0),'Läser orden…');
       else prog(.35*(m.progress||0),'Laddar bildläsaren. Första gången kan det ta en halv minut.');
     }});
@@ -774,7 +776,7 @@ dimma = fog`}
     if(m) return {sv:m[1],fx:m[2],how:'sep'};
     m=line.split(/\s{2,}|\t/); if(m.length>=2) return {sv:m[0],fx:m.slice(1).join(' '),how:'sep'};
     const t=line.split(/\s+/).filter(Boolean);
-    const art = lang==='fr' ? /^(le|la|les|l['’].+|un|une|des|du)$/i : /^(to|the|a|an)$/i;
+    const art = lang==='fr' ? /^(le|la|les|l['’].+|un|une|des|du)$/i : lang==='es' ? /^(el|la|los|las|un|una|unos|unas)$/i : /^(to|the|a|an)$/i;
     for(let i=1;i<t.length;i++) if(art.test(t[i])) return {sv:t.slice(0,i).join(' '),fx:t.slice(i).join(' '),how:'art'};
     if(t.length===2) return {sv:t[0],fx:t[1],how:'two'};
     return {sv:t[0]||'',fx:t.slice(1).join(' '),how:'guess'};
@@ -782,22 +784,25 @@ dimma = fog`}
   /* --- turning OCR/text into glosor --- */
   const FR_W=new Set("le la les l un une des du de d et est es suis sont pas ne n ce c je j tu il elle on nous vous ils elles à au aux en y moi toi lui vos votre mon ma mes ton ta tes son sa ses sur dans avec pour par qui que qu quoi où comment oui non très bien merci bonjour salut voici voilà mais ou donc car chez sans sous".split(' '));
   const EN_W=new Set("the a an to and is are am was were be of in on at for with from you i he she it we they not no yes do does did have has this that these those my your his her our their what where when how who why can will please thank hello good very".split(' '));
+  const ES_W=new Set("el la los las un una unos unas y es está son soy estoy no sí de del al a en con por para que qué cómo dónde yo tú él ella nosotros vosotros ellos mi mis tu tus su sus muy bien gracias hola adiós pero o también".split(' '));
   const SV_W=new Set("och att det är en ett i på med för till av som jag du han hon vi ni de dem inte har kan ska vill den detta vad var när hur varför ja nej tack hej mycket bra från om men eller så också läxa läxor vecka åk sidan glosor franska engelska svenska".split(' '));
   function langOf(line,lang){
     const low=line.toLowerCase(), toks=low.split(/[^a-zà-ÿœæ]+/).filter(Boolean);
-    let fr=0,en=0,sv=0;
+    let fr=0,en=0,es=0,sv=0;
     if(/[åäö]/.test(low)) sv+=3;
     if(/[éèêëàâçîïôûùœ]/.test(low)) fr+=3;
+    if(/[áíóúñ¿¡]/.test(low)) es+=3; if(/é/.test(low)) es+=1;
     if(/\s[!?;:]\s*$/.test(line)) fr+=1;
     if(/[a-zé]+-(moi|toi|vous|nous|il|elle|le|la|les)\b/.test(low)) fr+=2;
     if(/\b(l|d|j|n|c|qu|s|m|t)['’]/.test(low)) fr+=2;
     toks.forEach(t=>{
-      if(FR_W.has(t)) fr+=1.5; if(EN_W.has(t)) en+=1.5; if(SV_W.has(t)) sv+=1.5;
+      if(FR_W.has(t)) fr+=1.5; if(EN_W.has(t)) en+=1.5; if(ES_W.has(t)) es+=1.5; if(SV_W.has(t)) sv+=1.5;
+      if(/(ción|dad|mente|ado|ido|amos|emos|ito|ita)$/.test(t)) es+=.5;
       if(/(ez|eux|aux|eau|tion|ment|oire|ette|ille|que|ais|ait|ée)$/.test(t)) fr+=.5;
       if(/(ing|ed|ly|ness|ful|ght)$/.test(t)) en+=.5;
       if(/(ning|het|lig|arna|orna|erna|skap)$/.test(t)) sv+=.5;
     });
-    const T = lang==='fr'?fr:en;
+    const T = {fr,en,es}[lang];
     if(sv>=1.5 && sv>T) return 'sv';
     if(T>0 && T>=sv) return 'fx';
     return '?';
@@ -895,7 +900,7 @@ dimma = fog`}
   // returns up to 5 Swedish suggestions, best first
   async function translate(text,lang){
     text=text.toLowerCase();
-    const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${lang==='fr'?'fr':'en'}|sv`;
+    const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${lang}|sv`;
     const r=await fetch(url); const j=await r.json();
     if(String(j.responseStatus)!=='200') throw new Error('tr');
     const raw=[j.responseData&&j.responseData.translatedText];
@@ -911,7 +916,7 @@ dimma = fog`}
   }
   // true if the Swedish words seem to be in the right column
   function orient(rows,lang){
-    const art = lang==='fr' ? /^(le|la|les|l['’]|un|une|des)\b/i : /^(to|the|a|an)\s/i;
+    const art = lang==='fr' ? /^(le|la|les|l['’]|un|une|des)\b/i : lang==='es' ? /^(el|la|los|las|un|una)\s/i : /^(to|the|a|an)\s/i;
     let flip=0, keep=0;
     rows.forEach(r=>{
       if(/[åäö]/i.test(r.fx)) flip++; if(/[åäö]/i.test(r.sv)) keep++;
@@ -990,9 +995,9 @@ dimma = fog`}
   $('revCancel').onclick=()=>{ const o=IMP&&IMP.origin; IMP=null; show(o==='add'?'add':'edit'); };
 
   /* ---------- checking ---------- */
-  const norm=s=>s.toLowerCase().replace(/[’`´]/g,"'").replace(/\s+/g,' ').replace(/\s*'\s*/g,"'").replace(/[.!?]+$/,'').trim();
+  const norm=s=>s.toLowerCase().replace(/[’`´]/g,"'").replace(/\s+/g,' ').replace(/\s*'\s*/g,"'").replace(/[.!?]+$/,'').replace(/^[¿¡]+/,'').trim();
   const noAcc=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/œ/g,'oe').replace(/æ/g,'ae');
-  const stripArt=s=>s.replace(/^(le |la |les |l'|un |une |des |the |a |an |to |en |ett |att )/,'');
+  const stripArt=s=>s.replace(/^(le |la |les |l'|un |une |des |el |los |las |una |the |a |an |to |en |ett |att )/,'');
   function judge(given,correct){
     const alts=correct.split('/').map(norm).filter(Boolean), g=norm(given);
     if(alts.includes(g)) return {kind:'good'};
