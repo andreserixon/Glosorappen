@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Glosor">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-tap-highlight-color:transparent}</style>
+<title>Glosförhöret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --soft:#F3F6F4; --line:#E3E8E5; --ink:#2B3A33; --muted:#7A8A82;
+  --green:#3DBE5B; --green-d:#2A9A45; --green-soft:#DDF7E3; --green-ink:#1F7A37;
+  --red:#F0525A; --red-d:#C73A42; --red-soft:#FFE3E4; --red-ink:#B8323A;
+  --blue:#2FA8F0; --blue-d:#1D86C6; --blue-soft:#DDF1FD;
+  --gold:#FFBE1A; --gold-d:#D9980A; --gold-soft:#FFF4D1;
+  --flame:#FF8A1F; --purple:#9B6BF2; --purple-d:#7A4ED6;
+  --tile:#FFFFFF; --tile-shadow:#E3E8E5; --locked:#E6EAE8; --locked-d:#CCD3CF;
+  --display:"Baloo 2","Nunito",ui-rounded,system-ui,sans-serif;
+  --body:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#131F1A; --soft:#1B2A24; --line:#2C3D35; --ink:#EAF3EE; --muted:#93A69C;
+    --green-soft:#183827; --green-ink:#6FE08A; --red-soft:#3D1D22; --red-ink:#FF8C92;
+    --blue-soft:#15314A; --gold-soft:#3A2F12;
+    --tile:#1B2A24; --tile-shadow:#0C1512; --locked:#26372F; --locked-d:#1A2822;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131F1A; --soft:#1B2A24; --line:#2C3D35; --ink:#EAF3EE; --muted:#93A69C;
+  --green-soft:#183827; --green-ink:#6FE08A; --red-soft:#3D1D22; --red-ink:#FF8C92;
+  --blue-soft:#15314A; --gold-soft:#3A2F12;
+  --tile:#1B2A24; --tile-shadow:#0C1512; --locked:#26372F; --locked-d:#1A2822;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;font-weight:700;padding-inline:16px;padding-block:0}
+.page{max-width:600px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;line-height:1.1;text-wrap:balance}
+button{font:inherit;cursor:pointer;color:inherit;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+input,textarea,select{font-size:16px}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+
+/* chunky buttons */
+.btn{
+  --c:var(--green); --d:var(--green-d); --t:#fff;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--c);color:var(--t);border:0;border-radius:16px;
+  padding:14px 22px;min-height:52px;font-weight:900;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 5px 0 var(--d);transform:translateY(0);transition:transform .06s,box-shadow .06s,filter .1s;
+}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:translateY(5px);box-shadow:0 0 0 var(--d)}
+.btn.wide{width:100%}
+.btn.blue{--c:var(--blue);--d:var(--blue-d)}
+.btn.red{--c:var(--red);--d:var(--red-d)}
+.btn.gold{--c:var(--gold);--d:var(--gold-d);--t:#4A3500}
+.btn.ghost{--c:var(--tile);--d:var(--tile-shadow);--t:var(--blue);border:2px solid var(--line)}
+.btn:disabled{--c:var(--locked);--d:var(--locked-d);--t:var(--muted);cursor:not-allowed;filter:none}
+.btn:disabled:active{transform:none;box-shadow:0 5px 0 var(--d)}
+.link{background:none;border:0;color:var(--blue);font-weight:900;text-transform:uppercase;letter-spacing:.06em;font-size:.9rem;padding:10px 6px;min-height:44px}
+
+/* top stats bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;border-bottom:2px solid var(--line)}
+.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--green)}
+.stats{display:flex;gap:16px;align-items:center}
+.stat{display:flex;align-items:center;gap:5px;font-weight:900;font-variant-numeric:tabular-nums}
+.stat svg{width:24px;height:24px}
+.stat.flame{color:var(--flame)} .stat.flame.off{color:var(--muted)} .stat.xp{color:var(--gold-d)}
+.stat.off svg{filter:grayscale(1);opacity:.5}
+
+@media (max-width:430px){
+  .brand{font-size:1.15rem}
+  .qtitle{font-size:1.35rem}
+  .frog{width:84px;height:84px}
+  .lbody{gap:16px;padding-block:6px 190px}
+  .bubble{padding:12px}
+  .choice{min-height:54px;padding:12px 14px}
+  .done h1{font-size:2rem}
+  .done .frog{width:120px;height:120px}
+  .footer{padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px))}
+  .fb h3{font-size:1.25rem}
+}
+/* home */
+.home{display:flex;flex-direction:column;gap:14px;padding-bottom:36px}
+.stats{gap:12px}
+.stat svg.mini{width:22px;height:22px}
+.goalstat{color:var(--gold-d);font-size:.9rem}
+#newListBtn{margin-top:4px}
+.optcard{border:2px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.optcard h3{font-size:1.1rem}
+.optcard .hint{margin:-2px 0 2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--tile);border-radius:999px;padding:8px 14px 8px 12px;min-height:40px;font-weight:800;font-size:.9rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.chip::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid var(--locked-d);flex:none}
+.chip[aria-pressed="true"]{border-color:var(--green);color:var(--green-ink);background:var(--green-soft)}
+.chip[aria-pressed="true"]::before{background:var(--green);border-color:var(--green);box-shadow:inset 0 0 0 3px var(--green-soft)}
+.goaltext{margin:0;color:var(--muted);font-size:.9rem;text-align:center}
+.sect{font-size:1.3rem;margin-top:6px}
+.sect span{color:var(--muted);font-size:1rem}
+.cards{display:flex;flex-direction:column;gap:12px}
+.lc{border:2px solid var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:12px;box-shadow:0 4px 0 var(--tile-shadow);background:var(--tile)}
+.lc-main{display:flex;gap:12px;align-items:center;min-width:0}
+.lc-icon{--c:var(--green);--d:var(--green-d);width:54px;height:54px;border-radius:16px;background:var(--c);box-shadow:0 4px 0 var(--d);color:#fff;display:grid;place-items:center;flex:none;position:relative}
+.lc-icon svg{width:28px;height:28px}
+.lc-icon span{position:absolute;bottom:-6px;right:-8px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:8px;font-size:.65rem;font-weight:900;padding:0 5px}
+.lc-icon.fr{--c:var(--blue);--d:var(--blue-d)} .lc-icon.en{--c:var(--purple);--d:var(--purple-d)} .lc-icon.empty{--c:var(--locked);--d:var(--locked-d);color:var(--muted)}
+.lc-text{min-width:0;flex:1}
+.lc .title{font-weight:900;font-size:1.05rem;overflow-wrap:break-word}
+.lc .meta{color:var(--muted);font-size:.85rem;font-weight:700}
+.lc .stars{justify-content:flex-start;margin-top:2px}
+.stars{display:flex;gap:2px}
+.stars svg{width:16px;height:16px}
+.lc-acts{display:flex;gap:8px}
+.lc-go{flex:1;min-height:48px}
+.lc-go.fr{--c:var(--blue);--d:var(--blue-d)} .lc-go.en{--c:var(--purple);--d:var(--purple-d)}
+.iconbtn{width:52px;height:48px;flex:none;border:2px solid var(--line);background:var(--tile);border-radius:14px;box-shadow:0 4px 0 var(--tile-shadow);color:var(--muted);display:grid;place-items:center}
+.iconbtn:active{transform:translateY(4px);box-shadow:none}
+.iconbtn svg{width:22px;height:22px}
+.iconbtn.danger{color:var(--red)}
+.lc .confirm{padding:12px}
+.acts2{display:flex;gap:8px}
+.acts2 .btn{flex:1;min-height:44px;padding:10px;font-size:.85rem}
+.emptytxt{color:var(--muted);text-align:center}
+
+/* edit */
+.form{display:flex;flex-direction:column;gap:18px;padding-block:20px 40px}
+.form .head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.lbl{display:block;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input[type=text],textarea,select{width:100%;font:inherit;font-weight:700;color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+textarea{min-height:220px;resize:vertical;line-height:1.7}
+.hint{color:var(--muted);font-size:.9rem;margin:6px 0 0;font-weight:600}
+code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.seg{display:flex;gap:10px}
+.seg button{flex:1;border:2px solid var(--line);background:var(--tile);border-radius:14px;padding:12px;font-weight:900;box-shadow:0 4px 0 var(--tile-shadow);min-height:48px}
+.seg button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-d);box-shadow:0 4px 0 var(--blue)}
+.confirm{background:var(--red-soft);color:var(--red-ink);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+
+/* lesson */
+.lesson{min-height:100%;display:flex;flex-direction:column}
+.lhead{display:flex;align-items:center;gap:14px;padding-block:18px 8px}
+.x{background:none;border:0;color:var(--muted);width:44px;height:44px;display:grid;place-items:center;flex:none}
+.x svg{width:26px;height:26px}
+.bar{flex:1;height:18px;background:var(--locked);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--green);border-radius:999px;transition:width .4s cubic-bezier(.3,1.4,.5,1);box-shadow:inset 0 5px 0 rgba(255,255,255,.28)}
+.combo{color:var(--flame);font-weight:900;font-size:.95rem;white-space:nowrap;min-width:64px;text-align:right}
+.combo.bump{animation:bump .4s}
+@keyframes bump{40%{transform:scale(1.35)}}
+.lbody{flex:1;display:flex;flex-direction:column;gap:22px;padding-block:14px 200px}
+.qtitle{font-size:1.55rem}
+.speaker{display:flex;align-items:flex-end;gap:12px}
+.frog{width:110px;height:110px;flex:none}
+.bubble{position:relative;border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:26px;min-width:0;flex:1}
+.bubble::before{content:"";position:absolute;left:-10px;bottom:16px;width:16px;height:16px;background:var(--bg);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.bubble .w{font-size:1.35rem;font-weight:900;overflow-wrap:break-word;hyphens:auto;min-width:0}
+.say{width:44px;height:44px;border-radius:12px;border:0;background:var(--blue);box-shadow:0 4px 0 var(--blue-d);color:#fff;display:grid;place-items:center;flex:none}
+.say:active{transform:translateY(4px);box-shadow:none}
+.say svg{width:22px;height:22px}
+.bigsay{width:110px;height:110px;border-radius:26px;margin:0 auto;box-shadow:0 7px 0 var(--blue-d)}
+.bigsay svg{width:54px;height:54px}
+.answer{font-size:1.3rem!important;padding:16px!important;min-height:60px;background:var(--soft)!important}
+.accents{display:flex;flex-wrap:wrap;gap:8px}
+.accents button{border:2px solid var(--line);background:var(--tile);border-radius:12px;box-shadow:0 3px 0 var(--tile-shadow);min-width:44px;min-height:44px;font-size:1.1rem;font-weight:800}
+.accents button:active{transform:translateY(3px);box-shadow:none}
+.choices{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:520px){.choices{grid-template-columns:1fr 1fr}}
+.choice,.mt{
+  display:flex;align-items:center;gap:12px;text-align:left;border:2px solid var(--line);background:var(--tile);border-radius:16px;
+  box-shadow:0 4px 0 var(--tile-shadow);padding:14px 16px;min-height:60px;font-size:1.1rem;font-weight:800;transition:transform .06s
+}
+.choice:active,.mt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--tile-shadow)}
+.choice .k{border:2px solid var(--line);border-radius:8px;width:28px;height:28px;display:grid;place-items:center;font-size:.8rem;color:var(--muted);flex:none}
+.choice[aria-pressed="true"],.mt.sel{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-d);box-shadow:0 4px 0 var(--blue)}
+.choice[aria-pressed="true"] .k{border-color:var(--blue);color:var(--blue-d)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match .col{display:flex;flex-direction:column;gap:12px}
+.mt{justify-content:center;text-align:center;overflow-wrap:anywhere;font-size:1rem;padding:12px 10px}
+.mt.ok{border-color:var(--green);background:var(--green-soft);color:var(--green-ink);box-shadow:0 4px 0 var(--green)}
+.mt.done{opacity:.35;pointer-events:none;box-shadow:none;transform:translateY(4px)}
+.mt.no{border-color:var(--red);background:var(--red-soft);color:var(--red-ink);box-shadow:0 4px 0 var(--red);animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* bottom check bar */
+.footer{position:fixed;left:0;right:0;bottom:0;z-index:10;border-top:2px solid var(--line);background:var(--bg);padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.footer .in{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.footer.good{background:var(--green-soft);border-color:transparent}
+.footer.bad{background:var(--red-soft);border-color:transparent}
+.footer.good,.footer.bad{animation:slide .25s ease-out}
+@keyframes slide{from{transform:translateY(40%);opacity:.4}}
+.fb{display:flex;gap:14px;align-items:flex-start}
+.fb .icon{width:48px;height:48px;border-radius:50%;background:var(--bg);display:grid;place-items:center;flex:none}
+.fb .icon svg{width:30px;height:30px}
+.fb h3{font-size:1.45rem}
+.good .fb h3{color:var(--green-ink)} .bad .fb h3{color:var(--red-ink)}
+.fb p{margin:2px 0 0;font-size:1rem}
+.good .fb p{color:var(--green-ink)} .bad .fb p{color:var(--red-ink)}
+.diff{font-family:ui-monospace,Menlo,monospace;letter-spacing:.02em}
+.diff .m{background:var(--red);color:#fff;border-radius:3px;padding:0 1px}
+.footer .btn.skip{--c:var(--tile);--d:var(--tile-shadow);--t:var(--muted);border:2px solid var(--line)}
+.footer .acts{display:flex;gap:12px}
+.footer .acts .btn{flex:1}
+
+/* quit sheet */
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+.sheet .card{background:var(--bg);border-radius:22px;padding:22px;max-width:480px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center;margin-bottom:env(safe-area-inset-bottom,0px)}
+.sheet .frog{margin:0 auto}
+
+/* done */
+.done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding-block:40px 140px}
+.done .frog{width:150px;height:150px;animation:hop 1s ease-in-out infinite}
+@keyframes hop{50%{transform:translateY(-12px)}}
+.done h1{font-size:2.3rem;color:var(--gold-d)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:440px}
+.tl{border:2px solid var(--c);border-radius:16px;overflow:hidden;background:var(--c)}
+.tl b{display:block;color:#fff;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:5px 4px}
+.tl span{display:flex;align-items:center;justify-content:center;gap:4px;background:var(--bg);border-radius:13px;padding:12px 4px;font-size:1.25rem;font-weight:900;color:var(--c);font-variant-numeric:tabular-nums}
+.tl.x1{--c:var(--gold)} .tl.x2{--c:var(--green)} .tl.x3{--c:var(--blue)}
+.review{width:100%;max-width:440px;text-align:left;display:flex;flex-direction:column;gap:8px}
+.review li{list-style:none;display:flex;justify-content:space-between;gap:10px;padding:10px 14px;border:2px solid var(--line);border-radius:14px;flex-wrap:wrap}
+.review ul{margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.review li span{color:var(--muted)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<!-- shared SVG symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.5 1.2-4 2.5-5 .2 2 1 3 2.2 3.3C11 8.5 11 5 12 2z" fill="#FF8A1F"/><path d="M12 12c.6 2 2.5 2.6 2.5 5a2.5 2.5 0 0 1-5 0c0-1.4.8-2.3 1.4-2.8.1.9.5 1.4 1 1.5-.2-1.3-.2-2.5.1-3.7z" fill="#FFD23F"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2 4 13.5h6.5L9.5 22 20 9.5h-6.8L13.5 2z" fill="#FFBE1A" stroke="#D9980A" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z" fill="currentColor"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z" fill="currentColor" opacity=".35"/><path d="M4 5.5v15A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 18.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-spk" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" stroke-width="2.4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div class="page">
+
+<!-- HOME -->
+<section id="home" class="home">
+  <div class="topbar">
+    <span class="brand">Glosförhöret</span>
+    <div class="stats">
+      <span class="stat goalstat" title="Dagens mål"><svg class="mini" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="var(--locked)" stroke-width="10"/>
+        <circle id="ringArc" cx="32" cy="32" r="26" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="163.4" transform="rotate(-90 32 32)"/></svg><span id="goalN">0/30</span></span>
+      <span class="stat flame" id="streakStat" title="Dagar i rad"><svg><use href="#i-flame"/></svg><span id="streakN">0</span></span>
+      <span class="stat xp" title="XP totalt"><svg><use href="#i-bolt"/></svg><span id="xpN">0</span></span>
+    </div>
+  </div>
+
+  <button class="btn wide" id="newListBtn"><svg width="22" height="22"><use href="#i-plus"/></svg>Ny lista</button>
+
+  <div class="optcard">
+    <h3>Så vill jag bli förhörd</h3>
+    <div class="seg" id="modeSeg"><button type="button" data-v="mix">Blandat</button><button type="button" data-v="write">Bara skriva</button></div>
+    <p class="hint" id="modeHint"></p>
+    <div class="seg" id="scopeSeg"><button type="button" data-v="weak">8 svåraste orden</button><button type="button" data-v="all">Alla ord</button></div>
+    <div class="chips">
+      <button type="button" class="chip" id="chipSound">Ljud</button>
+      <button type="button" class="chip" id="chipSpeak">Läs upp orden</button>
+      <button type="button" class="chip" id="chipStrict">Franska accenter måste vara rätt</button>
+    </div>
+  </div>
+
+  <p class="goaltext" id="goalText"></p>
+  <h2 class="sect">Mina förhör <span id="listCount"></span></h2>
+  <div class="cards" id="cards"></div>
+</section>
+
+<!-- EDIT -->
+<section id="edit" class="form" hidden>
+  <div class="head">
+    <h2 id="editTitle">Ny lista</h2>
+    <button class="link" id="editCancel">Avbryt</button>
+  </div>
+  <div>
+    <label class="lbl" for="listName">Namn på listan</label>
+    <input type="text" id="listName" placeholder="t.ex. Franska vecka 40" autocomplete="off">
+  </div>
+  <div>
+    <span class="lbl">Språk</span>
+    <div class="seg" id="langSeg">
+      <button type="button" data-lang="fr" aria-pressed="true">Franska</button>
+      <button type="button" data-lang="en" aria-pressed="false">Engelska</button>
+    </div>
+  </div>
+  <div>
+    <label class="lbl" for="listWords">Glosor, en per rad: svenska = utländska</label>
+    <textarea id="listWords" spellcheck="false" placeholder="hund = dog&#10;katt = cat&#10;springa = run"></textarea>
+    <p class="hint">Skilj orden med <code>=</code>, <code>-</code> eller <code>:</code>. Flera rätta svar skriver du med snedstreck: <code>stor = big / large</code>.</p>
+    <p class="hint" id="wordCount"></p>
+  </div>
+  <button class="btn wide" id="saveBtn">Spara listan</button>
+  <button class="link" id="deleteBtn" style="color:var(--red)" hidden>Ta bort listan</button>
+  <div class="confirm" id="confirmDelete" hidden>
+    <span>Vill du verkligen ta bort listan? Det går inte att ångra.</span>
+    <div class="seg"><button type="button" id="confirmYes">Ja, ta bort</button><button type="button" id="confirmNo">Nej</button></div>
+  </div>
+</section>
+
+<!-- LESSON -->
+<section id="lesson" class="lesson" hidden>
+  <div class="lhead">
+    <button class="x" id="quitBtn" aria-label="Avsluta lektionen"><svg><use href="#i-x"/></svg></button>
+    <div class="bar"><i id="bar"></i></div>
+    <span class="combo" id="combo"></span>
+  </div>
+  <div class="lbody" id="lbody"></div>
+</section>
+
+<!-- DONE -->
+<section id="done" class="done" hidden>
+  <div id="doneFrog"></div>
+  <h1 id="doneTitle">Lektionen klar!</h1>
+  <div class="tiles">
+    <div class="tl x1"><b>XP</b><span><svg width="20" height="20"><use href="#i-bolt"/></svg><em id="dXp" style="font-style:normal"></em></span></div>
+    <div class="tl x2"><b>Träff&shy;säkerhet</b><span id="dAcc"></span></div>
+    <div class="tl x3"><b>Tid</b><span id="dTime"></span></div>
+  </div>
+  <p id="doneStreak" style="margin:0;color:var(--flame);font-weight:900"></p>
+  <div class="review" id="reviewBox" hidden>
+    <span class="lbl">Öva mer på de här</span>
+    <ul id="reviewList"></ul>
+  </div>
+</section>
+
+</div>
+
+<!-- fixed footer (lesson + done) -->
+<div class="footer" id="footer" hidden><div class="in" id="footerIn"></div></div>
+
+<div class="sheet" id="quitSheet" hidden>
+  <div class="card">
+    <div id="quitFrog"></div>
+    <h2>Vänta, du är ju så nära!</h2>
+    <p style="margin:0;color:var(--muted)">Om du slutar nu försvinner det du har gjort i lektionen.</p>
+    <button class="btn blue wide" id="keepBtn">Fortsätt öva</button>
+    <button class="link" id="reallyQuit" style="color:var(--red)">Sluta lektionen</button>
+  </div>
+</div>
+
+<canvas id="confetti" hidden></canvas>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const KEY='glosforhoret.v1', SKEY='glosforhoret.stats.v1';
+  const LANG={
+    en:{name:'engelska', short:'EN', voice:'en-GB', acc:[]},
+    fr:{name:'franska', short:'FR', voice:'fr-FR', acc:['é','è','ê','ë','à','â','ç','î','ï','ô','û','ù','œ']}
+  };
+  const EXAMPLES=[
+    {id:'ex-fr',example:true,name:'Franska: i skolan',lang:'fr',text:
+`skolan = l'école
+läraren = le professeur / la professeure
+boken = le livre
+pennan = le stylo
+bordet = la table
+fönstret = la fenêtre
+eleven = l'élève
+lektionen = le cours
+läxan = les devoirs
+suddgummit = la gomme`},
+    {id:'ex-en',example:true,name:'Engelska: vädret',lang:'en',text:
+`väder = weather
+regn = rain
+moln = cloud
+blåsig = windy
+åska = thunder
+solig = sunny
+snö = snow
+dimma = fog`}
+  ];
+
+  /* ---------- storage ---------- */
+  function read(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+  function write(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  let lists = Array.isArray(read(KEY)) ? read(KEY) : EXAMPLES.slice();
+  let S = Object.assign({xp:0,streak:0,lastDay:null,dayXp:0,day:null,goal:30,words:{},done:{},sound:true,speak:true,strict:false,mode:'mix',scope:'weak'}, read(SKEY)||{});
+  const saveLists=()=>write(KEY,lists), saveStats=()=>write(SKEY,S);
+
+  const dayStr = d => { d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+  const yesterday = () => { const d=new Date(); d.setDate(d.getDate()-1); return dayStr(d); };
+  function liveStreak(){ return (S.lastDay===dayStr()||S.lastDay===yesterday()) ? S.streak : 0; }
+  function todayXp(){ return S.day===dayStr() ? S.dayXp : 0; }
+
+  function parse(text){
+    return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+      const m=l.match(/^(.+?)\s*(?:=|\t|\s-\s|:|–|—)\s*(.+)$/)||l.match(/^(.+?)-(.+)$/);
+      return m?{sv:m[1].trim(),fx:m[2].trim()}:null;
+    }).filter(p=>p&&p.sv&&p.fx);
+  }
+  const wkey=(l,p)=>l.id+'|'+p.sv+'|'+p.fx;
+
+  /* ---------- mascot ---------- */
+  function frog(mood){
+    const mouth = mood==='sad' ? '<path d="M40 76 Q50 68 60 76" fill="none" stroke="#1B4D2A" stroke-width="4" stroke-linecap="round"/>'
+      : mood==='wow' ? '<ellipse cx="50" cy="74" rx="9" ry="7" fill="#1B4D2A"/><ellipse cx="50" cy="77" rx="5" ry="3" fill="#F0525A"/>'
+      : '<path d="M36 70 Q50 84 64 70" fill="#1B4D2A"/><path d="M43 76 Q50 81 57 76" fill="#F0525A"/>';
+    const brow = mood==='sad' ? '<path d="M24 22 l12 5M76 22 l-12 5" stroke="#1B4D2A" stroke-width="3.5" stroke-linecap="round"/>' : '';
+    return `<svg class="frog" viewBox="0 0 100 100" aria-hidden="true">
+      <ellipse cx="50" cy="94" rx="32" ry="5" fill="#000" opacity=".08"/>
+      <path d="M14 70 Q10 42 32 38 L68 38 Q90 42 86 70 Q84 92 50 92 Q16 92 14 70z" fill="#3DBE5B"/>
+      <ellipse cx="50" cy="76" rx="24" ry="13" fill="#B9EFC6"/>
+      <circle cx="31" cy="34" r="16" fill="#3DBE5B"/><circle cx="69" cy="34" r="16" fill="#3DBE5B"/>
+      <circle cx="31" cy="33" r="11" fill="#fff"/><circle cx="69" cy="33" r="11" fill="#fff"/>
+      <circle cx="${mood==='sad'?31:33}" cy="${mood==='sad'?36:33}" r="5.5" fill="#1B2A22"/><circle cx="${mood==='sad'?69:71}" cy="${mood==='sad'?36:33}" r="5.5" fill="#1B2A22"/>
+      <circle cx="35" cy="31" r="1.8" fill="#fff"/><circle cx="73" cy="31" r="1.8" fill="#fff"/>
+      ${brow}
+      <circle cx="22" cy="60" r="5" fill="#FF9DB0" opacity=".7"/><circle cx="78" cy="60" r="5" fill="#FF9DB0" opacity=".7"/>
+      <g transform="translate(0 -12)">${mouth}</g>
+      <path d="M22 88 q-8 2 -10 6 h16z M78 88 q8 2 10 6 h-16z" fill="#2A9A45"/>
+    </svg>`;
+  }
+
+  /* ---------- sound + speech ---------- */
+  let AC=null;
+  function tone(freqs,dur=.12,type='sine',gap=.1,vol=.18){
+    if(!S.sound) return;
+    try{
+      AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+      freqs.forEach((f,i)=>{
+        const o=AC.createOscillator(), g=AC.createGain(), t=AC.currentTime+i*gap;
+        o.type=type; o.frequency.value=f; g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(vol,t+.01); g.gain.exponentialRampToValueAtTime(.001,t+dur+.1);
+        o.connect(g).connect(AC.destination); o.start(t); o.stop(t+dur+.12);
+      });
+    }catch(e){}
+  }
+  const sGood=()=>tone([660,880],.12,'triangle',.09);
+  const sBad=()=>tone([220,175],.16,'sawtooth',.13,.08);
+  const sTap=()=>tone([520],.04,'triangle',0,.08);
+  const sWin=()=>tone([523,659,784,1047],.16,'triangle',.11);
+  const canSpeak = 'speechSynthesis' in window;
+  function speak(text,lang){
+    if(!S.speak||!canSpeak) return;
+    try{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text.split('/')[0].trim()); u.lang=lang; u.rate=.9;
+      const v=speechSynthesis.getVoices().find(v=>v.lang.replace('_','-').toLowerCase().startsWith(lang.slice(0,2)));
+      if(v) u.voice=v; speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  try{ canSpeak && speechSynthesis.getVoices(); }catch(e){}
+
+  /* ---------- views ---------- */
+  function show(v){
+    ['home','edit','lesson','done'].forEach(x=>$(x).hidden=x!==v);
+    if(v==='home'||v==='edit') $('footer').hidden=true;
+    window.scrollTo(0,0);
+  }
+
+  /* ---------- HOME ---------- */
+  let confirmId=null;
+  function setSeg(id,val){ $(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===val)); }
+  function renderHome(){
+    const st=liveStreak();
+    $('streakN').textContent=st; $('streakStat').classList.toggle('off',!st || S.lastDay!==dayStr());
+    $('xpN').textContent=S.xp;
+    const tx=todayXp(), g=S.goal;
+    $('ringArc').setAttribute('stroke-dashoffset', 163.4*(1-Math.min(1,tx/g)));
+    $('goalN').textContent=`${Math.min(tx,g)}/${g}`;
+    $('goalText').textContent = tx>=g ? `Dagens mål klart! ${tx} XP idag.` : `Dagens mål: ${tx} av ${g} XP.${S.lastDay===dayStr()?'':' Gör en lektion idag så håller du igång din svit.'}`;
+    setSeg('modeSeg',S.mode); setSeg('scopeSeg',S.scope);
+    $('modeHint').textContent = S.mode==='write' ? 'Du skriver alltid ordet själv. Inga svarsalternativ.' : 'Du väljer bland ord, parar ihop och skriver.';
+    $('chipSound').setAttribute('aria-pressed',S.sound);
+    $('chipSpeak').setAttribute('aria-pressed',S.speak);
+    $('chipStrict').setAttribute('aria-pressed',S.strict);
+    $('listCount').textContent = lists.length ? `(${lists.length})` : '';
+
+    const box=$('cards'); box.innerHTML='';
+    if(!lists.length){ box.innerHTML='<p class="emptytxt">Inga förhör än. Tryck på Ny lista och skriv in dina glosor.</p>'; }
+    lists.forEach(l=>{
+      const pairs=parse(l.text), n=pairs.length, lv=Math.min(3,S.done[l.id]||0);
+      const weak=pairs.filter(p=>(S.words[wkey(l,p)]||0)<2).length;
+      const stars=[0,1,2].map(i=>`<svg style="color:${i<lv?'var(--gold)':'var(--locked-d)'}"><use href="#i-star"/></svg>`).join('');
+      const c=document.createElement('div'); c.className='lc';
+      c.innerHTML=`<div class="lc-main">
+          <div class="lc-icon ${n?l.lang:'empty'}"><svg><use href="#i-book"/></svg><span>${LANG[l.lang].short}</span></div>
+          <div class="lc-text"><div class="title">${esc(l.name)}</div>
+            <div class="meta">${n} ord${n?(weak?` · ${weak} att öva på`:' · kan alla'):''}${l.example?' · <i>exempel</i>':''}</div>
+            <div class="stars" title="${lv} av 3 stjärnor">${stars}</div></div>
+        </div>
+        <div class="lc-acts">
+          <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
+          <button class="iconbtn" data-a="edit" aria-label="Ändra ${esc(l.name)}"><svg><use href="#i-pen"/></svg></button>
+          <button class="iconbtn danger" data-a="del" aria-label="Radera ${esc(l.name)}"><svg><use href="#i-trash"/></svg></button>
+        </div>
+        ${confirmId===l.id?`<div class="confirm"><span>Radera "${esc(l.name)}"? Det går inte att ångra.</span>
+          <div class="acts2"><button class="btn red" data-a="yes">Ja, radera</button><button class="btn ghost" data-a="no">Nej</button></div></div>`:''}`;
+      c.querySelector('[data-a=go]').onclick=()=>startLesson(l,S.scope==='all',S.mode==='write');
+      c.querySelector('[data-a=edit]').onclick=()=>openEdit(l.id);
+      c.querySelector('[data-a=del]').onclick=()=>{ confirmId = confirmId===l.id?null:l.id; renderHome(); };
+      if(confirmId===l.id){
+        c.querySelector('[data-a=yes]').onclick=()=>{ removeList(l); };
+        c.querySelector('[data-a=no]').onclick=()=>{ confirmId=null; renderHome(); };
+      }
+      box.appendChild(c);
+    });
+    if($('home').hidden) show('home');
+  }
+  function removeList(l){
+    lists=lists.filter(x=>x!==l); confirmId=null;
+    delete S.done[l.id]; Object.keys(S.words).forEach(k=>{ if(k.startsWith(l.id+'|')) delete S.words[k]; });
+    saveLists(); saveStats(); renderHome();
+  }
+  $('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ S.mode=b.dataset.v; saveStats(); sTap(); renderHome(); });
+  $('scopeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ S.scope=b.dataset.v; saveStats(); sTap(); renderHome(); });
+  [['chipSound','sound'],['chipSpeak','speak'],['chipStrict','strict']].forEach(([id,k])=>$(id).onclick=()=>{ S[k]=!S[k]; saveStats(); renderHome(); sTap(); });
+
+  /* ---------- EDIT ---------- */
+  let editing=null, editLang='fr';
+  function setLang(l){ editLang=l; $('langSeg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===l)); }
+  $('langSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+  function openEdit(id){
+    editing = id?lists.find(l=>l.id===id):null;
+    $('editTitle').textContent = editing?'Ändra lista':'Ny lista';
+    $('listName').value = editing?editing.name:'';
+    setLang(editing?editing.lang:'fr');
+    $('listWords').value = editing?editing.text:'';
+    $('deleteBtn').hidden=!editing; $('confirmDelete').hidden=true;
+    updateCount(); show('edit'); $('listName').focus();
+  }
+  function updateCount(){
+    const n=parse($('listWords').value).length, lines=$('listWords').value.split('\n').filter(l=>l.trim()).length;
+    let t=n?`${n} glosor hittade.`:'Inga glosor än.';
+    if(lines>n) t+=` ${lines-n} rad${lines-n>1?'er':''} saknar = mellan orden och hoppas över.`;
+    $('wordCount').textContent=t;
+  }
+  $('listWords').addEventListener('input',updateCount);
+  $('newListBtn').onclick=()=>openEdit(null);
+  $('editCancel').onclick=()=>{show('home');renderHome();};
+  $('saveBtn').onclick=()=>{
+    const data={name:$('listName').value.trim()||'Namnlös lista',lang:editLang,text:$('listWords').value};
+    if(editing){Object.assign(editing,data);delete editing.example;}
+    else { lists.unshift({id:'l'+Date.now(),...data}); }
+    saveLists(); renderHome();
+  };
+  $('deleteBtn').onclick=()=>{$('confirmDelete').hidden=false;};
+  $('confirmNo').onclick=()=>{$('confirmDelete').hidden=true;};
+  $('confirmYes').onclick=()=>removeList(editing);
+
+  /* ---------- checking ---------- */
+  const norm=s=>s.toLowerCase().replace(/[’`´]/g,"'").replace(/\s+/g,' ').replace(/\s*'\s*/g,"'").replace(/[.!?]+$/,'').trim();
+  const noAcc=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/œ/g,'oe').replace(/æ/g,'ae');
+  const stripArt=s=>s.replace(/^(le |la |les |l'|un |une |des |the |a |an |to |en |ett |att )/,'');
+  function judge(given,correct){
+    const alts=correct.split('/').map(norm).filter(Boolean), g=norm(given);
+    if(alts.includes(g)) return {kind:'good'};
+    const a=alts.find(a=>noAcc(a)===noAcc(g));
+    if(a) return {kind:S.strict?'accent-bad':'accent',target:a};
+    const b=alts.find(a=>stripArt(a)===stripArt(g));
+    if(b) return {kind:'article',target:b};
+    return {kind:'bad',target:alts[0]};
+  }
+  function diffHTML(given,target){
+    const g=norm(given),t=norm(target); let o='';
+    for(let i=0;i<g.length;i++) o+= g[i]===t[i]?esc(g[i]):`<span class="m">${esc(g[i])}</span>`;
+    return o;
+  }
+  const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+  /* ---------- LESSON ---------- */
+  let L=null;
+  function startLesson(list,all,writeOnly){
+    const pairs=parse(list.text); if(!pairs.length) return;
+    const str=p=>S.words[wkey(list,p)]||0;
+    let pick = all ? shuffle(pairs.slice()) : shuffle(pairs.slice()).sort((a,b)=>str(a)-str(b)).slice(0,8);
+    shuffle(pick);
+    const ex=[];
+    pick.forEach(p=>{
+      const s=str(p); let t;
+      if(writeOnly) t='write';
+      else if(s===0 && pairs.length>=4) t='choice';
+      else if(s>=2 && canSpeak && S.speak && Math.random()<.35) t='listen';
+      else t='write';
+      ex.push({t,p});
+    });
+    if(pairs.length>=4 && !writeOnly){
+      const mp=shuffle(pick.slice()).slice(0,Math.min(5,pick.length));
+      const at=Math.min(ex.length,3+Math.floor(Math.random()*2));
+      ex.splice(at,0,{t:'match',pairs:mp.length>=4?mp:shuffle(pairs.slice()).slice(0,4)});
+    }
+    L={list,pairs,queue:ex,total:ex.length,done:0,firstTry:0,tries:0,mistakes:new Map(),combo:0,best:0,start:Date.now(),seen:new Set()};
+    $('combo').textContent=''; $('bar').style.width='0%';
+    show('lesson'); nextEx();
+  }
+  function setBar(){ $('bar').style.width=(L.done/(L.done+L.queue.length)*100)+'%'; }
+
+  function footer(html,cls){ const f=$('footer'); f.className='footer'+(cls?' '+cls:''); $('footerIn').innerHTML=html; f.hidden=false; }
+  let onEnter=null;
+
+  function nextEx(){
+    if(!L.queue.length) return finish();
+    setBar();
+    const e=L.queue[0], body=$('lbody'), lang=LANG[L.list.lang];
+    L.cur=e; L.answered=false; L.retrying=false;
+    if(e.t==='write'||e.t==='listen'){
+      const isListen=e.t==='listen';
+      body.innerHTML = `<h2 class="qtitle">${isListen?'Skriv det du hör':`Skriv på ${lang.name}`}</h2>
+        ${isListen?`<button class="say bigsay" id="sayBtn" aria-label="Lyssna igen"><svg><use href="#i-spk"/></svg></button>`
+        :`<div class="speaker">${frog('happy')}<div class="bubble"><button class="say" id="sayBtn" aria-label="Lyssna"><svg><use href="#i-spk"/></svg></button><span class="w">${esc(e.p.sv)}</span></div></div>`}
+        <input type="text" class="answer" id="ans" placeholder="Skriv på ${lang.name}" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" enterkeyhint="go">
+        ${lang.acc.length?`<div class="accents">${lang.acc.map(c=>`<button type="button" data-c="${c}">${c}</button>`).join('')}</div>`:''}`;
+      const ans=$('ans');
+      body.querySelectorAll('.accents button').forEach(b=>b.onclick=()=>{
+        const s=ans.selectionStart??ans.value.length,en=ans.selectionEnd??ans.value.length;
+        ans.value=ans.value.slice(0,s)+b.dataset.c+ans.value.slice(en); ans.focus(); ans.setSelectionRange(s+1,s+1); upd();
+      });
+      const say=()=> isListen?speak(e.p.fx,lang.voice):speak(e.p.sv,'sv-SE');
+      $('sayBtn').onclick=say;
+      footer(`<div class="acts"><button class="btn skip" id="skipBtn">Vet inte</button><button class="btn" id="checkBtn" disabled>Kolla</button></div>`);
+      const upd=()=>{$('checkBtn').disabled=!ans.value.trim();};
+      ans.addEventListener('input',upd);
+      ans.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ev.preventDefault(); if(ans.value.trim()) check(ans.value);} });
+      $('checkBtn').onclick=()=>check(ans.value);
+      $('skipBtn').onclick=()=>check('');
+      setTimeout(()=>ans.focus(),50);
+      say();
+    }
+    else if(e.t==='choice'){
+      const others=shuffle(L.pairs.filter(p=>p.fx!==e.p.fx)).slice(0,3);
+      const opts=shuffle([e.p,...others]);
+      L.curOpts=opts;
+      body.innerHTML=`<h2 class="qtitle">Välj rätt ord</h2>
+        <div class="speaker">${frog('happy')}<div class="bubble"><button class="say" id="sayBtn" aria-label="Lyssna"><svg><use href="#i-spk"/></svg></button><span class="w">${esc(e.p.sv)}</span></div></div>
+        <div class="choices">${opts.map((o,i)=>`<button class="choice" data-i="${i}" aria-pressed="false"><span class="k">${i+1}</span>${esc(o.fx.split('/')[0].trim())}</button>`).join('')}</div>`;
+      let sel=null;
+      const pickI=i=>{ sel=i; sTap(); body.querySelectorAll('.choice').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i)); $('checkBtn').disabled=false;
+        speak(opts[i].fx,lang.voice); };
+      body.querySelectorAll('.choice').forEach(b=>b.onclick=()=>pickI(+b.dataset.i));
+      $('sayBtn').onclick=()=>speak(e.p.sv,'sv-SE');
+      footer(`<div class="acts"><button class="btn" id="checkBtn" disabled>Kolla</button></div>`);
+      $('checkBtn').onclick=()=>{ if(sel!==null) check(opts[sel].fx); };
+      onEnter=ev=>{ if(!L.answered && /^[1-4]$/.test(ev.key)&&opts[ev.key-1]) pickI(ev.key-1); else if(ev.key==='Enter'&&sel!==null&&!L.answered) check(opts[sel].fx); };
+      speak(e.p.sv,'sv-SE');
+    }
+    else if(e.t==='match'){
+      const left=shuffle(e.pairs.map((p,i)=>({i,t:p.sv}))), right=shuffle(e.pairs.map((p,i)=>({i,t:p.fx.split('/')[0].trim()})));
+      body.innerHTML=`<h2 class="qtitle">Para ihop orden</h2>
+        <div class="match"><div class="col">${left.map(x=>`<button class="mt" data-s="l" data-i="${x.i}">${esc(x.t)}</button>`).join('')}</div>
+        <div class="col">${right.map(x=>`<button class="mt" data-s="r" data-i="${x.i}">${esc(x.t)}</button>`).join('')}</div></div>`;
+      footer(`<div class="acts"><button class="btn" disabled>Para ihop alla ord</button></div>`);
+      let a=null, left_=e.pairs.length, errs=0;
+      body.querySelectorAll('.mt').forEach(b=>b.onclick=()=>{
+        if(b.dataset.s==='r') speak(e.pairs[+b.dataset.i].fx,lang.voice);
+        if(!a||a.dataset.s===b.dataset.s){ if(a) a.classList.remove('sel'); a=b; b.classList.add('sel'); sTap(); return; }
+        const x=a,y=b; a=null; x.classList.remove('sel');
+        if(x.dataset.i===y.dataset.i){
+          sGood(); [x,y].forEach(el=>{el.classList.add('ok'); setTimeout(()=>{el.classList.remove('ok');el.classList.add('done');},350);});
+          if(--left_===0) setTimeout(()=>matchDone(errs),450);
+        } else {
+          sBad(); errs++; [x,y].forEach(el=>{el.classList.add('no'); setTimeout(()=>el.classList.remove('no'),450);});
+        }
+      });
+    }
+  }
+
+  const PRAISE=['Snyggt!','Perfekt!','Grymt!','Toppen!','Helt rätt!','Kanon!','Så bra!'];
+  const praise=()=>PRAISE[Math.floor(Math.random()*PRAISE.length)];
+
+  function bumpCombo(ok){
+    if(ok){ L.combo++; L.best=Math.max(L.best,L.combo); } else L.combo=0;
+    const c=$('combo'); c.textContent = L.combo>=3 ? `${L.combo} i rad!` : '';
+    if(L.combo>=3){ c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
+  }
+
+  function matchDone(errs){
+    L.answered=true; L.queue.shift(); L.done++; L.tries++; if(!errs) L.firstTry++;
+    bumpCombo(!errs); setBar();
+    footer(`<div class="fb"><div class="icon" style="color:var(--green)"><svg><use href="#i-check"/></svg></div><div><h3>${errs?'Bra jobbat!':praise()}</h3><p>${errs?`Du parade ihop alla, med ${errs} miss${errs>1?'ar':''}.`:'Alla par rätt på första försöket.'}</p></div></div>
+      <button class="btn wide" id="contBtn">Fortsätt</button>`,'good');
+    $('contBtn').onclick=nextEx; $('contBtn').focus();
+  }
+
+  function badFooter(head,full,yours,note){
+    footer(`<div class="fb"><div class="icon" style="color:var(--red)"><svg><use href="#i-x"/></svg></div><div><h3>${head}</h3><p>Rätt svar: <b>${esc(full)}</b></p>${yours}<p style="opacity:.8">${note}</p></div></div>
+      <div class="acts"><button class="btn skip" id="retryBtn">Försök igen</button><button class="btn red" id="contBtn">Jag fattar</button></div>`,'bad');
+    $('retryBtn').onclick=startRetry;
+  }
+  function headFor(res){ return res.kind==='accent-bad'?'Nästan! Kolla accenterna.':res.kind==='article'?'Nästan! Glöm inte le/la/the.':res.kind==='skip'?'Så här skriver man:':'Inte riktigt'; }
+  function yoursFor(res,given,e){ return (res.kind!=='skip' && e.t!=='choice') ? `<p>Du skrev: <span class="diff">${diffHTML(given,res.target)}</span></p>` : ''; }
+
+  function startRetry(){
+    const e=L.cur; L.answered=false; L.retrying=true;
+    const ta=$('ans');
+    if(ta){
+      ta.readOnly=false; ta.value='';
+      footer(`<div class="acts"><button class="btn skip" id="skipBtn">Hoppa över</button><button class="btn" id="checkBtn" disabled>Kolla</button></div>`);
+      $('checkBtn').onclick=()=>check(ta.value);
+      $('skipBtn').onclick=nextEx;
+      setTimeout(()=>ta.focus(),30);
+    } else {
+      document.querySelectorAll('.choice').forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');});
+      footer(`<div class="acts"><button class="btn skip" id="skipBtn">Hoppa över</button><button class="btn" id="checkBtn" disabled>Kolla</button></div>`);
+      $('checkBtn').onclick=()=>{ const b=document.querySelector('.choice[aria-pressed="true"]'); if(b) check(L.curOpts[+b.dataset.i].fx); };
+      $('skipBtn').onclick=nextEx;
+    }
+  }
+
+  function retryCheck(given){
+    const e=L.cur, lang=LANG[L.list.lang];
+    const res = given.trim() ? judge(given,e.p.fx) : {kind:'skip',target:norm(e.p.fx.split('/')[0])};
+    const ok = res.kind==='good'||res.kind==='accent';
+    const full=e.p.fx.split('/').map(s=>s.trim()).join(' eller ');
+    if(ok){
+      sGood();
+      footer(`<div class="fb"><div class="icon" style="color:var(--green)"><svg><use href="#i-check"/></svg></div><div><h3>Bra, nu sitter det!</h3><p>${res.kind==='accent'?`Tänk på accenterna: <b>${esc(res.target)}</b>. `:''}Ordet kommer ändå tillbaka en gång till senare.</p></div></div>
+        <button class="btn wide" id="contBtn">Fortsätt</button>`,'good');
+    } else {
+      sBad();
+      badFooter(headFor(res),full,yoursFor(res,given,e),'Du kan försöka igen eller gå vidare.');
+    }
+    const ta=$('ans'); if(ta) ta.readOnly=true;
+    document.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+    if(e.t!=='choice') setTimeout(()=>speak(e.p.fx,lang.voice),200);
+    $('contBtn').onclick=nextEx; setTimeout(()=>$('contBtn')&&$('contBtn').focus(),30);
+  }
+
+  function check(given){
+    if(L.answered) return; L.answered=true;
+    if(L.retrying) return retryCheck(given);
+    const e=L.cur, lang=LANG[L.list.lang], k=wkey(L.list,e.p);
+    const res = given.trim() ? judge(given,e.p.fx) : {kind:'skip',target:norm(e.p.fx.split('/')[0])};
+    const ok = res.kind==='good'||res.kind==='accent';
+    const first=!L.seen.has(k); L.seen.add(k); L.tries++;
+    L.queue.shift();
+    const full=e.p.fx.split('/').map(s=>s.trim()).join(' eller ');
+    if(ok){
+      L.done++; if(first) L.firstTry++;
+      S.words[k]=Math.min(5,(S.words[k]||0)+(first?1:0));
+      sGood(); bumpCombo(true);
+      let sub = res.kind==='accent' ? `Tänk på accenterna: <b>${esc(res.target)}</b>` : (e.t==='choice'||!e.p.fx.includes('/')? (e.t==='listen'?`Betyder: ${esc(e.p.sv)}`:'') : `Det går också: ${esc(full)}`);
+      if(e.t==='choice') sub = `${esc(e.p.sv)} = ${esc(full)}`;
+      footer(`<div class="fb"><div class="icon" style="color:var(--green)"><svg><use href="#i-check"/></svg></div><div><h3>${praise()}</h3>${sub?`<p>${sub}</p>`:''}</div></div>
+        <button class="btn wide" id="contBtn">Fortsätt</button>`,'good');
+    } else {
+      S.words[k]=Math.max(0,(S.words[k]||0)-1);
+      L.mistakes.set(k,{p:e.p,n:(L.mistakes.get(k)?.n||0)+1});
+      sBad(); bumpCombo(false);
+      const pos=Math.min(L.queue.length,2+Math.floor(Math.random()*3));
+      L.queue.splice(pos,0,{t:'write',p:e.p});
+      badFooter(headFor(res),full,yoursFor(res,given,e),'Ordet kommer tillbaka snart.');
+    }
+    saveStats(); setBar();
+    const ta=$('ans'); if(ta) ta.readOnly=true;
+    document.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+    if(e.t!=='choice') setTimeout(()=>speak(e.p.fx,lang.voice),200);
+    $('contBtn').onclick=nextEx; setTimeout(()=>$('contBtn')&&$('contBtn').focus(),30);
+  }
+
+  document.addEventListener('keydown',ev=>{
+    if($('lesson').hidden) return;
+    if(!L.answered && onEnter && L.cur && L.cur.t==='choice'){ onEnter(ev); return; }
+  });
+
+  /* quit */
+  $('quitBtn').onclick=()=>{ $('quitFrog').innerHTML=frog('sad'); $('quitSheet').hidden=false; $('keepBtn').focus(); };
+  $('keepBtn').onclick=()=>{$('quitSheet').hidden=true;};
+  $('reallyQuit').onclick=()=>{$('quitSheet').hidden=true; try{speechSynthesis.cancel();}catch(e){} renderHome();};
+
+  /* ---------- DONE ---------- */
+  function finish(){
+    $('bar').style.width='100%';
+    const acc=Math.round(L.firstTry/L.total*100);
+    const perfect=L.mistakes.size===0 && L.firstTry===L.total;
+    const xp=10+L.firstTry+(perfect?5:0);
+    const today=dayStr(), wasToday=S.lastDay===today;
+    if(!wasToday){ S.streak = S.lastDay===yesterday()? S.streak+1 : 1; S.lastDay=today; }
+    if(S.day!==today){S.day=today;S.dayXp=0;}
+    const before=S.dayXp; S.dayXp+=xp; S.xp+=xp;
+    S.done[L.list.id]=(S.done[L.list.id]||0)+1;
+    saveStats();
+
+    const secs=Math.round((Date.now()-L.start)/1000);
+    $('doneFrog').innerHTML=frog('wow');
+    $('doneTitle').textContent = perfect?'Perfekt lektion!':acc>=80?'Lektionen klar!':'Bra kämpat!';
+    $('dXp').textContent=xp;
+    $('dAcc').innerHTML=`<svg width="20" height="20"><use href="#i-target"/></svg>${acc}%`;
+    $('dTime').innerHTML=`<svg width="20" height="20"><use href="#i-clock"/></svg>${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+    let msg='';
+    if(!wasToday) msg = S.streak>1?`${S.streak} dagar i rad! Fortsätt imorgon också.`:'Du har startat en svit! Öva imorgon så blir det 2 dagar i rad.';
+    else if(before<S.goal && S.dayXp>=S.goal) msg='Du klarade dagens mål!';
+    $('doneStreak').textContent=msg;
+    const rl=$('reviewList'); rl.innerHTML='';
+    [...L.mistakes.values()].forEach(m=>{ const li=document.createElement('li'); li.innerHTML=`<b>${esc(m.p.sv)}</b><span>${esc(m.p.fx)}</span>`; rl.appendChild(li); });
+    $('reviewBox').hidden=!L.mistakes.size;
+    show('done');
+    footer(`<button class="btn wide" id="homeBtn">Fortsätt</button>`);
+    $('homeBtn').onclick=()=>{ $('footer').hidden=true; renderHome(); };
+    sWin(); confetti();
+  }
+
+  function confetti(){
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const c=$('confetti'); c.hidden=false; const x=c.getContext('2d');
+    const W=c.width=innerWidth, H=c.height=innerHeight;
+    const cols=['#3DBE5B','#2FA8F0','#FFBE1A','#F0525A','#9B6BF2','#FF8A1F'];
+    const P=Array.from({length:140},()=>({x:W/2+(Math.random()-.5)*80,y:H*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,r:Math.random()*6+4,c:cols[Math.random()*6|0],a:Math.random()*6,s:(Math.random()-.5)*.3}));
+    let f=0;
+    (function step(){
+      x.clearRect(0,0,W,H);
+      P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.s;
+        x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});
+      if(++f<150) requestAnimationFrame(step); else {x.clearRect(0,0,W,H); c.hidden=true;}
+    })();
+  }
+
+  /* keep the check bar above the iPhone keyboard */
+  if(window.visualViewport){
+    const vv=window.visualViewport;
+    const fit=()=>{ const off=Math.max(0,window.innerHeight-vv.height-vv.offsetTop); $('footer').style.bottom=off+'px'; };
+    vv.addEventListener('resize',fit); vv.addEventListener('scroll',fit);
+  }
+
+  renderHome();
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+</script>
+</body>
+</html>

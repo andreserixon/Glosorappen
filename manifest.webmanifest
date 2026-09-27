@@ -1,0 +1,11 @@
+{
+  "name": "Glosförhöret",
+  "short_name": "Glosor",
+  "lang": "sv",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#3DBE5B",
+  "icons": [{ "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
+}
