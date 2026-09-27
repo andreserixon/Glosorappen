@@ -655,8 +655,8 @@ dimma = fog`}
       body.querySelectorAll('.choice').forEach(b=>b.onclick=()=>pickI(+b.dataset.i));
       $('sayBtn').onclick=()=>speak(e.p.sv,'sv-SE');
       footer(`<div class="acts"><button class="btn" id="checkBtn" disabled>Kolla</button></div>`);
-      $('checkBtn').onclick=()=>{ if(sel!==null) check(opts[sel].fx); };
-      onEnter=ev=>{ if(!L.answered && /^[1-4]$/.test(ev.key)&&opts[ev.key-1]) pickI(ev.key-1); else if(ev.key==='Enter'&&sel!==null&&!L.answered) check(opts[sel].fx); };
+      $('checkBtn').onclick=()=>{ if(sel!==null) check(opts[sel].fx.split('/')[0]); };
+      onEnter=ev=>{ if(!L.answered && /^[1-4]$/.test(ev.key)&&opts[ev.key-1]) pickI(ev.key-1); else if(ev.key==='Enter'&&sel!==null&&!L.answered) check(opts[sel].fx.split('/')[0]); };
       speak(e.p.sv,'sv-SE');
     }
     else if(e.t==='match'){
@@ -717,7 +717,7 @@ dimma = fog`}
     } else {
       document.querySelectorAll('.choice').forEach(b=>{b.disabled=false;b.setAttribute('aria-pressed','false');});
       footer(`<div class="acts"><button class="btn skip" id="skipBtn">Hoppa över</button><button class="btn" id="checkBtn" disabled>Kolla</button></div>`);
-      $('checkBtn').onclick=()=>{ const b=document.querySelector('.choice[aria-pressed="true"]'); if(b) check(L.curOpts[+b.dataset.i].fx); };
+      $('checkBtn').onclick=()=>{ const b=document.querySelector('.choice[aria-pressed="true"]'); if(b) check(L.curOpts[+b.dataset.i].fx.split('/')[0]); };
       $('skipBtn').onclick=nextEx;
     }
   }
