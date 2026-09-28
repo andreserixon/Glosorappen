@@ -189,7 +189,49 @@ input,textarea,select{font-size:16px}
 .goalbar i{display:block;height:100%;width:0;background:var(--gold);border-radius:999px;transition:width .4s}
 .tip{display:flex;flex-direction:column;gap:6px;border:2px solid var(--blue);background:var(--blue-soft);border-radius:16px;padding:12px 14px;font-weight:700}
 .tip svg{vertical-align:-3px}
-.tip .link{align-self:flex-start;padding:4px 0;min-height:32px}
+.tip .link{padding:4px 0;min-height:32px}
+.tipbtns{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.a2card{gap:10px}
+.a2cap{margin:0;font-weight:800;text-align:center;min-height:2.8em}
+/* iPhone-attrapp, alltid mörk som i skärmbilderna */
+.phone{position:relative;width:250px;height:440px;align-self:center;border-radius:34px;border:6px solid #0b0b0c;background:#15201b;overflow:hidden;font-family:-apple-system,system-ui,sans-serif;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.ph-page{position:absolute;inset:0;padding:40px 14px 70px;display:flex;flex-direction:column;gap:10px}
+.ph-page i{display:block;height:12px;border-radius:6px;background:#2a3a33}
+.ph-page i.big{height:60px;border-radius:14px}
+.ph-page i.green{background:#2f7d45;height:34px;border-radius:12px}
+.sf-bar{position:absolute;left:10px;right:10px;bottom:14px;display:flex;align-items:center;gap:8px}
+.sf-btn{width:38px;height:38px;border-radius:50%;background:#2c2c2e;display:grid;place-items:center;font-size:18px;font-weight:700;flex:none}
+.sf-url{flex:1;height:38px;border-radius:19px;background:#2c2c2e;display:flex;align-items:center;justify-content:center;font-size:11px;color:#ddd}
+.ph-dim{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.ph-menu{position:absolute;right:10px;bottom:62px;width:170px;border-radius:18px;background:#2c2c2e;padding:6px 0;font-size:12px}
+.ph-menu div{padding:9px 14px;display:flex;gap:10px;align-items:center}
+.ph-menu hr{border:0;border-top:1px solid #444;margin:4px 12px}
+.ph-sheet{position:absolute;left:0;right:0;bottom:0;top:60px;border-radius:22px 22px 0 0;background:#1f2a25;padding:14px 12px;display:flex;flex-direction:column;gap:12px;font-size:11px}
+.ph-sheet .app{display:flex;gap:10px;align-items:center}
+.ph-sheet .app b{font-size:13px}
+.ph-sheet .ico{width:40px;height:40px;border-radius:10px;background:#fff;display:grid;place-items:center;flex:none}
+.ph-sheet .ico span{width:26px;height:26px;border-radius:6px;background:#3DBE5B}
+.ph-row{display:flex;justify-content:space-between;text-align:center;gap:4px}
+.ph-row div{display:flex;flex-direction:column;align-items:center;gap:4px;width:25%;font-size:9.5px;color:#ddd}
+.ph-row .sq{width:40px;height:40px;border-radius:12px;background:#3a3a3c}
+.ph-row .ci{width:40px;height:40px;border-radius:50%;background:#3a4a44;display:grid;place-items:center;font-size:15px;color:#fff}
+.ph-list{border-radius:14px;background:#3a3a3c;overflow:hidden}
+.ph-list div{padding:9px 12px;border-bottom:1px solid #4a4a4c;font-size:11.5px}
+.ph-list div:last-child{border-bottom:0}
+.ph-add .top{display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.ph-add .top b{font-size:11.5px}
+.ph-add .blue{color:#4aa3ff;font-weight:700}
+.ph-add .field{display:flex;gap:10px;align-items:center;background:#3a3a3c;border-radius:12px;padding:10px}
+.ph-home{position:absolute;inset:0;padding:50px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px 10px;align-content:start;background:linear-gradient(160deg,#274b6d,#1a2a3a)}
+.ph-home div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:9px}
+.ph-home .ap{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.18)}
+.ph-home .frogapp{background:#3DBE5B;display:grid;place-items:center}
+.tgt{position:relative;outline:2px solid #FFBE1A;outline-offset:2px;border-radius:10px}
+.sf-btn.tgt,.ci.tgt{border-radius:50%}
+.tgt::after{content:"";position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 0 0 rgba(255,190,26,.7);animation:tap 1.4s ease-out infinite;pointer-events:none}
+@keyframes tap{0%{transform:scale(.4);opacity:0;box-shadow:0 0 0 0 rgba(255,190,26,.7)}30%{opacity:1;transform:scale(1)}60%{transform:scale(.8)}100%{opacity:0;transform:scale(1.1);box-shadow:0 0 0 18px rgba(255,190,26,0)}}
+.ph-in{animation:phin .35s ease-out}
+@keyframes phin{from{transform:translateY(20px);opacity:0}}
 .secthead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
 .secthead .sect{margin:0}
 .btn.small{min-height:40px;padding:8px 14px;font-size:.8rem;box-shadow:0 4px 0 var(--d)}
@@ -439,8 +481,8 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 
   <div class="tip" id="installTip" hidden>
     <b>Lägg appen på hemskärmen</b>
-    <span>Då håller du dig inloggad och appen funkar som en riktig app. Tryck på Dela <svg width="16" height="16"><use href="#i-up"/></svg> och sedan <b>Lägg till på hemskärmen</b>. Öppna appen därifrån och logga in en gång.</span>
-    <button class="link" id="installTipX">Okej, jag fattar</button>
+    <span>Då håller du dig inloggad och appen funkar som en riktig app. Tryck på <b>•••</b> längst ner till höger i Safari, sedan <b>Dela</b>, <b>Visa mer</b> och <b>Lägg till på hemskärmen</b>.</span>
+    <div class="tipbtns"><button class="btn small" id="installShow">Visa mig</button><button class="link" id="installTipX">Okej, jag fattar</button></div>
   </div>
 
   <div id="cloudHome" class="cloudsec" hidden></div>
@@ -625,6 +667,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
       <button type="button" class="chip" id="chipStrict">Accenter måste vara rätt</button>
     </div>
     <button type="button" class="btn ghost" id="acIntro">Visa hur appen funkar</button>
+    <button type="button" class="btn ghost" id="acA2hs">Lägg appen på hemskärmen</button>
   </div>
 
   <div id="acDispBox">
@@ -724,6 +767,16 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 
 <!-- fixed footer (lesson + done) -->
 <div class="footer" id="footer" hidden><div class="in" id="footerIn"></div></div>
+
+<div class="sheet" id="a2hs" hidden>
+  <div class="card left a2card">
+    <div class="head" style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:1.2rem">Lägg appen på hemskärmen</h2><button class="link" id="a2Close">Stäng</button></div>
+    <div class="phone" id="a2Phone" aria-hidden="true"></div>
+    <p class="a2cap" id="a2Cap"></p>
+    <div class="dots center" id="a2Dots"></div>
+    <div class="intronav"><button class="btn ghost" id="a2Back">Tillbaka</button><button class="btn" id="a2Next">Nästa</button></div>
+  </div>
+</div>
 
 <div class="sheet" id="newSheet" hidden>
   <div class="card left">
@@ -1161,7 +1214,7 @@ dimma = fog`}
 
   /* mitt konto */
   function openAccount(){
-    renderSettings(); $('acErr').textContent='';
+    renderSettings(); $('acErr').textContent=''; $('acA2hs').hidden=standalone();
     const inn=!!(C&&C.profile);
     $('acIn').hidden=!inn; $('acLogout').hidden=!inn; $('acLogoutConfirm').hidden=true;
     $('acOut').hidden = inn || !(sb&&sbReach);
@@ -1185,6 +1238,7 @@ dimma = fog`}
   $('acSignup').onclick=showWelcome;
   $('acLogin').onclick=()=>{ $('liErr').textContent=''; show('login'); };
   $('acIntro').onclick=()=>openIntro();
+  $('acA2hs').onclick=openA2hs;
   $('acSaveImg').onclick=()=>saveImg($('acSaveImg'));
   $('acSaveNote').onclick=()=>saveNote($('acSaveNote'));
   $('acDispSave').onclick=async()=>{
@@ -1540,6 +1594,40 @@ dimma = fog`}
   function renderSettings(){ $('chipSound').setAttribute('aria-pressed',S.sound); $('chipSpeak').setAttribute('aria-pressed',S.speak); $('chipStrict').setAttribute('aria-pressed',S.strict); }
   [['chipSound','sound'],['chipSpeak','speak'],['chipStrict','strict']].forEach(([id,k])=>$(id).onclick=()=>{ S[k]=!S[k]; saveStats(); renderSettings(); sTap(); });
   $('installTipX').onclick=()=>{ S.tipDone=true; saveStats(); renderHome(); };
+
+  /* animerad guide: lägg appen på hemskärmen (Safari på iPhone) */
+  let A2=0, a2T=null;
+  const phPage=`<div class="ph-page"><i style="width:60%"></i><i class="big"></i><i class="green"></i><i></i><i style="width:80%"></i><i class="big"></i></div>`;
+  const phBar=(t)=>`<div class="sf-bar"><span class="sf-btn">‹</span><span class="sf-url">andreserixon.github.io</span><span class="sf-btn ${t?'tgt':''}">•••</span></div>`;
+  const A2STEPS=[
+    {cap:'Tryck på <b>•••</b> längst ner till höger i Safari.', html:()=>phPage+phBar(true)},
+    {cap:'Tryck på <b>Dela</b>.', html:()=>phPage+phBar(false)+`<div class="ph-dim"></div><div class="ph-menu ph-in"><div class="tgt">⇪ Dela</div><div>☐ Lägg till i Bokmärken</div><div>▢ Lägg till bokmärke i…</div><hr><div>＋ Ny flik</div><div>✋ Ny privat flik</div></div>`},
+    {cap:'Tryck på <b>Visa mer</b> för att se fler val.', html:()=>phPage+`<div class="ph-dim"></div><div class="ph-sheet ph-in">
+      <div class="app"><div class="ico"><span></span></div><div><b>Glosförhöret</b><br>andreserixon.github.io</div></div>
+      <div class="ph-row"><div><span class="sq"></span>AirDrop</div><div><span class="sq"></span>Meddelanden</div><div><span class="sq"></span>Mail</div><div><span class="sq"></span>Gmail</div></div>
+      <div class="ph-row"><div><span class="ci">⧉</span>Kopiera</div><div><span class="ci">⎙</span>Skriv ut</div><div><span class="ci">✎</span>Märkning</div><div><span class="ci tgt">⌄</span>Visa mer</div></div></div>`},
+    {cap:'Scrolla ner och tryck på <b>Lägg till på hemskärmen</b>.', html:()=>phPage+`<div class="ph-dim"></div><div class="ph-sheet">
+      <div class="app"><div class="ico"><span></span></div><div><b>Glosförhöret</b><br>andreserixon.github.io</div></div>
+      <div class="ph-list ph-in"><div>Lägg till i Bokmärken</div><div>Lägg till i läslistan</div><div>Lägg till i favoriter</div><div>Sök på sidan</div><div class="tgt">⊞ Lägg till på hemskärmen</div></div></div>`},
+    {cap:'Tryck på <b>Lägg till</b> uppe till höger.', html:()=>phPage+`<div class="ph-dim"></div><div class="ph-sheet ph-add ph-in">
+      <div class="top"><span class="blue">Avbryt</span><b>Lägg till på hemskärmen</b><span class="blue tgt">Lägg till</span></div>
+      <div class="field"><div class="ico"><span></span></div><div><b>Glosförhöret</b><br>andreserixon.github.io</div></div>
+      <div class="field" style="justify-content:space-between">Öppna som webbapp <span style="width:34px;height:20px;border-radius:10px;background:#34c759;display:inline-block"></span></div></div>`},
+    {cap:'Klart! Öppna <b>Glosförhöret</b> från hemskärmen och logga in en gång med ditt namn och din kod.', html:()=>`<div class="ph-home ph-in">${Array.from({length:11},()=>'<div><span class="ap"></span></div>').join('')}<div><span class="ap frogapp tgt"><svg width="30" height="30" viewBox="0 0 100 100"><circle cx="31" cy="34" r="14" fill="#fff"/><circle cx="69" cy="34" r="14" fill="#fff"/><circle cx="33" cy="34" r="6" fill="#1B2A22"/><circle cx="71" cy="34" r="6" fill="#1B2A22"/><path d="M30 64 Q50 80 70 64" stroke="#1B4D2A" stroke-width="7" fill="none" stroke-linecap="round"/></svg></span>Glosförhöret</div></div>`}
+  ];
+  function a2Render(){
+    const st=A2STEPS[A2];
+    $('a2Phone').innerHTML=st.html(); $('a2Cap').innerHTML=`${A2+1}. ${st.cap}`;
+    $('a2Dots').innerHTML=A2STEPS.map((_,i)=>`<i class="${i===A2?'on':''}"></i>`).join('');
+    $('a2Back').style.visibility=A2?'visible':'hidden';
+    $('a2Next').textContent = A2===A2STEPS.length-1 ? 'Spela igen' : 'Nästa';
+  }
+  function a2Auto(){ clearInterval(a2T); a2T=setInterval(()=>{ if(A2<A2STEPS.length-1){ A2++; a2Render(); } else clearInterval(a2T); },3200); }
+  function openA2hs(){ A2=0; a2Render(); $('a2hs').hidden=false; if(!matchMedia('(prefers-reduced-motion: reduce)').matches) a2Auto(); }
+  $('installShow').onclick=openA2hs;
+  $('a2Next').onclick=()=>{ if(A2<A2STEPS.length-1){ A2++; a2Render(); a2Auto(); } else { A2=0; a2Render(); a2Auto(); } };
+  $('a2Back').onclick=()=>{ if(A2>0){ A2--; a2Render(); a2Auto(); } };
+  $('a2Close').onclick=()=>{ clearInterval(a2T); $('a2hs').hidden=true; };
   $('introLink').onclick=()=>openIntro();
 
   /* nya förhör från läraren */
