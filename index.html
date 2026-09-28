@@ -318,6 +318,9 @@ input,textarea,select{font-size:16px}
 .grow .in{color:var(--green-ink);font-weight:900}
 .from{color:var(--muted);font-size:.8rem;font-weight:700}
 .combo{position:relative}
+.seg.tight{gap:4px}
+.seg.tight button{padding:8px 0;min-width:0;min-height:42px;border-radius:10px}
+.cllist{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:2px}
 .searchbar{display:flex;align-items:center;gap:10px;width:100%;border:2px solid var(--line);background:var(--soft);border-radius:999px;padding:12px 16px;color:var(--muted);font-weight:800;text-align:left;min-height:48px}
 .searchbar svg{flex:none;color:var(--blue)}
 .srmeta{color:var(--muted);font-size:.8rem;font-weight:700}
@@ -341,7 +344,7 @@ input,textarea,select{font-size:16px}
 .form{display:flex;flex-direction:column;gap:18px;padding-block:20px 40px}
 .form .head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .lbl{display:block;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-input[type=text],textarea,select{width:100%;font:inherit;font-weight:700;color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+input[type=text],input[type=search],textarea,select{width:100%;font:inherit;font-weight:700;color:var(--ink);background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px}
 textarea{min-height:220px;resize:vertical;line-height:1.7}
 .hint{color:var(--muted);font-size:.9rem;margin:6px 0 0;font-weight:600}
 code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
@@ -719,16 +722,24 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 <section id="classes" class="form" hidden>
   <div class="head"><h2>Klasser</h2><button class="link" id="clBack">Tillbaka</button></div>
   <div class="importbox">
-    <h3>Gå med i en klass</h3>
-    <p class="hint" style="margin:0">Fråga din lärare eller en klasskompis efter klasskoden.</p>
+    <h3>Hitta din klass</h3>
+    <input type="search" id="clQ" placeholder="Sök, t.ex. 7b" autocomplete="off" autocorrect="off" autocapitalize="characters">
+    <div class="cllist" id="clList"></div>
+  </div>
+  <div class="importbox">
+    <h3>Har du en klasskod?</h3>
     <div class="row2"><input type="text" id="joinCode" placeholder="t.ex. GRODA-4821" autocapitalize="characters" autocorrect="off" autocomplete="off"><button class="btn" id="joinBtn">Gå med</button></div>
     <p class="errmsg" id="joinErr"></p>
   </div>
   <div class="importbox">
-    <h3>Skapa en ny klass</h3>
-    <p class="hint" style="margin:0">Gör det bara om ingen i klassen har skapat den än. Annars blir det två likadana klasser.</p>
-    <input type="text" id="newClassName" placeholder="t.ex. 7A" maxlength="40" autocomplete="off">
-    <div class="sugg" id="classSugg"></div>
+    <h3>Finns inte din klass? Skapa den</h3>
+    <span class="lbl" style="margin:0">Årskurs</span>
+    <div class="seg tight" id="ncGrade"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button><button type="button" data-v="9">9</button></div>
+    <span class="lbl" style="margin:0">Klass</span>
+    <div class="seg tight" id="ncLetter"><button type="button" data-v="A">A</button><button type="button" data-v="B">B</button><button type="button" data-v="C">C</button><button type="button" data-v="D">D</button><button type="button" data-v="E">E</button><button type="button" data-v="F">F</button><button type="button" data-v="G">G</button><button type="button" data-v="H">H</button></div>
+    <span class="lbl" style="margin:0">Termin</span>
+    <div class="row2"><select id="ncYear" aria-label="År"></select><div class="seg" id="ncSeg"><button type="button" data-v="VT">VT</button><button type="button" data-v="HT">HT</button></div></div>
+    <div class="sugg" id="ncHint"></div>
     <button class="btn blue" id="createClassBtn">Skapa klassen</button>
     <p class="errmsg" id="ccErr"></p>
   </div>
@@ -736,15 +747,15 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 
 <section id="klass" class="form" hidden>
   <div class="head"><h2 id="kName"></h2><button class="link" id="kBack">Klar</button></div>
-  <div class="row2" id="kRename" hidden><input type="text" id="kNameIn" maxlength="40" aria-label="Klassens namn"><button class="btn ghost" id="kRenameBtn">Byt namn</button></div>
+  <div class="row2" id="kRename" hidden><input type="text" id="kNameIn" maxlength="2" aria-label="Klassens namn, t.ex. 7B" autocapitalize="characters" autocorrect="off"><button class="btn ghost" id="kRenameBtn">Byt namn</button></div>
   <div class="codebox"><span class="lbl">Klasskod</span><b id="kCode"></b><button class="btn ghost" id="kCopy">Kopiera</button><p class="hint" style="margin:0">Dela koden med klassen så kan de gå med.</p></div>
-  <div class="cloudsec"><span class="lbl" style="margin:0">Terminer och kurser i klassen</span><div class="cloudsec" id="kGroups"></div></div>
+  <div class="cloudsec"><span class="lbl" style="margin:0">Kurser i klassen</span><div class="cloudsec" id="kGroups"></div></div>
   <div class="importbox">
-    <h3>Lägg till termin och kurs</h3>
+    <h3 id="kAddTitle">Lägg till kurs</h3>
     <span class="lbl" style="margin:0">1. Språk</span>
     <div class="seg" id="cLang"><button type="button" data-v="fr">Franska</button><button type="button" data-v="en">Engelska</button><button type="button" data-v="es">Spanska</button></div>
-    <span class="lbl" style="margin:0">2. Termin</span>
-    <div class="row2"><select id="tYear" aria-label="År"></select><div class="seg" id="tSeg"><button type="button" data-v="VT">VT</button><button type="button" data-v="HT">HT</button></div></div>
+    <div id="kTermBox" class="cloudsec" style="gap:10px"><span class="lbl" style="margin:0">2. Termin</span>
+    <div class="row2"><select id="tYear" aria-label="År"></select><div class="seg" id="tSeg"><button type="button" data-v="VT">VT</button><button type="button" data-v="HT">HT</button></div></div></div>
     <label class="lbl" for="cName" style="margin:0">3. Kurs</label>
     <div class="combo">
       <input type="text" id="cName" placeholder="Skriv för att söka, t.ex. fra" maxlength="40" autocomplete="off" autocorrect="off" role="combobox" aria-expanded="false" aria-controls="cList" aria-autocomplete="list">
@@ -1046,7 +1057,7 @@ dimma = fog`}
     const uid=C.uid;
     const [prof,classes,groups,gm,ls,ud,links]=await Promise.all([
       q(sb.from('profiles').select('*').eq('id',uid).maybeSingle()),
-      q(sb.from('classes').select('*').order('name')),
+      q(sb.from('classes').select('*,term:terms(name)').order('name')),
       q(sb.from('groups').select('id,class_id,term:terms(name),course:courses(name,lang)')),
       q(sb.from('group_members').select('group_id')),
       q(sb.from('lists').select('*').order('created_at',{ascending:false})),
@@ -1054,7 +1065,7 @@ dimma = fog`}
       q(sb.from('examiner_links').select('*')),
     ]);
     if(!prof) throw new Error('noprofile');
-    C.profile=prof; C.classes=classes; C.links=links;
+    C.profile=prof; C.classes=classes.map(c=>({...c,term:(c.term||{}).name||null})); C.links=links;
     C.groups=groups.map(g=>({id:g.id,class_id:g.class_id,term:(g.term||{}).name||'',course:(g.course||{}).name||'',lang:(g.course||{}).lang||null}))
       .sort((a,b)=>b.term.localeCompare(a.term)||a.course.localeCompare(b.course));
     C.myGroups=new Set(gm.map(x=>x.group_id));
@@ -1322,7 +1333,7 @@ dimma = fog`}
     if(!C.classes.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">${role==='larare'?'Du har inga klasser än. Skapa en klass eller gå med med en klasskod.':'Har din lärare gett dig en klasskod? Tryck på Klasskod så ser du lärarens förhör här.'}</p>`);
     C.classes.forEach(c=>{
       const h=document.createElement('div'); h.className='classhead';
-      h.innerHTML=`<h3>${esc(c.name)}</h3><button class="btn ghost small">${role==='larare'?'Hantera':'Visa klass'}</button>`;
+      h.innerHTML=`<h3>${esc(c.name)}${c.term?` · ${esc(c.term)}`:''}</h3><button class="btn ghost small">${role==='larare'?'Hantera':'Visa klass'}</button>`;
       h.querySelector('button').onclick=()=>openKlass(c.id); box.appendChild(h);
       const gs=C.groups.filter(g=>g.class_id===c.id && C.myGroups.has(g.id));
       if(!gs.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">Välj termin och kurs under ${role==='larare'?'Hantera':'Visa klass'}.</p>`);
@@ -1340,22 +1351,58 @@ dimma = fog`}
   }
 
   /* gå med i / skapa klass */
-  function openClasses(){ $('joinErr').textContent=''; $('ccErr').textContent=''; $('joinCode').value=''; $('newClassName').value=''; $('classSugg').innerHTML=''; show('classes'); }
+  let CL=[], ncG='7', ncL='A', ncT='HT';
+  async function openClasses(){
+    $('joinErr').textContent=''; $('ccErr').textContent=''; $('joinCode').value=''; $('clQ').value='';
+    const t=curTerm(); ncT=t.p;
+    $('ncYear').innerHTML=[t.y-1,t.y,t.y+1].map(y=>`<option ${y===t.y?'selected':''}>${y}</option>`).join('');
+    setSeg('ncGrade',ncG); setSeg('ncLetter',ncL); setSeg('ncSeg',ncT);
+    $('clList').innerHTML='<p class="hint" style="margin:0">Hämtar klasser…</p>';
+    show('classes'); renderNc();
+    try{ CL=await q(sb.rpc('list_classes')); }catch(e){ CL=[]; $('clList').innerHTML=`<p class="errmsg">${esc(errMsg(e))}</p>`; return; }
+    renderClList(); renderNc();
+  }
+  function renderClList(){
+    const qs=$('clQ').value.trim(), y=String(curTerm().y);
+    let rows = qs ? CL.filter(r=>matchScore(qs,`${r.name} ${r.term}`)>0) : CL.slice();
+    // innevarande år först, sedan övriga år med senaste först
+    const years=[...new Set(rows.map(r=>r.term.slice(0,4)))].sort((a,b)=>(b===y)-(a===y)||b.localeCompare(a));
+    const box=$('clList'); box.innerHTML='';
+    if(!rows.length){ box.innerHTML=`<p class="hint" style="margin:0">${qs?'Ingen klass matchar. Skapa den nedan.':'Inga klasser än. Skapa din klass nedan.'}</p>`; return; }
+    years.forEach(yr=>{
+      box.insertAdjacentHTML('beforeend',`<div class="grouphead">${yr}${yr===y?' · i år':''}</div>`);
+      rows.filter(r=>r.term.startsWith(yr)).sort((a,b)=>b.term.localeCompare(a.term)||a.name.localeCompare(b.name)).forEach(r=>{
+        const d=document.createElement('div'); d.className='grow';
+        d.innerHTML=`<b>${esc(r.name)} · ${esc(r.term)}</b>${r.is_member?'<button class="btn ghost">Öppna</button>':'<button class="btn">Gå med</button>'}`;
+        d.querySelector('button').onclick=()=>joinById(r.id,r.is_member,d.querySelector('button'));
+        box.appendChild(d);
+      });
+    });
+  }
+  async function joinById(id,member,btn){
+    try{ if(!member){ btn.disabled=true; await q(sb.rpc('join_class_id',{p_class:id})); await cloudLoad(); } openKlass(id); }
+    catch(e){ btn.disabled=false; $('ccErr').textContent=errMsg(e); }
+  }
+  const ncName=()=>ncG+ncL, ncTerm=()=>`${$('ncYear').value}-${ncT}`;
+  function renderNc(){
+    const n=ncName(), t=ncTerm(), ex=CL.find(r=>r.name===n&&r.term===t);
+    $('ncHint').innerHTML = ex ? `<span><b>${n} · ${t}</b> finns redan. ${ex.is_member?'Du är med i den.':'Du går med i den i stället för att skapa en ny.'}</span>` : '';
+    $('createClassBtn').textContent = ex ? (ex.is_member?`Öppna ${n} · ${t}`:`Gå med i ${n} · ${t}`) : `Skapa ${n} · ${t}`;
+  }
+  $('ncGrade').querySelectorAll('button').forEach(b=>b.onclick=()=>{ ncG=b.dataset.v; setSeg('ncGrade',ncG); renderNc(); sTap(); });
+  $('ncLetter').querySelectorAll('button').forEach(b=>b.onclick=()=>{ ncL=b.dataset.v; setSeg('ncLetter',ncL); renderNc(); sTap(); });
+  $('ncSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ ncT=b.dataset.v; setSeg('ncSeg',ncT); renderNc(); });
+  $('ncYear').onchange=renderNc;
+  $('clQ').addEventListener('input',renderClList);
   $('clBack').onclick=()=>{ renderHome(); show('home'); };
   $('joinBtn').onclick=async()=>{
     $('joinErr').textContent='';
     try{ const c=await q(sb.rpc('join_class',{p_code:$('joinCode').value})); await cloudLoad(); openKlass(c.id); }
     catch(e){ $('joinErr').textContent=errMsg(e); }
   };
-  $('newClassName').oninput=()=>{
-    const sim=similar($('newClassName').value,C.classes.map(c=>c.name));
-    $('classSugg').innerHTML = sim.length ? `<span>Du är redan med i ${sim.map(n=>`<b>${esc(n)}</b>`).join(', ')}. Menade du den?</span>`+
-      sim.map(n=>`<button class="btn ghost" data-open="${esc(C.classes.find(c=>c.name===n).id)}">Öppna ${esc(n)}</button>`).join('') : '';
-    $('classSugg').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openKlass(b.dataset.open));
-  };
   $('createClassBtn').onclick=async()=>{
-    const name=$('newClassName').value.trim(); if(!name){ $('ccErr').textContent='Skriv ett namn på klassen.'; return; }
-    try{ const c=await q(sb.rpc('create_class',{p_name:name})); await cloudLoad(); openKlass(c.id); }
+    $('ccErr').textContent='';
+    try{ const c=await q(sb.rpc('create_class',{p_name:ncName(),p_term:ncTerm()})); await cloudLoad(); sGood(); openKlass(c.id); }
     catch(e){ $('ccErr').textContent=errMsg(e); }
   };
 
@@ -1364,7 +1411,8 @@ dimma = fog`}
   function curTerm(){ const d=new Date(); return {y:d.getFullYear(), p:d.getMonth()<6?'VT':'HT'}; }
   async function openKlass(id){
     K=C.classes.find(c=>c.id===id); if(!K) return;
-    $('kName').textContent=K.name; $('kCode').textContent=K.join_code;
+    $('kName').textContent=K.name+(K.term?` · ${K.term}`:''); $('kCode').textContent=K.join_code;
+    $('kTermBox').hidden=!!K.term; $('kAddTitle').textContent=K.term?'Lägg till kurs':'Lägg till termin och kurs';
     const canRename = C.profile.role==='larare' || K.created_by===C.uid;
     $('kRename').hidden=!canRename; $('kNameIn').value=K.name;
     $('gErr').textContent=''; $('cName').value=''; $('kLeave').dataset.sure='';
@@ -1378,7 +1426,7 @@ dimma = fog`}
   }
   function renderKGroups(){
     const gs=C.groups.filter(g=>g.class_id===K.id), box=$('kGroups'); box.innerHTML='';
-    if(!gs.length) box.innerHTML='<p class="emptytxt" style="text-align:left">Inga än. Lägg till en termin och kurs nedan.</p>';
+    if(!gs.length) box.innerHTML='<p class="emptytxt" style="text-align:left">Inga kurser än. Lägg till en nedan.</p>';
     gs.forEach(g=>{
       const d=document.createElement('div'); d.className='grow';
       const inG=C.myGroups.has(g.id);
@@ -1387,7 +1435,7 @@ dimma = fog`}
       box.appendChild(d);
     });
   }
-  const termName=()=>`${$('tYear').value}-${tTerm}`;
+  const termName=()=>K&&K.term ? K.term : `${$('tYear').value}-${tTerm}`;
   function guessLang(n){ const k=nkey(n); return /^fran|^fre/.test(k)?'fr':/^eng/.test(k)?'en':/^span|^spa|^esp/.test(k)?'es':null; }
   function gHint(){
     const name=$('cName').value.trim(), tn=termName(), out=[];
@@ -1445,7 +1493,7 @@ dimma = fog`}
   };
   $('kRenameBtn').onclick=async()=>{
     const n=$('kNameIn').value.trim(); if(!n) return;
-    try{ await q(sb.rpc('rename_class',{p_class:K.id,p_name:n})); await cloudLoad(); K=C.classes.find(c=>c.id===K.id); $('kName').textContent=K.name; }
+    try{ await q(sb.rpc('rename_class',{p_class:K.id,p_name:n})); await cloudLoad(); K=C.classes.find(c=>c.id===K.id); $('kName').textContent=K.name+(K.term?` · ${K.term}`:''); }
     catch(e){ $('gErr').textContent=errMsg(e); }
   };
   $('kCopy').onclick=()=>copyText(K.join_code,$('kCopy'));
