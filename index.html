@@ -318,6 +318,14 @@ input,textarea,select{font-size:16px}
 .grow .in{color:var(--green-ink);font-weight:900}
 .from{color:var(--muted);font-size:.8rem;font-weight:700}
 .combo{position:relative}
+.searchbar{display:flex;align-items:center;gap:10px;width:100%;border:2px solid var(--line);background:var(--soft);border-radius:999px;padding:12px 16px;color:var(--muted);font-weight:800;text-align:left;min-height:48px}
+.searchbar svg{flex:none;color:var(--blue)}
+.srmeta{color:var(--muted);font-size:.8rem;font-weight:700}
+.srprev{color:var(--muted);font-size:.8rem;font-weight:600;font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srbtn{min-height:40px;padding:8px 12px;font-size:.75rem}
+.combo-list li .sub{display:block;font-size:.75rem;color:var(--muted);font-weight:700}
+.combo-list li .act{color:var(--blue-d);font-size:.72rem;font-weight:900;text-transform:uppercase;flex:none}
+#srRes .title mark{background:var(--gold-soft);color:inherit;border-radius:3px}
 .combo-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;margin:0;padding:6px;list-style:none;max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border:2px solid var(--blue);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .combo-list li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800;min-height:44px}
 .combo-list li[aria-selected="true"],.combo-list li:hover{background:var(--blue-soft)}
@@ -450,6 +458,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
     <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" fill="currentColor"/><path d="M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
@@ -479,6 +488,8 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     </div>
   </div>
 
+  <button class="searchbar" id="searchBtn" hidden><svg width="20" height="20"><use href="#i-search"/></svg><span>Sök förhör, t.ex. franska v40</span></button>
+
   <div class="tip" id="installTip" hidden>
     <b>Lägg appen på hemskärmen</b>
     <span>Då håller du dig inloggad och appen funkar som en riktig app. Tryck på <b>•••</b> längst ner till höger i Safari, sedan <b>Dela</b>, <b>Visa mer</b> och <b>Lägg till på hemskärmen</b>.</span>
@@ -501,7 +512,16 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   </div>
   <div>
     <label class="lbl" for="listName">Namn på listan</label>
-    <input type="text" id="listName" placeholder="t.ex. Franska vecka 40" autocomplete="off">
+    <div class="combo">
+      <input type="text" id="listName" placeholder="t.ex. Franska vecka 40" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="nameList" aria-autocomplete="list">
+      <ul class="combo-list" id="nameList" role="listbox" hidden></ul>
+    </div>
+    <p class="hint" id="nameHint"></p>
+  </div>
+  <div class="importbox" id="shareBox" hidden>
+    <label class="check" style="min-height:0"><input type="checkbox" id="listShared"> Dela förhöret med min klass</label>
+    <p class="hint" style="margin:0" id="shareHint">Andra i klassen kan söka fram förhöret och göra en egen kopia. Ingen ser att det är du som har gjort det, och ingen kan ändra ditt förhör.</p>
+    <div id="ctxBox"><label class="lbl" for="listCtx" style="margin:0 0 6px">Vilken klass och kurs?</label><select id="listCtx"></select></div>
   </div>
   <div id="placeBox" hidden>
     <label class="lbl" for="listPlace">Var ska listan ligga?</label>
@@ -737,6 +757,16 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <button class="link" id="kLeave" style="color:var(--red)">Lämna klassen</button>
 </section>
 
+<!-- SÖK FÖRHÖR -->
+<section id="search" class="form" hidden>
+  <div class="head"><h2>Hitta förhör</h2><button class="link" id="srBack">Klar</button></div>
+  <p class="hint" style="margin-top:-10px">Sök bland förhören i dina klasser, från läraren och från klasskompisar som har delat. Du får en egen kopia som du kan ändra.</p>
+  <input type="search" id="srQ" placeholder="t.ex. franska v40" autocomplete="off" autocorrect="off" autocapitalize="off" enterkeyhint="search">
+  <div class="seg" id="srLang"><button type="button" data-v="">Alla</button><button type="button" data-v="fr">FR</button><button type="button" data-v="en">EN</button><button type="button" data-v="es">ES</button></div>
+  <p class="hint" id="srInfo"></p>
+  <div class="cards" id="srRes"></div>
+</section>
+
 <!-- LESSON -->
 <section id="lesson" class="lesson" hidden>
   <div class="lhead">
@@ -923,7 +953,7 @@ dimma = fog`}
 
   /* ---------- views ---------- */
   function show(v){
-    ['home','edit','add','review','lesson','done','welcome','signup','secret','login','account','classes','klass','intro'].forEach(x=>$(x).hidden=x!==v);
+    ['home','edit','add','review','lesson','done','welcome','signup','secret','login','account','classes','klass','intro','search'].forEach(x=>$(x).hidden=x!==v);
     if(!['review','lesson','done'].includes(v)) $('footer').hidden=true;
     window.scrollTo(0,0);
   }
@@ -947,7 +977,9 @@ dimma = fog`}
   // Sökning som hittar ord i vilken ordning som helst: "fra" hittar både "Franska förhör v40" och "Förhör v40 franska"
   const fold1=ch=>ch.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().charAt(0)||ch.toLowerCase();
   const foldStr=t=>Array.from(String(t||'')).map(fold1).join('');
-  const toks=t=>foldStr(t).split(/[^a-z0-9]+/).filter(Boolean);
+  // "vecka 41", "v41", "v 41" och "v.41" räknas som samma sak
+  const weekify=t=>t.replace(/(^|[^a-z0-9])v(?:ecka|\.)?\s*(\d{1,2})(?=$|[^0-9])/g,'$1v$2 $2');
+  const toks=t=>weekify(foldStr(t)).split(/[^a-z0-9]+/).filter(Boolean);
   function matchScore(query,cand){
     const q=toks(query), c=toks(cand); if(!q.length||!c.length) return 0;
     let sum=0;
@@ -1003,8 +1035,8 @@ dimma = fog`}
       return true;
     }catch(e){ return false; }
   }
-  const fromRow=r=>({id:r.id,name:r.name,lang:r.lang,text:r.words||'',group_id:r.group_id,owner_id:r.owner_id,mine:r.owner_id===C.uid});
-  const hashL=l=>[l.name,l.lang,l.text,l.group_id||''].join('\u0001');
+  const fromRow=r=>({id:r.id,name:r.name,lang:r.lang,text:r.words||'',group_id:r.group_id,owner_id:r.owner_id,mine:r.owner_id===C.uid,shared:!!r.shared,copied_from:r.copied_from||null,context_group:r.context_group||null});
+  const hashL=l=>[l.name,l.lang,l.text,l.group_id||'',l.shared?1:0,l.context_group||''].join('\u0001');
   const statsOut=()=>{ const o=Object.assign({},S); delete o.sound; delete o.speak; delete o.localOnly; return o; };
   function freshStats(){ return {xp:0,streak:0,lastDay:null,dayXp:0,day:null,goal:30,words:{},done:{},sound:S.sound,speak:S.speak,strict:false,mode:'mix',scope:'weak'}; }
   function cacheCloud(){ if(!C) return; write(CKEY,{uid:C.uid,secret:C.secret,profile:C.profile,classes:C.classes,groups:C.groups,myGroups:[...C.myGroups],links:C.links,people:C.people,lists,pushed:C.pushed,delq:C.delq}); }
@@ -1051,7 +1083,7 @@ dimma = fog`}
       for(const id of [...(C.delq||[])]){ await q(sb.from('lists').delete().eq('id',id)); C.delq=C.delq.filter(x=>x!==id); }
       const dirty=lists.filter(l=>l.mine && C.pushed[l.id]!==hashL(l));
       if(dirty.length){
-        await q(sb.from('lists').upsert(dirty.map(l=>({id:l.id,owner_id:C.uid,group_id:l.group_id||null,name:l.name,lang:l.lang,words:l.text,updated_at:new Date().toISOString()}))));
+        await q(sb.from('lists').upsert(dirty.map(l=>({id:l.id,owner_id:C.uid,group_id:l.group_id||null,name:l.name,lang:l.lang,words:l.text,shared:!!l.shared,context_group:l.context_group||null,copied_from:l.copied_from||null,updated_at:new Date().toISOString()}))));
         dirty.forEach(l=>C.pushed[l.id]=hashL(l));
       }
       if(C.statsDirty){ C.statsDirty=false; await q(sb.from('user_data').upsert({user_id:C.uid,data:statsOut(),updated_at:new Date().toISOString()})); }
@@ -1515,16 +1547,18 @@ dimma = fog`}
     const stars=[0,1,2].map(i=>`<svg style="color:${i<lv?'var(--gold)':'var(--locked-d)'}"><use href="#i-star"/></svg>`).join('');
     const who = C && !l.mine && l.owner_id && C.people[l.owner_id] ? personName(C.people[l.owner_id]) : '';
     const open = edit && (moreId===l.id || confirmId===l.id);
+    const roOpen = !edit && C && moreId===l.id;
+    const copyInfo = l.copied_from ? ' · din kopia' : '';
     const c=document.createElement('div'); c.className='lc';
     const isNew = C && l.group_id && !l.mine && !(S.seen||{})[l.id];
     c.innerHTML=`<div class="lc-main">
         <div class="lc-icon ${n?l.lang:'empty'}"><svg><use href="#i-book"/></svg><span>${LANG[l.lang].short}</span></div>
         <div class="lc-text"><div class="title">${esc(l.name)}${isNew?'<span class="newtag">Ny</span>':''}</div>
-          <div class="meta">${n} ord${n?(weak?` · ${weak} att öva på`:' · kan alla'):''}${l.example?' · <i>exempel</i>':''}</div>
+          <div class="meta">${n} ord${n?(weak?` · ${weak} att öva på`:' · kan alla'):''}${l.example?' · <i>exempel</i>':''}${copyInfo}${l.shared?' · delad':''}</div>
           ${who?`<div class="from">Från ${esc(who)}</div>`:''}
           <div class="stars" title="${lv} av 3 stjärnor">${stars}</div></div>
         <div class="lc-acts">
-          ${edit?`<button class="iconbtn" data-a="more" aria-expanded="${open}" aria-label="Fler val för ${esc(l.name)}"><svg><use href="#i-dots"/></svg></button>`:''}
+          ${(edit||C)?`<button class="iconbtn" data-a="more" aria-expanded="${open||roOpen}" aria-label="Fler val för ${esc(l.name)}"><svg><use href="#i-dots"/></svg></button>`:''}
           <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
         </div>
       </div>
@@ -1532,9 +1566,18 @@ dimma = fog`}
         <button class="btn ghost" data-a="add">+ Lägg till ord</button>
         <button class="btn ghost" data-a="edit">Ändra</button>
         <button class="btn ghost danger-t" data-a="del">Radera</button></div>`:''}
+      ${roOpen?`<div class="lc-more"><button class="btn ghost" data-a="copy">${lists.some(x=>x.mine&&x.copied_from===l.id)?'Öppna min kopia':'Kopiera till mina förhör'}</button></div>`:''}
       ${confirmId===l.id?`<div class="confirm"><span>Radera "${esc(l.name)}"?${l.group_id?' Den försvinner för alla i kursen.':''} Det går inte att ångra.</span>
         <div class="acts2"><button class="btn red" data-a="yes">Ja, radera</button><button class="btn ghost" data-a="no">Nej</button></div></div>`:''}`;
     c.querySelector('[data-a=go]').onclick=()=>{ $('newSheet').hidden=true; openStart(l); };
+    if(!edit && C){
+      c.querySelector('[data-a=more]').onclick=()=>{ moreId = roOpen?null:l.id; renderHome(); };
+      if(roOpen) c.querySelector('[data-a=copy]').onclick=async e=>{
+        const have=lists.find(x=>x.mine&&x.copied_from===l.id);
+        const cp = have || await copyShared(l.id,e.currentTarget);
+        if(cp){ moreId=null; openEdit(cp.id); $('nameHint').textContent='Det här är din egen kopia. Ändra och lägg till som du vill.'; }
+      };
+    }
     if(edit){
       c.querySelector('[data-a=more]').onclick=()=>{ moreId = open?null:l.id; confirmId=null; renderHome(); };
       if(open){
@@ -1563,6 +1606,7 @@ dimma = fog`}
     $('goalText').textContent = tx>=g ? `Dagens mål klart! ${tx} XP idag.`
       : `${tx} av ${g} XP idag.${S.lastDay===dayStr()?' Bra jobbat!':(st?` Öva idag så håller du igång din svit på ${st} dagar.`:' Gör en lektion idag!')}`;
     $('installTip').hidden = !(C && isIOS && !standalone() && !S.tipDone);
+    $('searchBtn').hidden = !(C && C.profile && C.classes.length);
 
     const own=lists.filter(l=>!l.group_id && !l.studentId && l.mine!==false);
     $('ownHead').textContent = C ? 'Mina egna förhör' : 'Mina förhör';
@@ -1690,8 +1734,107 @@ dimma = fog`}
     setLang(editing?editing.lang:((groupId&&C&&(C.groups.find(g=>g.id===groupId)||{}).lang)||'fr'));
     $('listWords').value = editing?editing.text:'';
     $('deleteBtn').hidden=!editing; $('confirmDelete').hidden=true;
+    const mineGroups = C ? C.groups.filter(g=>C.myGroups.has(g.id)) : [];
+    const groupList = editing && editing.group_id;
+    $('shareBox').hidden = !C || (teacher && ($('listPlace').value||groupList));
+    if(C){
+      $('listShared').checked = !!(editing && editing.shared);
+      $('listCtx').innerHTML=mineGroups.map(g=>`<option value="${g.id}">${esc(groupLabel(g))}</option>`).join('');
+      if(editing && editing.context_group) $('listCtx').value = editing.context_group;
+      $('listShared').disabled = !mineGroups.length;
+      $('shareHint').textContent = mineGroups.length ? 'Andra i klassen kan söka fram förhöret och göra en egen kopia. Ingen ser att det är du som har gjort det, och ingen kan ändra ditt förhör.' : 'Gå med i en klass först, så kan du dela förhöret med den.';
+      $('ctxBox').hidden = !mineGroups.length || !$('listShared').checked;
+      if(teacher) $('listPlace').addEventListener('change',()=>{ $('shareBox').hidden=!!$('listPlace').value; });
+    }
+    $('nameHint').innerHTML = C && !editing ? 'Skriv namnet så letar appen efter förhör som redan finns.' : '';
+    if(C && !editing) loadShared();
     updateCount(); show('edit'); $('listName').focus();
   }
+  $('listShared').onchange=()=>{ $('ctxBox').hidden = !$('listShared').checked || !C || !C.groups.some(g=>C.myGroups.has(g.id)); };
+
+  /* delade förhör: sök, föreslå och kopiera */
+  let SH={t:0,rows:[]}, shLoading=null;
+  async function loadShared(force){
+    if(!C||!sb) return [];
+    if(!force && SH.rows.length && Date.now()-SH.t<120000) return SH.rows;
+    if(!shLoading) shLoading=q(sb.rpc('search_lists',{p_lang:null})).then(r=>{ SH={t:Date.now(),rows:r||[]}; return SH.rows; }).catch(()=>SH.rows).finally(()=>{ shLoading=null; });
+    return shLoading;
+  }
+  const shText=r=>`${r.name} ${r.label||''}`;
+  function rankShared(qs,lang){
+    const pool=SH.rows.filter(r=>!lang||r.lang===lang);
+    if(!qs.trim()) return pool;
+    return pool.map(r=>({r,s:matchScore(qs,shText(r))})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.r);
+  }
+  const myCopyOf=id=>lists.find(l=>l.mine && l.copied_from===id);
+  async function copyShared(id,btn){
+    try{
+      if(btn){ btn.disabled=true; btn.textContent='Kopierar…'; }
+      const n=await q(sb.rpc('copy_list',{p_list:id}));
+      await cloudLoad(); sGood();
+      return lists.find(l=>l.id===n.id);
+    }catch(e){ if(btn){ btn.disabled=false; btn.textContent=errMsg(e); } return null; }
+  }
+  const sharedMeta=r=>[r.label, `${r.words} ord`, r.by_teacher?'från en lärare':'från en elev'].filter(Boolean).join(' · ');
+  const previewOf=t=>parse(t||'').slice(0,3).map(p=>`${p.sv} = ${p.fx}`).join(', ');
+
+  // förslag medan man skriver namnet på en ny lista
+  let nmItems=[], nmActive=-1;
+  function renderNameCombo(){
+    const qs=$('listName').value, list=$('nameList');
+    if(!C || editing || qs.trim().length<2){ list.hidden=true; $('listName').setAttribute('aria-expanded','false'); return; }
+    nmItems=rankShared(qs,null).slice(0,30);
+    if(!nmItems.length){ list.hidden=true; $('listName').setAttribute('aria-expanded','false'); return; }
+    list.innerHTML=`<li class="none" style="font-size:.8rem">Finns redan. Tryck för att få en egen kopia:</li>`+nmItems.map((r,i)=>`<li role="option" data-i="${i}" aria-selected="${i===nmActive}"><span>${highlight(qs,r.name)}<span class="sub">${esc(sharedMeta(r))}</span></span><span class="act">${myCopyOf(r.id)?'Har':'Kopiera'}</span></li>`).join('');
+    list.hidden = document.activeElement!==$('listName'); $('listName').setAttribute('aria-expanded',!list.hidden);
+    list.querySelectorAll('li[data-i]').forEach(li=>li.onpointerdown=e=>{ e.preventDefault(); pickName(+li.dataset.i); });
+  }
+  async function pickName(i){
+    const r=nmItems[i]; if(!r) return;
+    $('nameList').hidden=true; $('listName').blur();
+    const have=myCopyOf(r.id);
+    $('nameHint').textContent='Kopierar förhöret till dig…';
+    const l = have || await copyShared(r.id);
+    if(l) openEdit(l.id); else $('nameHint').textContent='Kunde inte kopiera. Kolla att du har internet.';
+    if(l) $('nameHint').textContent = have ? 'Du har redan en kopia av det här förhöret. Här kan du ändra den.' : 'Klart! Det här är din egen kopia. Ändra och lägg till som du vill och tryck på Spara.';
+  }
+  $('listName').addEventListener('input',()=>{ nmActive=-1; renderNameCombo(); });
+  $('listName').addEventListener('focus',()=>{ if(SH.rows.length) renderNameCombo(); else loadShared().then(renderNameCombo); });
+  $('listName').addEventListener('blur',()=>setTimeout(()=>{ $('nameList').hidden=true; },150));
+  $('listName').addEventListener('keydown',e=>{
+    if($('nameList').hidden) return;
+    if(e.key==='ArrowDown'){ e.preventDefault(); nmActive=Math.min(nmItems.length-1,nmActive+1); renderNameCombo(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); nmActive=Math.max(0,nmActive-1); renderNameCombo(); }
+    else if(e.key==='Enter' && nmActive>=0){ e.preventDefault(); pickName(nmActive); }
+    else if(e.key==='Escape') $('nameList').hidden=true;
+  });
+
+  // sökskärmen
+  let srLang='';
+  async function openSearch(){ $('srQ').value=''; setSeg('srLang',srLang); show('search'); $('srInfo').textContent='Hämtar förhör…'; renderSearch(); await loadShared(true); renderSearch(); $('srQ').focus(); }
+  function renderSearch(){
+    const qs=$('srQ').value, rows=rankShared(qs,srLang).slice(0,60), box=$('srRes'); box.innerHTML='';
+    $('srInfo').textContent = !SH.rows.length ? (SH.t?'Inga delade förhör i dina klasser än. Dela ett eget förhör med klassen så kan andra hitta det.':'Hämtar förhör…')
+      : rows.length ? (qs.trim()?`${rows.length} förhör hittades.`:'De senaste delade förhören. Skriv för att söka.') : 'Inga förhör matchar. Prova färre eller andra ord.';
+    rows.forEach(r=>{
+      const have=myCopyOf(r.id);
+      const c=document.createElement('div'); c.className='lc';
+      c.innerHTML=`<div class="lc-main">
+        <div class="lc-icon ${r.lang}"><svg><use href="#i-book"/></svg><span>${LANG[r.lang].short}</span></div>
+        <div class="lc-text"><div class="title">${highlight(qs,r.name)}</div><div class="srmeta">${esc(sharedMeta(r))}</div><div class="srprev">${esc(previewOf(r.preview))}</div></div>
+        <div class="lc-acts"><button class="btn ${have?'ghost':''} srbtn">${have?'Öppna':'Lägg till'}</button></div></div>`;
+      c.querySelector('button').onclick=async e=>{
+        const l = have || await copyShared(r.id,e.currentTarget);
+        if(l){ renderHome(); show('home'); if(!have) setTimeout(()=>{ const el=[...document.querySelectorAll('#cards .lc .title')].find(t=>t.textContent.startsWith(l.name)); el&&el.scrollIntoView({block:'center'}); },50); }
+      };
+      box.appendChild(c);
+    });
+  }
+  $('srQ').addEventListener('input',renderSearch);
+  $('srLang').querySelectorAll('button').forEach(b=>b.onclick=()=>{ srLang=b.dataset.v; setSeg('srLang',srLang); renderSearch(); });
+  $('srBack').onclick=()=>{ renderHome(); show('home'); };
+  $('searchBtn').onclick=openSearch;
+
   function updateCount(){
     const n=parse($('listWords').value).length, lines=$('listWords').value.split('\n').filter(l=>l.trim()).length;
     let t=n?`${n} glosor hittade.`:'Inga glosor än.';
@@ -1704,6 +1847,7 @@ dimma = fog`}
   $('saveBtn').onclick=()=>{
     const data={name:$('listName').value.trim()||'Namnlös lista',lang:editLang,text:$('listWords').value};
     if(C && C.profile.role==='larare') data.group_id=$('listPlace').value||null;
+    if(C && !data.group_id){ data.shared=$('listShared').checked && !!$('listCtx').value; data.context_group=data.shared?$('listCtx').value:null; }
     if(editing){Object.assign(editing,data);delete editing.example;}
     else { lists.unshift(C ? {id:newId(),owner_id:C.uid,mine:true,group_id:null,...data} : {id:'l'+Date.now(),...data}); }
     saveLists(); renderHome();
