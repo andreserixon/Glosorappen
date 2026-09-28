@@ -171,8 +171,65 @@ input,textarea,select{font-size:16px}
 .altchip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);color:var(--blue-d)}
 .revcount{margin:0;text-align:center;font-size:.9rem;color:var(--muted)}
 
+/* startsida */
+.hello{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--line);border-radius:18px;margin-top:4px}
+.hello-frog .frog{width:64px;height:64px}
+.hello-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.hello-text h2{font-size:1.3rem;overflow-wrap:anywhere}
+.hello-text p{margin:0;color:var(--muted);font-size:.88rem;font-weight:700}
+.goalbar{height:12px;background:var(--locked);border-radius:999px;overflow:hidden}
+.goalbar i{display:block;height:100%;width:0;background:var(--gold);border-radius:999px;transition:width .4s}
+.tip{display:flex;flex-direction:column;gap:6px;border:2px solid var(--blue);background:var(--blue-soft);border-radius:16px;padding:12px 14px;font-weight:700}
+.tip svg{vertical-align:-3px}
+.tip .link{align-self:flex-start;padding:4px 0;min-height:32px}
+.secthead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+.secthead .sect{margin:0}
+.btn.small{min-height:40px;padding:8px 14px;font-size:.8rem;box-shadow:0 4px 0 var(--d)}
+.link.center,.center{align-self:center;text-align:center}
+.emptybox{display:flex;flex-direction:column;gap:10px;border:2px dashed var(--line);border-radius:18px;padding:16px;text-align:center}
+.emptybox .row2 .btn{flex:1;font-size:.82rem;padding:12px 8px}
+.lc-more{display:flex;gap:8px;flex-wrap:wrap}
+.lc-more .btn{flex:1;min-height:44px;padding:8px 10px;font-size:.78rem;letter-spacing:.03em}
+.lc-more .btn.danger-t{--t:var(--red)}
+.modes{display:flex;flex-direction:column;gap:10px}
+.modebtn{display:flex;flex-direction:column;gap:2px;text-align:left;border:2px solid var(--line);background:var(--tile);border-radius:16px;box-shadow:0 4px 0 var(--tile-shadow);padding:12px 14px}
+.modebtn b{font-size:1.1rem;font-weight:900}
+.modebtn span{color:var(--muted);font-weight:700;font-size:.9rem}
+.modebtn[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft);box-shadow:0 4px 0 var(--blue)}
+.modebtn[aria-pressed="true"] b{color:var(--blue-d)}
+.sheet .card.left{text-align:left;max-height:calc(100% - 20px);overflow:auto}
+.teacherbox{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:2px solid var(--line);color:var(--muted);font-weight:800}
+.teacherbox .link{padding:6px 2px;min-height:36px}
+.savebtns{display:flex;gap:10px}
+.savebtns .btn{flex:1;padding:12px 8px;font-size:.8rem;letter-spacing:.03em}
+.credimg{width:100%;max-width:320px;align-self:center;border-radius:16px;border:2px solid var(--line)}
+/* intro */
+.intro{min-height:100%;padding-bottom:24px}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--locked)}
+.dots i.on{background:var(--green);width:22px;border-radius:999px}
+.introbody{display:flex;flex-direction:column;gap:14px;min-height:430px}
+.introbody h2{font-size:1.6rem}
+.introbody p{margin:0;font-weight:700;color:var(--muted)}
+.introbody .big{display:flex;justify-content:center}
+.introbody .big .frog{width:130px;height:130px}
+.intronav{display:flex;gap:10px}
+.intronav .btn{flex:1}
+.mock{border:2px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--soft)}
+.mock .mline{font-family:ui-monospace,Menlo,monospace;font-weight:700;font-size:.95rem;min-height:1.4em}
+.mock .caret{display:inline-block;width:2px;height:1em;background:var(--ink);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.demo-fb{border-radius:12px;padding:10px 12px;font-weight:900}
+.demo-fb.good{background:var(--green-soft);color:var(--green-ink)}
+.demo-fb.bad{background:var(--red-soft);color:var(--red-ink)}
+.feat{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:16px;padding:12px}
+.feat svg{width:34px;height:34px;flex:none}
+.feat div{display:flex;flex-direction:column}
+.feat b{font-weight:900}
+.feat span{color:var(--muted);font-weight:700;font-size:.9rem}
+
 /* konto, klasser */
-.avatar{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:40px;height:40px;border-radius:999px;border:2px solid var(--line);background:var(--tile);font-weight:900;color:var(--green-ink);padding:0 10px;font-size:.85rem;box-shadow:0 3px 0 var(--tile-shadow)}
+.avatar{display:inline-flex;align-items:center;justify-content:center;gap:4px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:40px;height:40px;border-radius:999px;border:2px solid var(--line);background:var(--tile);font-weight:900;color:var(--green-ink);padding:0 10px;font-size:.85rem;box-shadow:0 3px 0 var(--tile-shadow)}
 .welcome{align-items:stretch;text-align:left;padding-top:28px}
 .wfrog{display:flex;justify-content:center}
 .wfrog .frog{width:120px;height:120px}
@@ -332,6 +389,8 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
     <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14l-4-4M20 16H6l4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
@@ -345,33 +404,33 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <div class="topbar">
     <span class="brand">Glosförhöret</span>
     <div class="stats">
-      <span class="stat goalstat" title="Dagens mål"><svg class="mini" viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="32" r="26" fill="none" stroke="var(--locked)" stroke-width="10"/>
-        <circle id="ringArc" cx="32" cy="32" r="26" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="163.4" transform="rotate(-90 32 32)"/></svg><span id="goalN">0/30</span></span>
       <span class="stat flame" id="streakStat" title="Dagar i rad"><svg><use href="#i-flame"/></svg><span id="streakN">0</span></span>
       <span class="stat xp" title="XP totalt"><svg><use href="#i-bolt"/></svg><span id="xpN">0</span></span>
-      <button class="avatar" id="acctBtn" hidden></button>
+      <button class="avatar" id="acctBtn" aria-label="Meny och inställningar"><svg width="18" height="18"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 
-  <button class="btn wide" id="newListBtn"><svg width="22" height="22"><use href="#i-plus"/></svg>Ny lista</button>
-
-  <div class="optcard">
-    <h3>Så vill jag bli förhörd</h3>
-    <div class="seg" id="modeSeg"><button type="button" data-v="mix">Blandat</button><button type="button" data-v="write">Bara skriva</button></div>
-    <p class="hint" id="modeHint"></p>
-    <div class="seg" id="scopeSeg"><button type="button" data-v="weak">8 svåraste orden</button><button type="button" data-v="all">Alla ord</button></div>
-    <div class="chips">
-      <button type="button" class="chip" id="chipSound">Ljud</button>
-      <button type="button" class="chip" id="chipSpeak">Läs upp orden</button>
-      <button type="button" class="chip" id="chipStrict">Accenter måste vara rätt</button>
+  <div class="hello">
+    <div class="hello-frog" id="helloFrog"></div>
+    <div class="hello-text">
+      <h2 id="helloTitle">Hej!</h2>
+      <div class="goalbar" aria-hidden="true"><i id="goalFill"></i></div>
+      <p id="goalText"></p>
     </div>
   </div>
 
-  <p class="goaltext" id="goalText"></p>
+  <div class="tip" id="installTip" hidden>
+    <b>Lägg appen på hemskärmen</b>
+    <span>Då håller du dig inloggad och appen funkar som en riktig app. Tryck på Dela <svg width="16" height="16"><use href="#i-up"/></svg> och sedan <b>Lägg till på hemskärmen</b>. Öppna appen därifrån och logga in en gång.</span>
+    <button class="link" id="installTipX">Okej, jag fattar</button>
+  </div>
+
   <div id="cloudHome" class="cloudsec" hidden></div>
-  <h2 class="sect"><span id="ownHead">Mina förhör</span> <span id="listCount"></span></h2>
+
+  <div class="secthead"><h2 class="sect" id="ownHead">Mina förhör</h2><button class="btn small" id="newListBtn"><svg width="18" height="18"><use href="#i-plus"/></svg>Ny lista</button></div>
   <div class="cards" id="cards"></div>
+
+  <button class="link center" id="introLink">Så funkar appen</button>
 </section>
 
 <!-- EDIT -->
@@ -471,15 +530,14 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 <!-- WELCOME / KONTO -->
 <section id="welcome" class="form welcome" hidden>
   <div class="wfrog" id="wFrog"></div>
-  <h1 class="wtitle">Välkommen!</h1>
-  <p class="hint" style="text-align:center;margin:-8px 0 0">Vem är du?</p>
-  <div class="roles">
-    <button type="button" class="rolebtn" data-role="elev"><b>Elev</b><span>Jag ska öva på mina glosor</span></button>
-    <button type="button" class="rolebtn" data-role="larare"><b>Lärare</b><span>Jag gör glosförhör till mina klasser</span></button>
-    <button type="button" class="rolebtn" data-role="forhorare"><b>Förhörare</b><span>Jag förhör någon, t.ex. mitt barn eller en kompis</span></button>
-  </div>
-  <button class="btn ghost wide" id="toLogin">Jag har redan ett konto</button>
-  <button class="link" id="localOnly">Använd utan konto</button>
+  <h1 class="wtitle">Hej! Välkommen till Glosförhöret</h1>
+  <p class="hint center" style="margin-top:-8px">Öva glosor på franska, engelska och spanska.</p>
+  <button type="button" class="btn wide" data-role="elev">Jag ska öva på glosor</button>
+  <button type="button" class="btn blue wide" data-role="forhorare">Jag ska förhöra någon</button>
+  <button type="button" class="btn ghost wide" id="toLogin">Jag har redan ett konto</button>
+  <button type="button" class="btn ghost wide" id="toIntro">Visa hur appen funkar</button>
+  <button type="button" class="link center" id="localOnly">Fortsätt utan konto</button>
+  <div class="teacherbox"><span>Är du lärare?</span><button type="button" class="link" data-role="larare">Skapa ett lärarkonto</button></div>
 </section>
 
 <section id="signup" class="form" hidden>
@@ -499,29 +557,58 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 </section>
 
 <section id="secret" class="form" hidden>
-  <h2>Skriv upp det här!</h2>
-  <p class="hint" style="margin-top:-8px">Du behöver namnet och den hemliga koden för att logga in på en annan telefon eller dator. Visa dem inte för någon annan.</p>
+  <h2>Spara din inloggning</h2>
+  <p class="hint" style="margin-top:-8px">Med namnet och den hemliga koden kommer du in på kontot på en annan telefon. Visa dem inte för någon annan.</p>
   <div class="secretcard"><span class="lbl">Namn</span><b id="seName"></b><span class="lbl">Hemlig kod</span><b id="seCode"></b></div>
-  <button class="btn ghost wide" id="seCopy">Kopiera namn och kod</button>
-  <label class="check"><input type="checkbox" id="seOk"> Jag har skrivit upp namnet och koden</label>
+  <div class="savebtns">
+    <button type="button" class="btn blue" id="seSaveImg"><svg width="18" height="18"><use href="#i-cam"/></svg>Spara som bild</button>
+    <button type="button" class="btn blue" id="seSaveNote"><svg width="18" height="18"><use href="#i-pen"/></svg>Spara anteckning</button>
+  </div>
+  <p class="hint center" id="seHint">Välj <b>Spara bild</b> eller <b>Anteckningar</b> i menyn som kommer upp.</p>
+  <img id="seImg" class="credimg" alt="Bild med ditt namn och din hemliga kod" hidden>
+  <label class="check"><input type="checkbox" id="seOk"> Jag har sparat namnet och koden</label>
   <button class="btn wide" id="seGo" disabled>Fortsätt</button>
 </section>
 
 <section id="login" class="form" hidden>
   <div class="head"><h2>Logga in</h2><button class="link" id="liBack">Tillbaka</button></div>
   <div><label class="lbl" for="liName">Namn</label><input type="text" id="liName" placeholder="t.ex. Glada-Pingvinen-42" autocapitalize="off" autocorrect="off" autocomplete="username"></div>
-  <div><label class="lbl" for="liCode">Hemlig kod</label><input type="text" id="liCode" placeholder="t.ex. sol-kex-moln-472" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="current-password"></div>
+  <div><label class="lbl" for="liCode">Hemlig kod</label><input type="text" id="liCode" name="password" placeholder="t.ex. sol-kex-moln-472" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="current-password"></div>
   <button class="btn wide" id="liGo">Logga in</button>
   <p class="errmsg" id="liErr"></p>
 </section>
 
 <section id="account" class="form" hidden>
-  <div class="head"><h2>Mitt konto</h2><button class="link" id="acBack">Klar</button></div>
-  <div class="secretcard">
-    <span class="lbl">Namn</span><b id="acName"></b>
-    <span class="lbl">Roll</span><b id="acRole"></b>
-    <span class="lbl" id="acCodeLbl">Hemlig kod</span><b id="acCode"></b>
+  <div class="head"><h2>Meny</h2><button class="link" id="acBack">Klar</button></div>
+
+  <div id="acIn">
+    <div class="secretcard">
+      <span class="lbl">Namn</span><b id="acName"></b>
+      <span class="lbl">Roll</span><b id="acRole"></b>
+      <span class="lbl" id="acCodeLbl">Hemlig kod</span><b id="acCode"></b>
+    </div>
+    <div class="savebtns" id="acSave">
+      <button type="button" class="btn blue" id="acSaveImg"><svg width="18" height="18"><use href="#i-cam"/></svg>Spara som bild</button>
+      <button type="button" class="btn blue" id="acSaveNote"><svg width="18" height="18"><use href="#i-pen"/></svg>Spara anteckning</button>
+    </div>
   </div>
+
+  <div class="importbox" id="acOut">
+    <h3>Konto</h3>
+    <p class="hint" style="margin:0">Med ett konto sparas dina förhör och din XP, du kan gå med i din klass och någon kan förhöra dig.</p>
+    <div class="row2"><button class="btn" id="acSignup">Skapa konto</button><button class="btn ghost" id="acLogin">Logga in</button></div>
+  </div>
+
+  <div class="importbox">
+    <h3>Inställningar</h3>
+    <div class="chips">
+      <button type="button" class="chip" id="chipSound">Ljud</button>
+      <button type="button" class="chip" id="chipSpeak">Läs upp orden</button>
+      <button type="button" class="chip" id="chipStrict">Accenter måste vara rätt</button>
+    </div>
+    <button type="button" class="btn ghost" id="acIntro">Visa hur appen funkar</button>
+  </div>
+
   <div id="acDispBox">
     <label class="lbl" for="acDisp">Namn som eleverna ser</label>
     <div class="row2"><input type="text" id="acDisp" maxlength="40" autocomplete="off"><button class="btn" id="acDispSave">Spara</button></div>
@@ -536,9 +623,16 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <p class="errmsg" id="acErr"></p>
   <button class="btn red wide" id="acLogout">Logga ut</button>
   <div class="confirm" id="acLogoutConfirm" hidden>
-    <span>Har du skrivit upp ditt namn och din hemliga kod? Annars kommer du inte in på kontot igen.</span>
+    <span>Har du sparat ditt namn och din hemliga kod? Annars kommer du inte in på kontot igen.</span>
     <div class="acts2"><button class="btn red" id="acLogoutYes">Logga ut</button><button class="btn ghost" id="acLogoutNo">Avbryt</button></div>
   </div>
+</section>
+
+<!-- INTRO -->
+<section id="intro" class="form intro" hidden>
+  <div class="head"><span class="dots" id="introDots"></span><button class="link" id="introSkip">Hoppa över</button></div>
+  <div class="introbody" id="introBody"></div>
+  <div class="intronav"><button class="btn ghost" id="introBack">Tillbaka</button><button class="btn" id="introNext">Nästa</button></div>
 </section>
 
 <section id="classes" class="form" hidden>
@@ -610,6 +704,21 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 
 <!-- fixed footer (lesson + done) -->
 <div class="footer" id="footer" hidden><div class="in" id="footerIn"></div></div>
+
+<div class="sheet" id="startSheet" hidden>
+  <div class="card left">
+    <h2 id="ssTitle"></h2>
+    <span class="lbl" style="margin:0">Hur vill du öva?</span>
+    <div class="modes" id="ssModes">
+      <button type="button" class="modebtn" data-v="choice"><b>Flervalsfrågor</b><span>Välj rätt ord bland flera och para ihop</span></button>
+      <button type="button" class="modebtn" data-v="write"><b>Skriv glosorna</b><span>Du skriver varje ord själv</span></button>
+    </div>
+    <span class="lbl" style="margin:0">Vilka ord?</span>
+    <div class="seg" id="ssScope"><button type="button" data-v="weak" id="ssWeak">8 svåraste</button><button type="button" data-v="all" id="ssAll">Alla ord</button></div>
+    <button class="btn wide" id="ssGo">Starta</button>
+    <button class="link center" id="ssCancel">Avbryt</button>
+  </div>
+</div>
 
 <div class="sheet" id="quitSheet" hidden>
   <div class="card">
@@ -733,7 +842,7 @@ dimma = fog`}
 
   /* ---------- views ---------- */
   function show(v){
-    ['home','edit','add','review','lesson','done','welcome','signup','secret','login','account','classes','klass'].forEach(x=>$(x).hidden=x!==v);
+    ['home','edit','add','review','lesson','done','welcome','signup','secret','login','account','classes','klass','intro'].forEach(x=>$(x).hidden=x!==v);
     if(!['review','lesson','done'].includes(v)) $('footer').hidden=true;
     window.scrollTo(0,0);
   }
@@ -847,25 +956,40 @@ dimma = fog`}
     return rows.length;
   }
 
+  async function autoLogin(){
+    const lg=read(LOGINKEY); if(!lg||!lg.u||!lg.s) return null;
+    try{ const {data,error}=await sb.auth.signInWithPassword({email:toEmail(lg.u),password:lg.s}); if(error) return null; return data.session; }catch(e){ return null; }
+  }
+  function isNewUser(){ return !C && !S.xp && !(Array.isArray(read(KEY))?read(KEY):[]).some(l=>!l.example); }
   async function boot(){
-    if(!(await sbInit())) return;
+    const firstRun = !S.seenIntro && isNewUser();
+    if(!(await sbInit())){ if(firstRun) openIntro(); return; }
     let session=null; try{ session=(await sb.auth.getSession()).data.session; }catch(e){}
+    if(!session && sbReach) session=await autoLogin();
     if(session){
       C={uid:session.user.id,pushed:{},delq:[],classes:[],groups:[],myGroups:new Set(),links:[],people:{}};
       const x=read(CKEY); if(x&&x.uid===C.uid) applyCache(x);
+      const lg=read(LOGINKEY); if(lg&&lg.s&&!C.secret) C.secret=lg.s;
       if(C.profile) renderHome();
       try{ await cloudLoad(); await cloudPush(); renderHome(); }
       catch(e){ if(e.message==='noprofile'){ await sb.auth.signOut(); C=null; showWelcome(); } else if(!C.profile){ C=null; renderHome(); } }
+      try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist(); }catch(e){}
+      // om inloggningen skulle försvinna: logga in igen med det som sparats på telefonen
+      sb.auth.onAuthStateChange(async(ev)=>{ if(ev==='SIGNED_OUT' && C && read(LOGINKEY)){ const ss=await autoLogin(); if(!ss){ C=null; showWelcome(); } } });
       return;
     }
+    // Sparade uppgifter finns men vi är offline: använd det som sparats
+    const x=read(CKEY), lg=read(LOGINKEY);
+    if(!sbReach && x && lg && x.profile){ C={uid:x.uid,pushed:{},delq:[],classes:[],groups:[],myGroups:new Set(),links:[],people:{}}; applyCache(x); renderHome(); return; }
     renderAcctBtn();
-    if(!S.localOnly && sbReach) showWelcome();
+    if(firstRun) openIntro();
+    else if(!S.localOnly && sbReach) showWelcome();
   }
 
   /* välkommen, skapa konto, logga in */
   let suRole='elev', suName='';
-  function showWelcome(){ $('wFrog').innerHTML=frog('happy'); $('localOnly').hidden=false; show('welcome'); }
-  document.querySelectorAll('.rolebtn').forEach(b=>b.onclick=()=>{
+  function showWelcome(){ $('wFrog').innerHTML=frog('happy'); show('welcome'); }
+  document.querySelectorAll('#welcome [data-role]').forEach(b=>b.onclick=()=>{
     suRole=b.dataset.role; suName=genName();
     $('suTitle').textContent=`Nytt konto: ${ROLE[suRole].toLowerCase()}`;
     $('suName').textContent=suName; $('suErr').textContent='';
@@ -881,6 +1005,7 @@ dimma = fog`}
   $('toLogin').onclick=()=>{ $('liErr').textContent=''; show('login'); $('liName').focus(); };
   $('liBack').onclick=showWelcome;
   $('localOnly').onclick=()=>{ S.localOnly=true; write(SKEY,S); renderHome(); show('home'); };
+  $('toIntro').onclick=()=>openIntro();
   $('suGo').onclick=async()=>{
     const btn=$('suGo'); btn.disabled=true; $('suErr').textContent='';
     try{
@@ -895,15 +1020,56 @@ dimma = fog`}
         delete S.localOnly;
         await migrateLocal();
         await cloudLoad();
-        $('seName').textContent=username; $('seCode').textContent=secret; $('seOk').checked=false; $('seGo').disabled=true;
-        show('secret'); done=true;
+        rememberLogin(username,secret);
+        openSecret(username,secret); done=true;
       }
       if(!done) throw new Error('Kunde inte hitta ett ledigt namn. Försök igen.');
     }catch(e){ $('suErr').textContent=errMsg(e); }
     finally{ btn.disabled=false; }
   };
+  /* spara inloggningen: som bild eller anteckning, och kom ihåg den på telefonen */
+  const LOGINKEY='glosforhoret.login';
+  const APPURL='https://andreserixon.github.io/Glosorappen/';
+  function rememberLogin(u,sec){ write(LOGINKEY,{u,s:sec}); try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist(); }catch(e){} }
+  let credFile=null, credUser='', credSecret='';
+  function credText(){ return `Min inloggning till Glosförhöret\n\nNamn: ${credUser}\nHemlig kod: ${credSecret}\n\n${APPURL}`; }
+  function makeCredImage(){
+    const c=document.createElement('canvas'); c.width=1080; c.height=1080; const x=c.getContext('2d');
+    x.fillStyle='#3DBE5B'; x.fillRect(0,0,1080,1080);
+    x.fillStyle='#FFFFFF'; x.beginPath(); x.roundRect ? x.roundRect(70,230,940,700,48) : x.rect(70,230,940,700); x.fill();
+    x.textAlign='center'; x.fillStyle='#FFFFFF'; x.font='800 76px "Baloo 2", Nunito, sans-serif'; x.fillText('Glosförhöret',540,150);
+    x.font='700 36px Nunito, sans-serif'; x.fillText('Min inloggning',540,200);
+    x.fillStyle='#7A8A82'; x.font='800 34px Nunito, sans-serif'; x.fillText('NAMN',540,340); x.fillText('HEMLIG KOD',540,570);
+    x.fillStyle='#2B3A33'; const fit=(t,y)=>{ let sz=76; do{ x.font=`900 ${sz}px Nunito, sans-serif`; sz-=4; }while(x.measureText(t).width>860&&sz>30); x.fillText(t,540,y); };
+    fit(credUser,430); fit(credSecret,660);
+    x.fillStyle='#7A8A82'; x.font='700 30px Nunito, sans-serif'; x.fillText('andreserixon.github.io/Glosorappen',540,850);
+    x.fillStyle='#FFFFFF'; x.font='700 30px Nunito, sans-serif'; x.fillText('Visa inte för någon annan',540,1010);
+    $('seImg').src=c.toDataURL('image/png');
+    c.toBlob(b=>{ credFile=b?new File([b],'glosforhoret-inloggning.png',{type:'image/png'}):null; },'image/png');
+  }
+  function prepCreds(u,sec){ credUser=u; credSecret=sec; credFile=null; makeCredImage(); }
+  async function saveImg(btn){
+    try{
+      if(credFile && navigator.canShare && navigator.canShare({files:[credFile]})){ await navigator.share({files:[credFile],title:'Glosförhöret'}); return true; }
+    }catch(e){ if(e&&e.name==='AbortError') return false; }
+    $('seImg').hidden=false; if(btn===$('acSaveImg')) openSecretFromAccount();
+    $('seHint').innerHTML='Håll fingret på bilden och välj <b>Spara i Bilder</b>.'; return false;
+  }
+  async function saveNote(btn){
+    try{ if(navigator.share){ await navigator.share({title:'Glosförhöret – min inloggning',text:credText()}); return true; } }catch(e){ if(e&&e.name==='AbortError') return false; }
+    copyText(credText(),btn); return false;
+  }
+  function openSecret(u,sec){
+    prepCreds(u,sec);
+    $('seName').textContent=u; $('seCode').textContent=sec; $('seImg').hidden=true;
+    $('seHint').innerHTML=navigator.share?'Välj <b>Spara bild</b> eller <b>Anteckningar</b> i menyn som kommer upp.':'Håll fingret på bilden och välj Spara, eller kopiera texten till en anteckning.';
+    if(!navigator.share) $('seImg').hidden=false;
+    $('seOk').checked=false; $('seGo').disabled=true; show('secret');
+  }
+  function openSecretFromAccount(){ openSecret(credUser,credSecret); $('seImg').hidden=false; $('seOk').checked=true; $('seGo').disabled=false; }
+  $('seSaveImg').onclick=async()=>{ if(await saveImg($('seSaveImg'))){ $('seOk').checked=true; $('seGo').disabled=false; } };
+  $('seSaveNote').onclick=async()=>{ if(await saveNote($('seSaveNote'))){ $('seOk').checked=true; $('seGo').disabled=false; } };
   $('seOk').onchange=()=>{ $('seGo').disabled=!$('seOk').checked; };
-  $('seCopy').onclick=()=>copyText(`Namn: ${$('seName').textContent}\nHemlig kod: ${$('seCode').textContent}`,$('seCopy'));
   $('seGo').onclick=()=>{ sWin(); renderHome(); show('home'); };
   $('liGo').onclick=async()=>{
     const btn=$('liGo'); btn.disabled=true; $('liErr').textContent='';
@@ -914,6 +1080,7 @@ dimma = fog`}
       C={uid:data.user.id,secret,pushed:{},delq:[],classes:[],groups:[],myGroups:new Set(),links:[],people:{}};
       S=freshStats(); lists=[];
       await cloudLoad();
+      rememberLogin($('liName').value.trim(),secret);
       $('liName').value=''; $('liCode').value='';
       renderHome(); show('home');
     }catch(e){ C=null; $('liErr').textContent=errMsg(e); }
@@ -926,14 +1093,20 @@ dimma = fog`}
 
   function renderAcctBtn(){
     const b=$('acctBtn');
-    if(C&&C.profile){ b.hidden=false; b.textContent=C.profile.username.split('-')[1]||'Konto'; b.setAttribute('aria-label','Mitt konto'); b.onclick=openAccount; }
-    else if(sb&&sbReach){ b.hidden=false; b.textContent='Logga in'; b.onclick=showWelcome; }
-    else b.hidden=true;
+    b.innerHTML = C&&C.profile ? esc(C.profile.username.split('-')[1]||'Konto') : '<svg width="18" height="18"><use href="#i-menu"/></svg>';
+    b.onclick=openAccount;
   }
 
   /* mitt konto */
   function openAccount(){
+    renderSettings(); $('acErr').textContent='';
+    const inn=!!(C&&C.profile);
+    $('acIn').hidden=!inn; $('acLogout').hidden=!inn; $('acLogoutConfirm').hidden=true;
+    $('acOut').hidden = inn || !(sb&&sbReach);
+    if(!inn){ $('acDispBox').hidden=true; $('acInvite').hidden=true; show('account'); return; }
     const p=C.profile;
+    if(C.secret) prepCreds(p.username,C.secret);
+    $('acSave').hidden=!C.secret;
     $('acName').textContent=p.username; $('acRole').textContent=ROLE[p.role];
     $('acCode').textContent=C.secret||'Syns bara på telefonen där kontot skapades eller loggades in.';
     $('acDispBox').hidden=p.role==='elev'; $('acDisp').value=p.display_name||'';
@@ -947,6 +1120,11 @@ dimma = fog`}
     show('account');
   }
   $('acBack').onclick=()=>{ renderHome(); show('home'); };
+  $('acSignup').onclick=showWelcome;
+  $('acLogin').onclick=()=>{ $('liErr').textContent=''; show('login'); };
+  $('acIntro').onclick=()=>openIntro();
+  $('acSaveImg').onclick=()=>saveImg($('acSaveImg'));
+  $('acSaveNote').onclick=()=>saveNote($('acSaveNote'));
   $('acDispSave').onclick=async()=>{
     try{ await q(sb.from('profiles').update({display_name:$('acDisp').value.trim()||null}).eq('id',C.uid)); C.profile.display_name=$('acDisp').value.trim()||null; cacheCloud(); $('acDispSave').textContent='Sparat!'; setTimeout(()=>$('acDispSave').textContent='Spara',1500); }
     catch(e){ $('acErr').textContent=errMsg(e); }
@@ -958,9 +1136,10 @@ dimma = fog`}
   $('acLogout').onclick=()=>{ $('acLogoutConfirm').hidden=false; };
   $('acLogoutNo').onclick=()=>{ $('acLogoutConfirm').hidden=true; };
   $('acLogoutYes').onclick=async()=>{
-    await cloudPush(); try{ await sb.auth.signOut(); }catch(e){}
-    try{ localStorage.removeItem(CKEY); }catch(e){}
-    C=null; S=freshStats(); write(SKEY,S); lists=Array.isArray(read(KEY))?read(KEY):[];
+    await cloudPush();
+    try{ localStorage.removeItem(CKEY); localStorage.removeItem(LOGINKEY); }catch(e){}
+    C=null;
+    try{ await sb.auth.signOut(); }catch(e){} S=freshStats(); write(SKEY,S); lists=Array.isArray(read(KEY))?read(KEY):[];
     renderHome(); showWelcome();
   };
 
@@ -989,15 +1168,16 @@ dimma = fog`}
       return;
     }
     const head=document.createElement('div'); head.className='classhead';
-    head.innerHTML='<h2 class="sect" style="margin:0">Mina klasser</h2><button class="btn ghost" id="toClasses">Gå med / skapa</button>';
+    head.innerHTML = role==='larare' ? '<h2 class="sect" style="margin:0">Mina klasser</h2><button class="btn ghost small" id="toClasses">Gå med / skapa</button>'
+      : '<h2 class="sect" style="margin:0">Från din lärare</h2><button class="btn ghost small" id="toClasses">Klasskod</button>';
     box.appendChild(head); $('toClasses').onclick=openClasses;
-    if(!C.classes.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">${role==='larare'?'Du har inga klasser än. Skapa en klass eller gå med med en klasskod.':'Du är inte med i någon klass än. Fråga din lärare efter klasskoden.'}</p>`);
+    if(!C.classes.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">${role==='larare'?'Du har inga klasser än. Skapa en klass eller gå med med en klasskod.':'Har din lärare gett dig en klasskod? Tryck på Klasskod så ser du lärarens förhör här.'}</p>`);
     C.classes.forEach(c=>{
       const h=document.createElement('div'); h.className='classhead';
-      h.innerHTML=`<h3>${esc(c.name)}</h3><button class="btn ghost">Hantera</button>`;
+      h.innerHTML=`<h3>${esc(c.name)}</h3><button class="btn ghost small">${role==='larare'?'Hantera':'Visa klass'}</button>`;
       h.querySelector('button').onclick=()=>openKlass(c.id); box.appendChild(h);
       const gs=C.groups.filter(g=>g.class_id===c.id && C.myGroups.has(g.id));
-      if(!gs.length) box.insertAdjacentHTML('beforeend','<p class="emptytxt">Välj termin och kurs under Hantera.</p>');
+      if(!gs.length) box.insertAdjacentHTML('beforeend',`<p class="emptytxt">Välj termin och kurs under ${role==='larare'?'Hantera':'Visa klass'}.</p>`);
       gs.forEach(g=>{
         box.insertAdjacentHTML('beforeend',`<div class="grouphead">${esc(g.term)} · ${esc(g.course)}</div>`);
         const ls=lists.filter(l=>l.group_id===g.id);
@@ -1100,15 +1280,93 @@ dimma = fog`}
     }catch(e){ $('gErr').textContent=errMsg(e); }
   };
 
+  /* ---------- INTRODUKTION ---------- */
+  let IN=0;
+  const INTRO=[
+    ()=>`<div class="big">${frog('happy')}</div><h2 class="center">Så funkar Glosförhöret</h2>
+      <p class="center">Här är en snabb visning. Den tar en minut, och du kan trycka på allt.</p>`,
+    ()=>`<h2>1. Lägg in dina glosor</h2><p>Skriv in dem själv eller ta en bild på läxan.</p>
+      <div class="seg" id="dmTab"><button type="button" data-v="w" aria-pressed="true">Skriv själv</button><button type="button" data-v="c" aria-pressed="false">Fotografera</button></div>
+      <div id="dmPane"></div>`,
+    ()=>`<h2>2. Välj hur du vill öva</h2><p>När du trycker på Öva får du välja. Prova båda!</p>
+      <div class="modes" id="dmModes">
+        <button type="button" class="modebtn" data-v="choice" aria-pressed="true"><b>Flervalsfrågor</b><span>Välj rätt ord bland flera</span></button>
+        <button type="button" class="modebtn" data-v="write" aria-pressed="false"><b>Skriv glosorna</b><span>Du skriver varje ord själv</span></button>
+      </div><div id="dmDemo"></div>`,
+    ()=>`<h2>3. Samla XP och stjärnor</h2>
+      <div class="feat"><svg><use href="#i-bolt"/></svg><div><b>XP för varje lektion</b><span>Dagens mål är 30 XP.</span></div></div>
+      <div class="feat"><svg><use href="#i-flame"/></svg><div><b>Dagar i rad</b><span>Öva lite varje dag så växer lågan.</span></div></div>
+      <div class="feat"><svg style="color:var(--gold)"><use href="#i-star"/></svg><div><b>Svåra ord kommer tillbaka</b><span>Tills du kan dem. Du kan alltid försöka igen.</span></div></div>`,
+    ()=>`<div class="big">${frog('wow')}</div><h2 class="center">Nu kör vi!</h2>
+      <p class="center">${C?'Lägg in dina glosor och tryck på Öva.':'Skapa ett konto så sparas dina förhör och din XP, och du kan gå med i din klass. Du kan också börja utan konto.'}</p>`
+  ];
+  function openIntro(){ IN=0; renderIntro(); show('intro'); }
+  function renderIntro(){
+    $('introBody').innerHTML=INTRO[IN]();
+    $('introDots').innerHTML=INTRO.map((_,i)=>`<i class="${i===IN?'on':''}"></i>`).join('');
+    $('introBack').style.visibility = IN? 'visible':'hidden';
+    const last=IN===INTRO.length-1;
+    $('introNext').textContent = last ? (C||!(sb&&sbReach)||S.localOnly ? 'Börja öva' : 'Skapa konto') : 'Nästa';
+    $('introSkip').textContent = last && !C && sb && sbReach && !S.localOnly ? 'Utan konto' : 'Hoppa över';
+    if(IN===1) demoAdd('w');
+    if(IN===2) demoPractice('choice');
+  }
+  function endIntro(toSignup){
+    S.seenIntro=true; saveStats();
+    if(toSignup && !C && sb && sbReach && !S.localOnly) showWelcome(); else { renderHome(); show('home'); }
+  }
+  $('introNext').onclick=()=>{ sTap(); if(IN<INTRO.length-1){ IN++; renderIntro(); } else endIntro(true); };
+  $('introBack').onclick=()=>{ if(IN>0){ IN--; renderIntro(); } };
+  $('introSkip').onclick=()=>{ const last=IN===INTRO.length-1; if(last&&!C){ S.localOnly=true; } endIntro(false); };
+  let typeT=null;
+  function demoAdd(v){
+    clearInterval(typeT);
+    $('dmTab').querySelectorAll('button').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.v===v); b.onclick=()=>demoAdd(b.dataset.v); });
+    const pane=$('dmPane');
+    if(v==='w'){
+      pane.innerHTML=`<div class="mock"><span class="lbl" style="margin:0">Glosor, en per rad</span><div class="mline" id="dmType"></div></div>
+        <p>Skriv svenska, ett likhetstecken och sedan ordet på det andra språket.</p>`;
+      const txt='hunden = le chien\nkatten = le chat\nhuset = la maison'; let i=0;
+      typeT=setInterval(()=>{ if(!$('dmType')){ clearInterval(typeT); return; } i++; $('dmType').innerHTML=esc(txt.slice(0,i)).replace(/\n/g,'<br>')+'<span class="caret"></span>'; if(i>=txt.length) clearInterval(typeT); },70);
+    } else {
+      pane.innerHTML=`<div class="mock"><span class="lbl" style="margin:0">Kolla orden</span>
+        ${[['hunden','le chien'],['katten','le chat']].map(r=>`<div class="rr"><div class="rr-fields"><input type="text" value="${r[0]}" readonly aria-label="Svenska"><input type="text" value="${r[1]}" readonly aria-label="Franska"></div><div class="rr-acts"><button type="button" class="rr-ok">Stämmer</button></div></div>`).join('')}
+        <button type="button" class="btn small" id="dmAll">Godkänn alla</button></div>
+        <p>Appen läser bilden och föreslår svenska om den saknas. Du kollar orden och trycker på Stämmer, eller Godkänn alla.</p>`;
+      const tog=b=>{ const rr=b.closest('.rr'); rr.classList.toggle('ok'); b.innerHTML=rr.classList.contains('ok')?'<svg><use href="#i-check"/></svg>Godkänd':'Stämmer'; sTap(); };
+      pane.querySelectorAll('.rr-ok').forEach(b=>b.onclick=()=>tog(b));
+      $('dmAll').onclick=()=>pane.querySelectorAll('.rr:not(.ok) .rr-ok').forEach(tog);
+    }
+  }
+  function demoPractice(v){
+    $('dmModes').querySelectorAll('.modebtn').forEach(b=>{ b.setAttribute('aria-pressed',b.dataset.v===v); b.onclick=()=>demoPractice(b.dataset.v); });
+    const d=$('dmDemo');
+    const bubble=`<div class="speaker">${frog('happy')}<div class="bubble"><span class="w">hunden</span></div></div>`;
+    if(v==='choice'){
+      d.innerHTML=bubble+`<div class="choices">${['le chat','le chien','la maison'].map(o=>`<button type="button" class="choice" data-o="${o}">${o}</button>`).join('')}</div><div id="dmFb"></div>`;
+      d.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{
+        const ok=b.dataset.o==='le chien'; ok?sGood():sBad();
+        $('dmFb').innerHTML=`<div class="demo-fb ${ok?'good':'bad'}">${ok?'Snyggt! hunden = le chien':'Inte riktigt. Prova igen!'}</div>`;
+      });
+    } else {
+      d.innerHTML=bubble+`<div class="row2"><input type="text" id="dmIn" placeholder="Skriv på franska" autocapitalize="off" autocorrect="off" spellcheck="false"><button type="button" class="btn" id="dmChk">Kolla</button></div><div id="dmFb"></div>`;
+      const chk=()=>{ const r=judge($('dmIn').value,'le chien'); const ok=r.kind==='good'||r.kind==='accent'; ok?sGood():sBad();
+        $('dmFb').innerHTML=`<div class="demo-fb ${ok?'good':'bad'}">${ok?'Rätt stavat!':`Rätt svar: le chien${r.kind==='article'?' (glöm inte le)':''}`}</div>`; };
+      $('dmChk').onclick=chk; $('dmIn').onkeydown=e=>{ if(e.key==='Enter') chk(); };
+    }
+  }
+
   /* ---------- HOME ---------- */
   let confirmId=null;
   function setSeg(id,val){ $(id).querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===val)); }
+  let moreId=null;
   function listCard(l){
     const edit = !C || l.mine;
     const pairs=parse(l.text), n=pairs.length, lv=Math.min(3,S.done[l.id]||0);
     const weak=pairs.filter(p=>(S.words[wkey(l,p)]||0)<2).length;
     const stars=[0,1,2].map(i=>`<svg style="color:${i<lv?'var(--gold)':'var(--locked-d)'}"><use href="#i-star"/></svg>`).join('');
     const who = C && !l.mine && l.owner_id && C.people[l.owner_id] ? personName(C.people[l.owner_id]) : '';
+    const open = edit && (moreId===l.id || confirmId===l.id);
     const c=document.createElement('div'); c.className='lc';
     c.innerHTML=`<div class="lc-main">
         <div class="lc-icon ${n?l.lang:'empty'}"><svg><use href="#i-book"/></svg><span>${LANG[l.lang].short}</span></div>
@@ -1119,46 +1377,61 @@ dimma = fog`}
       </div>
       <div class="lc-acts">
         <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
-        ${edit?`<button class="iconbtn" data-a="add" aria-label="Lägg till ord i ${esc(l.name)}"><svg><use href="#i-plus"/></svg></button>
-        <button class="iconbtn" data-a="edit" aria-label="Ändra ${esc(l.name)}"><svg><use href="#i-pen"/></svg></button>
-        <button class="iconbtn danger" data-a="del" aria-label="Radera ${esc(l.name)}"><svg><use href="#i-trash"/></svg></button>`:''}
+        ${edit?`<button class="iconbtn" data-a="more" aria-expanded="${open}" aria-label="Fler val för ${esc(l.name)}"><svg><use href="#i-dots"/></svg></button>`:''}
       </div>
+      ${open?`<div class="lc-more">
+        <button class="btn ghost" data-a="add">+ Lägg till ord</button>
+        <button class="btn ghost" data-a="edit">Ändra</button>
+        <button class="btn ghost danger-t" data-a="del">Radera</button></div>`:''}
       ${confirmId===l.id?`<div class="confirm"><span>Radera "${esc(l.name)}"?${l.group_id?' Den försvinner för alla i kursen.':''} Det går inte att ångra.</span>
         <div class="acts2"><button class="btn red" data-a="yes">Ja, radera</button><button class="btn ghost" data-a="no">Nej</button></div></div>`:''}`;
-    c.querySelector('[data-a=go]').onclick=()=>startLesson(l,S.scope==='all',S.mode==='write');
+    c.querySelector('[data-a=go]').onclick=()=>openStart(l);
     if(edit){
-      c.querySelector('[data-a=edit]').onclick=()=>openEdit(l.id);
-      c.querySelector('[data-a=add]').onclick=()=>openAdd(l.id);
-      c.querySelector('[data-a=del]').onclick=()=>{ confirmId = confirmId===l.id?null:l.id; renderHome(); };
+      c.querySelector('[data-a=more]').onclick=()=>{ moreId = open?null:l.id; confirmId=null; renderHome(); };
+      if(open){
+        c.querySelector('[data-a=edit]').onclick=()=>{ moreId=null; openEdit(l.id); };
+        c.querySelector('[data-a=add]').onclick=()=>{ moreId=null; openAdd(l.id); };
+        c.querySelector('[data-a=del]').onclick=()=>{ confirmId = confirmId===l.id?null:l.id; renderHome(); };
+      }
       if(confirmId===l.id){
-        c.querySelector('[data-a=yes]').onclick=()=>{ removeList(l); };
+        c.querySelector('[data-a=yes]').onclick=()=>{ moreId=null; removeList(l); };
         c.querySelector('[data-a=no]').onclick=()=>{ confirmId=null; renderHome(); };
       }
     }
     return c;
   }
+  const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const standalone=()=>navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
   function renderHome(){
     const st=liveStreak();
     $('streakN').textContent=st; $('streakStat').classList.toggle('off',!st || S.lastDay!==dayStr());
     $('xpN').textContent=S.xp;
     const tx=todayXp(), g=S.goal;
-    $('ringArc').setAttribute('stroke-dashoffset', 163.4*(1-Math.min(1,tx/g)));
-    $('goalN').textContent=`${Math.min(tx,g)}/${g}`;
-    $('goalText').textContent = tx>=g ? `Dagens mål klart! ${tx} XP idag.` : `Dagens mål: ${tx} av ${g} XP.${S.lastDay===dayStr()?'':' Gör en lektion idag så håller du igång din svit.'}`;
-    setSeg('modeSeg',S.mode); setSeg('scopeSeg',S.scope);
-    $('modeHint').textContent = S.mode==='write' ? 'Du skriver alltid ordet själv. Inga svarsalternativ.' : 'Du väljer bland ord, parar ihop och skriver.';
-    $('chipSound').setAttribute('aria-pressed',S.sound);
-    $('chipSpeak').setAttribute('aria-pressed',S.speak);
-    $('chipStrict').setAttribute('aria-pressed',S.strict);
-    $('listCount').textContent = lists.length ? `(${lists.length})` : '';
+    $('helloFrog').innerHTML=frog(tx>=g?'wow':'happy');
+    const nm = C&&C.profile ? C.profile.username.split('-').slice(0,2).join(' ') : '';
+    $('helloTitle').textContent = nm ? `Hej ${nm}!` : 'Hej!';
+    $('goalFill').style.width=Math.min(100,tx/g*100)+'%';
+    $('goalText').textContent = tx>=g ? `Dagens mål klart! ${tx} XP idag.`
+      : `${tx} av ${g} XP idag.${S.lastDay===dayStr()?' Bra jobbat!':(st?` Öva idag så håller du igång din svit på ${st} dagar.`:' Gör en lektion idag!')}`;
+    $('installTip').hidden = !(C && isIOS && !standalone() && !S.tipDone);
 
     const own=lists.filter(l=>!l.group_id && !l.studentId && l.mine!==false);
-    $('listCount').textContent = own.length ? `(${own.length})` : '';
     $('ownHead').textContent = C ? 'Mina egna förhör' : 'Mina förhör';
     const box=$('cards'); box.innerHTML='';
-    if(!own.length) box.innerHTML=`<p class="emptytxt">${C?'Inga egna förhör än. Tryck på Ny lista för att göra ett.':'Inga förhör än. Tryck på Ny lista och skriv in dina glosor.'}</p>`;
+    if(!own.length){
+      const e=document.createElement('div'); e.className='emptybox';
+      e.innerHTML=`<b>Lägg in dina glosor</b><span class="hint" style="margin:0">Skriv in dem själv eller ta en bild på läxan.</span>
+        <div class="row2"><button class="btn" data-e="write"><svg width="18" height="18"><use href="#i-pen"/></svg>Skriv in</button><button class="btn blue" data-e="cam"><svg width="18" height="18"><use href="#i-cam"/></svg>Fotografera</button></div>`;
+      e.querySelector('[data-e=write]').onclick=()=>openEdit(null);
+      e.querySelector('[data-e=cam]').onclick=()=>{ openEdit(null); document.querySelector('#edit [data-imp=cam]').click(); };
+      box.appendChild(e);
+    }
     own.forEach(l=>box.appendChild(listCard(l)));
     renderCloudHome();
+    // elev utan klass: egna förhör först, klasskoden längre ner
+    const noClass = C && C.profile && C.profile.role==='elev' && !C.classes.length;
+    $('cloudHome').style.order = noClass ? 5 : '';
+    $('introLink').style.order = 6;
     renderAcctBtn();
     if($('home').hidden) show('home');
   }
@@ -1168,9 +1441,29 @@ dimma = fog`}
     delete S.done[l.id]; Object.keys(S.words).forEach(k=>{ if(k.startsWith(l.id+'|')) delete S.words[k]; });
     saveLists(); saveStats(); renderHome();
   }
-  $('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ S.mode=b.dataset.v; saveStats(); sTap(); renderHome(); });
-  $('scopeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ S.scope=b.dataset.v; saveStats(); sTap(); renderHome(); });
-  [['chipSound','sound'],['chipSpeak','speak'],['chipStrict','strict']].forEach(([id,k])=>$(id).onclick=()=>{ S[k]=!S[k]; saveStats(); renderHome(); sTap(); });
+  function renderSettings(){ $('chipSound').setAttribute('aria-pressed',S.sound); $('chipSpeak').setAttribute('aria-pressed',S.speak); $('chipStrict').setAttribute('aria-pressed',S.strict); }
+  [['chipSound','sound'],['chipSpeak','speak'],['chipStrict','strict']].forEach(([id,k])=>$(id).onclick=()=>{ S[k]=!S[k]; saveStats(); renderSettings(); sTap(); });
+  $('installTipX').onclick=()=>{ S.tipDone=true; saveStats(); renderHome(); };
+  $('introLink').onclick=()=>openIntro();
+
+  /* välj hur man vill öva */
+  let ssList=null;
+  function openStart(l){
+    ssList=l; if(S.mode==='mix') S.mode='choice';
+    const n=parse(l.text).length;
+    $('ssTitle').textContent=l.name;
+    $('ssAll').textContent=`Alla ord (${n})`;
+    $('ssWeak').hidden = n<=8; if(n<=8) S.scope='all';
+    paintStart(); $('startSheet').hidden=false; $('ssGo').focus();
+  }
+  function paintStart(){
+    $('ssModes').querySelectorAll('.modebtn').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.mode));
+    setSeg('ssScope',S.scope);
+  }
+  $('ssModes').querySelectorAll('.modebtn').forEach(b=>b.onclick=()=>{ S.mode=b.dataset.v; sTap(); paintStart(); });
+  $('ssScope').querySelectorAll('button').forEach(b=>b.onclick=()=>{ S.scope=b.dataset.v; sTap(); paintStart(); });
+  $('ssCancel').onclick=()=>{ $('startSheet').hidden=true; };
+  $('ssGo').onclick=()=>{ $('startSheet').hidden=true; saveStats(); startLesson(ssList,S.scope==='all',S.mode); };
 
   /* ---------- EDIT ---------- */
   let editing=null, editLang='fr';
@@ -1577,7 +1870,8 @@ dimma = fog`}
 
   /* ---------- LESSON ---------- */
   let L=null;
-  function startLesson(list,all,writeOnly){
+  function startLesson(list,all,mode){
+    const writeOnly = mode===true || mode==='write', choiceOnly = mode==='choice';
     const pairs=parse(list.text); if(!pairs.length) return;
     const str=p=>S.words[wkey(list,p)]||0;
     let pick = all ? shuffle(pairs.slice()) : shuffle(pairs.slice()).sort((a,b)=>str(a)-str(b)).slice(0,8);
@@ -1586,6 +1880,7 @@ dimma = fog`}
     pick.forEach(p=>{
       const s=str(p); let t;
       if(writeOnly) t='write';
+      else if(choiceOnly && pairs.length>=4) t='choice';
       else if(s===0 && pairs.length>=4) t='choice';
       else if(s>=2 && canSpeak && S.speak && Math.random()<.35) t='listen';
       else t='write';
@@ -1596,7 +1891,7 @@ dimma = fog`}
       const at=Math.min(ex.length,3+Math.floor(Math.random()*2));
       ex.splice(at,0,{t:'match',pairs:mp.length>=4?mp:shuffle(pairs.slice()).slice(0,4)});
     }
-    L={list,pairs,queue:ex,total:ex.length,done:0,firstTry:0,tries:0,mistakes:new Map(),combo:0,best:0,start:Date.now(),seen:new Set()};
+    L={list,pairs,choiceOnly:choiceOnly&&pairs.length>=4,queue:ex,total:ex.length,done:0,firstTry:0,tries:0,mistakes:new Map(),combo:0,best:0,start:Date.now(),seen:new Set()};
     $('combo').textContent=''; $('bar').style.width='0%';
     show('lesson'); nextEx();
   }
@@ -1754,7 +2049,7 @@ dimma = fog`}
       L.mistakes.set(k,{p:e.p,n:(L.mistakes.get(k)?.n||0)+1});
       sBad(); bumpCombo(false);
       const pos=Math.min(L.queue.length,2+Math.floor(Math.random()*3));
-      L.queue.splice(pos,0,{t:'write',p:e.p});
+      L.queue.splice(pos,0,{t:L.choiceOnly?'choice':'write',p:e.p});
       badFooter(headFor(res),full,yoursFor(res,given,e),'Ordet kommer tillbaka snart.');
     }
     saveStats(); setBar();
