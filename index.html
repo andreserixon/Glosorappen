@@ -74,7 +74,7 @@ input,textarea,select{font-size:16px}
 
 /* top stats bar */
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;border-bottom:2px solid var(--line)}
-.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--green)}
+.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--green);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stats{display:flex;gap:16px;align-items:center}
 .stat{display:flex;align-items:center;gap:5px;font-weight:900;font-variant-numeric:tabular-nums}
 .stat svg{width:24px;height:24px}
@@ -95,7 +95,7 @@ input,textarea,select{font-size:16px}
 }
 /* home */
 .home{display:flex;flex-direction:column;gap:14px;padding-bottom:36px}
-.stats{gap:12px}
+.stats{gap:10px;flex:none}
 .stat svg.mini{width:22px;height:22px}
 .goalstat{color:var(--gold-d);font-size:.9rem}
 #newListBtn{margin-top:4px}
@@ -111,7 +111,7 @@ input,textarea,select{font-size:16px}
 .sect{font-size:1.3rem;margin-top:6px}
 .sect span{color:var(--muted);font-size:1rem}
 .cards{display:flex;flex-direction:column;gap:12px}
-.lc{border:2px solid var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:12px;box-shadow:0 4px 0 var(--tile-shadow);background:var(--tile)}
+.lc{border:2px solid var(--line);border-radius:18px;padding:10px 12px;display:flex;flex-direction:column;gap:10px;box-shadow:0 4px 0 var(--tile-shadow);background:var(--tile)}
 .lc-main{display:flex;gap:12px;align-items:center;min-width:0}
 .lc-icon{--c:var(--green);--d:var(--green-d);width:54px;height:54px;border-radius:16px;background:var(--c);box-shadow:0 4px 0 var(--d);color:#fff;display:grid;place-items:center;flex:none;position:relative}
 .lc-icon svg{width:28px;height:28px}
@@ -123,8 +123,16 @@ input,textarea,select{font-size:16px}
 .lc .stars{justify-content:flex-start;margin-top:2px}
 .stars{display:flex;gap:2px}
 .stars svg{width:16px;height:16px}
-.lc-acts{display:flex;gap:8px}
-.lc-go{flex:1;min-height:48px}
+.lc-acts{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.lc-acts .iconbtn{width:44px;height:30px;border-radius:10px;box-shadow:0 3px 0 var(--tile-shadow)}
+.lc-acts .iconbtn svg{width:20px;height:20px}
+.lc-go{min-height:42px;padding:8px 18px;font-size:.9rem}
+.newtag{display:inline-block;margin-left:6px;background:var(--red);color:#fff;border-radius:999px;font-size:.66rem;font-weight:900;letter-spacing:.06em;padding:1px 7px;vertical-align:2px;text-transform:uppercase}
+.bell{position:relative;width:40px;height:40px;border-radius:999px;border:2px solid var(--line);background:var(--tile);color:var(--flame);display:grid;place-items:center;box-shadow:0 3px 0 var(--tile-shadow);animation:ring 1.2s ease-in-out 2}
+.bell svg{width:22px;height:22px}
+.bell .badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;border-radius:999px;background:var(--red);color:#fff;font-size:.72rem;font-weight:900;display:grid;place-items:center;padding:0 5px;border:2px solid var(--bg)}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(4deg)}}
+#newSheet .cards{max-height:55vh;overflow:auto}
 .lc-go.fr{--c:var(--blue);--d:var(--blue-d)} .lc-go.en{--c:var(--purple);--d:var(--purple-d)} .lc-go.es{--c:var(--flame);--d:var(--flame-d)}
 .iconbtn{width:52px;height:48px;flex:none;border:2px solid var(--line);background:var(--tile);border-radius:14px;box-shadow:0 4px 0 var(--tile-shadow);color:var(--muted);display:grid;place-items:center}
 .iconbtn:active{transform:translateY(4px);box-shadow:none}
@@ -229,7 +237,7 @@ input,textarea,select{font-size:16px}
 .feat span{color:var(--muted);font-weight:700;font-size:.9rem}
 
 /* konto, klasser */
-.avatar{display:inline-flex;align-items:center;justify-content:center;gap:4px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:40px;height:40px;border-radius:999px;border:2px solid var(--line);background:var(--tile);font-weight:900;color:var(--green-ink);padding:0 10px;font-size:.85rem;box-shadow:0 3px 0 var(--tile-shadow)}
+.avatar{display:inline-flex;align-items:center;justify-content:center;gap:4px;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:40px;height:40px;border-radius:999px;border:2px solid var(--line);background:var(--tile);font-weight:900;color:var(--green-ink);padding:0 10px;font-size:.85rem;box-shadow:0 3px 0 var(--tile-shadow)}
 .welcome{align-items:stretch;text-align:left;padding-top:28px}
 .wfrog{display:flex;justify-content:center}
 .wfrog .frog{width:120px;height:120px}
@@ -391,6 +399,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
     <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14l-4-4M20 16H6l4 4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
     <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><circle cx="19" cy="12" r="2.2" fill="currentColor"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" fill="currentColor"/><path d="M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
@@ -404,6 +413,7 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <div class="topbar">
     <span class="brand">Glosförhöret</span>
     <div class="stats">
+      <button class="bell" id="bellBtn" hidden aria-label="Nya förhör"><svg><use href="#i-bell"/></svg><span class="badge" id="bellN"></span></button>
       <span class="stat flame" id="streakStat" title="Dagar i rad"><svg><use href="#i-flame"/></svg><span id="streakN">0</span></span>
       <span class="stat xp" title="XP totalt"><svg><use href="#i-bolt"/></svg><span id="xpN">0</span></span>
       <button class="avatar" id="acctBtn" aria-label="Meny och inställningar"><svg width="18" height="18"><use href="#i-menu"/></svg></button>
@@ -704,6 +714,14 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
 
 <!-- fixed footer (lesson + done) -->
 <div class="footer" id="footer" hidden><div class="in" id="footerIn"></div></div>
+
+<div class="sheet" id="newSheet" hidden>
+  <div class="card left">
+    <h2>Nya förhör från din lärare</h2>
+    <div class="cards" id="newCards"></div>
+    <button class="btn ghost wide" id="newClose">Stäng</button>
+  </div>
+</div>
 
 <div class="sheet" id="startSheet" hidden>
   <div class="card left">
@@ -1368,16 +1386,17 @@ dimma = fog`}
     const who = C && !l.mine && l.owner_id && C.people[l.owner_id] ? personName(C.people[l.owner_id]) : '';
     const open = edit && (moreId===l.id || confirmId===l.id);
     const c=document.createElement('div'); c.className='lc';
+    const isNew = C && l.group_id && !l.mine && !(S.seen||{})[l.id];
     c.innerHTML=`<div class="lc-main">
         <div class="lc-icon ${n?l.lang:'empty'}"><svg><use href="#i-book"/></svg><span>${LANG[l.lang].short}</span></div>
-        <div class="lc-text"><div class="title">${esc(l.name)}</div>
+        <div class="lc-text"><div class="title">${esc(l.name)}${isNew?'<span class="newtag">Ny</span>':''}</div>
           <div class="meta">${n} ord${n?(weak?` · ${weak} att öva på`:' · kan alla'):''}${l.example?' · <i>exempel</i>':''}</div>
           ${who?`<div class="from">Från ${esc(who)}</div>`:''}
           <div class="stars" title="${lv} av 3 stjärnor">${stars}</div></div>
-      </div>
-      <div class="lc-acts">
-        <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
-        ${edit?`<button class="iconbtn" data-a="more" aria-expanded="${open}" aria-label="Fler val för ${esc(l.name)}"><svg><use href="#i-dots"/></svg></button>`:''}
+        <div class="lc-acts">
+          ${edit?`<button class="iconbtn" data-a="more" aria-expanded="${open}" aria-label="Fler val för ${esc(l.name)}"><svg><use href="#i-dots"/></svg></button>`:''}
+          <button class="btn lc-go ${l.lang}" data-a="go" ${n?'':'disabled'}>Öva</button>
+        </div>
       </div>
       ${open?`<div class="lc-more">
         <button class="btn ghost" data-a="add">+ Lägg till ord</button>
@@ -1385,7 +1404,7 @@ dimma = fog`}
         <button class="btn ghost danger-t" data-a="del">Radera</button></div>`:''}
       ${confirmId===l.id?`<div class="confirm"><span>Radera "${esc(l.name)}"?${l.group_id?' Den försvinner för alla i kursen.':''} Det går inte att ångra.</span>
         <div class="acts2"><button class="btn red" data-a="yes">Ja, radera</button><button class="btn ghost" data-a="no">Nej</button></div></div>`:''}`;
-    c.querySelector('[data-a=go]').onclick=()=>openStart(l);
+    c.querySelector('[data-a=go]').onclick=()=>{ $('newSheet').hidden=true; openStart(l); };
     if(edit){
       c.querySelector('[data-a=more]').onclick=()=>{ moreId = open?null:l.id; confirmId=null; renderHome(); };
       if(open){
@@ -1433,6 +1452,7 @@ dimma = fog`}
     $('cloudHome').style.order = noClass ? 5 : '';
     $('introLink').style.order = 6;
     renderAcctBtn();
+    renderBell();
     if($('home').hidden) show('home');
   }
   function removeList(l){
@@ -1446,9 +1466,30 @@ dimma = fog`}
   $('installTipX').onclick=()=>{ S.tipDone=true; saveStats(); renderHome(); };
   $('introLink').onclick=()=>openIntro();
 
+  /* nya förhör från läraren */
+  const newLists=()=> C ? lists.filter(l=>l.group_id && !l.mine && !(S.seen||{})[l.id]) : [];
+  function markSeen(ids){ S.seen=S.seen||{}; ids.forEach(id=>S.seen[id]=1); saveStats(); }
+  function renderBell(){
+    const n=newLists().length;
+    $('bellBtn').hidden=!n; $('bellN').textContent=n>9?'9+':n;
+    document.querySelector('.brand').textContent = n && innerWidth<430 ? 'Glosor' : 'Glosförhöret';
+    $('bellBtn').setAttribute('aria-label',`${n} nya förhör`);
+  }
+  $('bellBtn').onclick=()=>{
+    const nl=newLists(), box=$('newCards'); box.innerHTML='';
+    nl.forEach(l=>{
+      const g=C.groups.find(x=>x.id===l.group_id);
+      if(g) box.insertAdjacentHTML('beforeend',`<div class="grouphead">${esc(groupLabel(g))}</div>`);
+      box.appendChild(listCard(l));
+    });
+    $('newSheet').hidden=false; sTap();
+  };
+  $('newClose').onclick=()=>{ markSeen(newLists().map(l=>l.id)); $('newSheet').hidden=true; $('newCards').innerHTML=''; renderHome(); };
+
   /* välj hur man vill öva */
   let ssList=null;
   function openStart(l){
+    if(l.group_id && !l.mine) markSeen([l.id]);
     ssList=l; if(S.mode==='mix') S.mode='choice';
     const n=parse(l.text).length;
     $('ssTitle').textContent=l.name;
