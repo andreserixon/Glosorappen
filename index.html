@@ -275,6 +275,14 @@ input,textarea,select{font-size:16px}
 .grow .btn{min-height:40px;padding:8px 14px;font-size:.8rem}
 .grow .in{color:var(--green-ink);font-weight:900}
 .from{color:var(--muted);font-size:.8rem;font-weight:700}
+.combo{position:relative}
+.combo-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;margin:0;padding:6px;list-style:none;max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border:2px solid var(--blue);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.combo-list li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:800;min-height:44px}
+.combo-list li[aria-selected="true"],.combo-list li:hover{background:var(--blue-soft)}
+.combo-list li mark{background:var(--gold-soft);color:inherit;border-radius:3px;padding:0 1px}
+.combo-list li .tag{font-size:.7rem;font-weight:900;color:var(--muted);border:2px solid var(--line);border-radius:8px;padding:0 6px;flex:none}
+.combo-list li.new{color:var(--blue-d)}
+.combo-list .none{color:var(--muted);font-weight:700;cursor:default}
 .sugg{display:flex;flex-direction:column;gap:6px;background:var(--gold-soft);border-radius:12px;padding:10px 12px;font-weight:700}
 .sugg:empty{display:none}
 .hint:empty{display:none}
@@ -670,13 +678,15 @@ code{font-family:ui-monospace,Menlo,monospace;background:var(--soft);border:1px 
   <div class="cloudsec"><span class="lbl" style="margin:0">Terminer och kurser i klassen</span><div class="cloudsec" id="kGroups"></div></div>
   <div class="importbox">
     <h3>Lägg till termin och kurs</h3>
-    <span class="lbl" style="margin:0">Termin</span>
-    <div class="row2"><select id="tYear" aria-label="År"></select><div class="seg" id="tSeg"><button type="button" data-v="VT">VT</button><button type="button" data-v="HT">HT</button></div></div>
-    <label class="lbl" for="cName" style="margin:0">Kurs</label>
-    <input type="text" id="cName" placeholder="t.ex. Franska" maxlength="40" autocomplete="off">
-    <div class="altchips" id="cChips"></div>
-    <span class="lbl" style="margin:0">Språk i kursen</span>
+    <span class="lbl" style="margin:0">1. Språk</span>
     <div class="seg" id="cLang"><button type="button" data-v="fr">Franska</button><button type="button" data-v="en">Engelska</button><button type="button" data-v="es">Spanska</button></div>
+    <span class="lbl" style="margin:0">2. Termin</span>
+    <div class="row2"><select id="tYear" aria-label="År"></select><div class="seg" id="tSeg"><button type="button" data-v="VT">VT</button><button type="button" data-v="HT">HT</button></div></div>
+    <label class="lbl" for="cName" style="margin:0">3. Kurs</label>
+    <div class="combo">
+      <input type="text" id="cName" placeholder="Skriv för att söka, t.ex. fra" maxlength="40" autocomplete="off" autocorrect="off" role="combobox" aria-expanded="false" aria-controls="cList" aria-autocomplete="list">
+      <ul class="combo-list" id="cList" role="listbox" hidden></ul>
+    </div>
     <div class="sugg" id="gHint"></div>
     <button class="btn blue" id="gAdd">Lägg till</button>
     <p class="errmsg" id="gErr"></p>
@@ -881,8 +891,42 @@ dimma = fog`}
   const nkey=t=>String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
   function lev(a,b){ const d=Array.from({length:a.length+1},(_,i)=>[i]); for(let j=1;j<=b.length;j++) d[0][j]=j;
     for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[a.length][b.length]; }
+  // Sökning som hittar ord i vilken ordning som helst: "fra" hittar både "Franska förhör v40" och "Förhör v40 franska"
+  const fold1=ch=>ch.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().charAt(0)||ch.toLowerCase();
+  const foldStr=t=>Array.from(String(t||'')).map(fold1).join('');
+  const toks=t=>foldStr(t).split(/[^a-z0-9]+/).filter(Boolean);
+  function matchScore(query,cand){
+    const q=toks(query), c=toks(cand); if(!q.length||!c.length) return 0;
+    let sum=0;
+    for(const qt of q){
+      let best=0;
+      c.forEach((ct,i)=>{
+        let v=0;
+        if(ct===qt) v=4;
+        else if(ct.startsWith(qt)) v=3+qt.length/ct.length;
+        else if(qt.length>=3 && ct.includes(qt)) v=2;                       // mitt i ett sammansatt ord
+        else if(qt.length>=4 && lev(qt,ct.slice(0,qt.length))<=1) v=1.5;    // stavfel i början
+        else if(qt.length>=5 && lev(qt,ct)<=2) v=1.2;                       // stavfel i hela ordet
+        if(v && i===0) v+=.3;
+        best=Math.max(best,v);
+      });
+      if(!best) return 0;          // alla sökord måste hitta något
+      sum+=best;
+    }
+    const whole=foldStr(cand).replace(/[^a-z0-9]/g,''), qq=foldStr(query).replace(/[^a-z0-9]/g,'');
+    if(whole.startsWith(qq)) sum+=1;
+    return sum/q.length - c.length*.02;
+  }
+  function highlight(query,cand){
+    const f=foldStr(cand), marks=new Array(cand.length).fill(false);
+    toks(query).forEach(qt=>{ let i=f.indexOf(qt); if(i>=0) for(let k=i;k<i+qt.length;k++) marks[k]=true; });
+    let out='', open=false;
+    Array.from(cand).forEach((ch,i)=>{ if(marks[i]&&!open){out+='<mark>';open=true;} if(!marks[i]&&open){out+='</mark>';open=false;} out+=esc(ch); });
+    return out+(open?'</mark>':'');
+  }
   // namn som liknar det man skriver, för att undvika dubbletter
   function similar(input,names){
+    const hit=names.filter(n=>matchScore(input,n)>0); if(hit.length) return hit;
     const k=nkey(input); if(!k) return [];
     return names.filter(n=>{ const m=nkey(n); return m===k || (k.length>=3&&(m.startsWith(k)||k.startsWith(m))) || lev(k,m)<=Math.max(1,Math.floor(Math.min(k.length,m.length)/4)); });
   }
@@ -1262,19 +1306,51 @@ dimma = fog`}
   function gHint(){
     const name=$('cName').value.trim(), tn=termName(), out=[];
     const exact=allCourses.find(c=>nkey(c.name)===nkey(name));
-    const sim=name?similar(name,allCourses.map(c=>c.name)).filter(n=>!exact||n!==exact.name).slice(0,4):[];
-    $('cChips').innerHTML = sim.map(n=>`<button type="button" class="altchip" data-n="${esc(n)}">Menar du ${esc(n)}?</button>`).join('');
-    $('cChips').querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ $('cName').value=b.dataset.n; gHint(); });
-    if(exact){ out.push(`Kursen <b>${esc(exact.name)}</b> finns redan och används.`); if(exact.lang){ cLang=exact.lang; setSeg('cLang',cLang); } }
-    else if(name){ const g=guessLang(name); if(g){ cLang=g; setSeg('cLang',cLang); } }
+    if(exact) out.push(`Kursen <b>${esc(exact.name)}</b> finns redan och används.`);
+    else if(name) out.push(`<b>${esc(name)}</b> blir en ny kurs.`);
     if(allTerms.some(t=>t.name===tn)) out.push(`Terminen <b>${tn}</b> finns redan och används.`);
     const dup=C.groups.find(g=>g.class_id===K.id && g.term===tn && exact && nkey(g.course)===nkey(exact.name));
     if(dup) out.push(C.myGroups.has(dup.id)?'Den här terminen och kursen finns redan i klassen och du är med.':'Den här terminen och kursen finns redan i klassen. Du går med i den.');
     $('gHint').innerHTML=out.map(t=>`<span>${t}</span>`).join('');
   }
-  $('cName').oninput=gHint; $('tYear').onchange=gHint;
+  /* rullbar lista med kurser som matchar */
+  let cActive=-1, cItems=[];
+  function courseItems(){
+    const q=$('cName').value.trim();
+    const pool=allCourses.filter(c=>!c.lang||c.lang===cLang);
+    let items = q ? pool.map(c=>({c,s:matchScore(q,c.name)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||a.c.name.localeCompare(b.c.name)).map(x=>x.c) : pool.slice();
+    return items;
+  }
+  function renderCombo(){
+    const q=$('cName').value.trim(), list=$('cList');
+    cItems=courseItems();
+    const exact=allCourses.some(c=>nkey(c.name)===nkey(q));
+    let html=cItems.map((c,i)=>`<li role="option" data-i="${i}" aria-selected="${i===cActive}"><span>${highlight(q,c.name)}</span>${c.lang?`<span class="tag">${LANG[c.lang].short}</span>`:''}</li>`).join('');
+    if(q && !exact) html+=`<li role="option" class="new" data-i="new" aria-selected="${cActive===cItems.length}">+ Ny kurs: ${esc(q)}</li>`;
+    if(!html) html=`<li class="none">Inga kurser på ${LANG[cLang].name} än. Skriv ett namn för att skapa en.</li>`;
+    list.innerHTML=html;
+    const show=document.activeElement===$('cName');
+    list.hidden=!show; $('cName').setAttribute('aria-expanded',show);
+    list.querySelectorAll('li[data-i]').forEach(li=>li.onpointerdown=e=>{ e.preventDefault(); pickCourse(li.dataset.i); });
+    const act=list.querySelector('[aria-selected="true"]'); if(act) act.scrollIntoView({block:'nearest'});
+  }
+  function pickCourse(i){
+    if(i!=='new'){ const c=cItems[+i]; if(c){ $('cName').value=c.name; if(c.lang){ cLang=c.lang; setSeg('cLang',cLang); } } }
+    cActive=-1; $('cList').hidden=true; $('cName').setAttribute('aria-expanded','false'); $('cName').blur(); gHint(); sTap();
+  }
+  $('cName').addEventListener('input',()=>{ cActive=-1; renderCombo(); gHint(); });
+  $('cName').addEventListener('focus',()=>{ cActive=-1; renderCombo(); });
+  $('cName').addEventListener('blur',()=>setTimeout(()=>{ $('cList').hidden=true; $('cName').setAttribute('aria-expanded','false'); },150));
+  $('cName').addEventListener('keydown',e=>{
+    const n=cItems.length+($('cList').querySelector('.new')?1:0);
+    if(e.key==='ArrowDown'){ e.preventDefault(); cActive=Math.min(n-1,cActive+1); renderCombo(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); cActive=Math.max(0,cActive-1); renderCombo(); }
+    else if(e.key==='Enter'){ e.preventDefault(); if(cActive>=0) pickCourse(cActive<cItems.length?String(cActive):'new'); else pickCourse('new'); }
+    else if(e.key==='Escape'){ $('cList').hidden=true; }
+  });
+  $('tYear').onchange=gHint;
   $('tSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{ tTerm=b.dataset.v; setSeg('tSeg',tTerm); gHint(); });
-  $('cLang').querySelectorAll('button').forEach(b=>b.onclick=()=>{ cLang=b.dataset.v; setSeg('cLang',cLang); });
+  $('cLang').querySelectorAll('button').forEach(b=>b.onclick=()=>{ cLang=b.dataset.v; setSeg('cLang',cLang); if(!$('cList').hidden) renderCombo(); gHint(); });
   $('gAdd').onclick=async()=>{
     const name=$('cName').value.trim(); if(!name){ $('gErr').textContent='Skriv vilken kurs det är, t.ex. Franska.'; return; }
     $('gErr').textContent='';
